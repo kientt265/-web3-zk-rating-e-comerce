@@ -19,6 +19,7 @@ contract DealComerce is SellerComerce, UserComerce {
         bool isCompleted;      
     }
 
+    bool public isBought;
     uint public dealId; 
     mapping (uint => Deal) public deals;
     mapping (address => uint[]) public buyerDeals; 
@@ -70,7 +71,7 @@ contract DealComerce is SellerComerce, UserComerce {
         deals[_dealId].isCompleted = true;
         emit DealCompleted(_dealId);
 
-
+        isBought = true;
         quantityPerItem[sellers[deals[_dealId].buyer].idTypeItems[deals[_dealId].productId]] -= deals[_dealId].amount;
     }
 }
