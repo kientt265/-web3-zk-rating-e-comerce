@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
-import {DealComerce} from "../../src/Deal/DealComerce.sol";
+import {DealComerce} from "../../src/PrivateChain/Deal/DealComerce.sol";
 
 contract DeployDeal is Script {
     DealComerce public dealComerce;

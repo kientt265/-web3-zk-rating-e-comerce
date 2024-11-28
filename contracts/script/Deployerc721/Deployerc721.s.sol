@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
-import {Erc721} from "../../src/Product/erc721.sol";
+import {Erc721} from "../../src/PrivateChain/Product/erc721.sol";
 
 contract Deployerc721 is Script{
     Erc721 public erc721;
