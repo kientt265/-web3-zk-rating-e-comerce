@@ -1,0 +1,23 @@
+{
+  "name": "Product Name", 
+  "description": "Detailed description of the product.", 
+  "image": "ipfs://QmdGf3x6dGaKZKwfHQ27utfVy41n1Hp8t6bCoW4UcedKcE", 
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Electronics"
+    },
+    {
+      "trait_type": "Brand",
+      "value": "Brand Name"
+    },
+    {
+      "trait_type": "Condition",
+      "value": "New"
+    },
+    {
+      "trait_type": "Stock",
+      "value": 100
+    }
+  ]
+}
