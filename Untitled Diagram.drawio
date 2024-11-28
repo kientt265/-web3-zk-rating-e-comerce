@@ -1,0 +1,173 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0" version="24.9.2">
+  <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
+    <mxGraphModel dx="1179" dy="634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-1" value="" style="points=[];aspect=fixed;html=1;align=center;shadow=0;dashed=0;fillColor=#FF6A00;strokeColor=none;shape=mxgraph.alibaba_cloud.baas_blockchain_as_a_service;" vertex="1" parent="1">
+          <mxGeometry x="507.08000000000004" y="360" width="72.91" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-2" value="Private Chain&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="493.45" y="450" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-3" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/blockchain/Consortium.svg;" vertex="1" parent="1">
+          <mxGeometry x="480.00000000000006" y="120" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-4" value="Public Chain&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="475.00000000000006" y="200" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-5" value="" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.user;" vertex="1" parent="1">
+          <mxGeometry x="755" y="470" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-6" value="user&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="760" y="530" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-8" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.user;" vertex="1" parent="1">
+          <mxGeometry x="280" y="475" width="70" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-9" value="seller&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="290" y="550" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-10" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="610" y="440" as="sourcePoint" />
+            <mxPoint x="740" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-11" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="490" as="sourcePoint" />
+            <mxPoint x="480" y="430" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-12" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" target="gUAxlboTfl1ikJfKjO2c-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="540" y="350" as="sourcePoint" />
+            <mxPoint x="520" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-13" value="send merkle root&lt;br&gt;and hash msg.sender for each transaction" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="270" y="270" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-16" value="Voting Contract" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="530" y="70" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-17" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;fontColor=#4277BB;labelBackgroundColor=default;fontSize=12;spacingTop=3;image=img/lib/ibm/blockchain/smart_contract.svg;" vertex="1" parent="1">
+          <mxGeometry x="560" y="20" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-18" value="System" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="750" y="330" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-19" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="770" y="450" as="sourcePoint" />
+            <mxPoint x="770" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-20" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="799.5" y="210" as="sourcePoint" />
+            <mxPoint x="799.5" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-21" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;fontColor=#4277BB;labelBackgroundColor=default;fontSize=12;spacingTop=3;image=img/lib/ibm/blockchain/smart_contract.svg;" vertex="1" parent="1">
+          <mxGeometry x="775" y="30" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-22" value="Verify Proof Contract" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="735" y="80" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-23" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="750" y="50" as="sourcePoint" />
+            <mxPoint x="650" y="50" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-24" value="True" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="675" y="18" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-26" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="580" y="160" as="sourcePoint" />
+            <mxPoint x="660" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-27" value="public input&amp;nbsp;&lt;br&gt;(merkle root &amp;amp; hash(sender))" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="585" y="140" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-29" value="&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;Proving Key&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="258" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-30" value="IPFS" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1055" y="318" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-31" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="610" y="380" as="sourcePoint" />
+            <mxPoint x="660" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-32" value="Merkle Proof" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="620" y="360" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-33" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="930" y="300" as="sourcePoint" />
+            <mxPoint x="1010" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-34" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1010" y="270" as="sourcePoint" />
+            <mxPoint x="930" y="270" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="960" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-37" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#00B336;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="670" y="220" width="250" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-39" value="Private input &lt;br&gt;(Zk Proof)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="790" y="240" width="105" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-40" value="Public input" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="240" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-41" value="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;rotation=0;gradientColor=#223548;strokeColor=none;gradientDirection=east;fillColor=#5b738b;rounded=0;pointerEvents=0;fontFamily=Helvetica;fontSize=16;fontColor=#FFFFFF;spacingTop=4;spacingBottom=4;spacingLeft=4;spacingRight=4;points=[];fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="675" y="441" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-42" value="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;rotation=0;gradientColor=#223548;strokeColor=none;gradientDirection=east;fillColor=#5b738b;rounded=0;pointerEvents=0;fontFamily=Helvetica;fontSize=16;fontColor=#FFFFFF;spacingTop=4;spacingBottom=4;spacingLeft=4;spacingRight=4;points=[];fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="420" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-43" value="2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;rotation=0;gradientColor=#223548;strokeColor=none;gradientDirection=east;fillColor=#5b738b;rounded=0;pointerEvents=0;fontFamily=Helvetica;fontSize=16;fontColor=#FFFFFF;spacingTop=4;spacingBottom=4;spacingLeft=4;spacingRight=4;points=[];fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="540" y="288" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-44" value="3" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;rotation=0;gradientColor=#223548;strokeColor=none;gradientDirection=east;fillColor=#5b738b;rounded=0;pointerEvents=0;fontFamily=Helvetica;fontSize=16;fontColor=#FFFFFF;spacingTop=4;spacingBottom=4;spacingLeft=4;spacingRight=4;points=[];fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="775" y="399" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-45" value="4" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;rotation=0;gradientColor=#223548;strokeColor=none;gradientDirection=east;fillColor=#5b738b;rounded=0;pointerEvents=0;fontFamily=Helvetica;fontSize=16;fontColor=#FFFFFF;spacingTop=4;spacingBottom=4;spacingLeft=4;spacingRight=4;points=[];fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="960" y="229" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-46" value="4" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;rotation=0;gradientColor=#223548;strokeColor=none;gradientDirection=east;fillColor=#5b738b;rounded=0;pointerEvents=0;fontFamily=Helvetica;fontSize=16;fontColor=#FFFFFF;spacingTop=4;spacingBottom=4;spacingLeft=4;spacingRight=4;points=[];fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="600" y="330" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-47" value="5" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;rotation=0;gradientColor=#223548;strokeColor=none;gradientDirection=east;fillColor=#5b738b;rounded=0;pointerEvents=0;fontFamily=Helvetica;fontSize=16;fontColor=#FFFFFF;spacingTop=4;spacingBottom=4;spacingLeft=4;spacingRight=4;points=[];fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="600" y="191" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-48" value="6" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;rotation=0;gradientColor=#223548;strokeColor=none;gradientDirection=east;fillColor=#5b738b;rounded=0;pointerEvents=0;fontFamily=Helvetica;fontSize=16;fontColor=#FFFFFF;spacingTop=4;spacingBottom=4;spacingLeft=4;spacingRight=4;points=[];fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="810" y="145" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-51" value="7" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;rotation=0;gradientColor=#223548;strokeColor=none;gradientDirection=east;fillColor=#5b738b;rounded=0;pointerEvents=0;fontFamily=Helvetica;fontSize=16;fontColor=#FFFFFF;spacingTop=4;spacingBottom=4;spacingLeft=4;spacingRight=4;points=[];fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="685" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-52" value="Send request" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="815" y="399" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gUAxlboTfl1ikJfKjO2c-53" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;1. Ghi transaction mua bán trên private chain&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;2. Lưu merkle root của mỗi khối và địa chỉ người&amp;nbsp; mua&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;3. Người dùng gửi yêu cầu voting&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;4 Lấy Merkle Proof và Proving Key để tạo Zk Proof ( Private input)&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;5 Lấy public input từ Public chain&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;6 Gửi lên Verify contract trên chain public&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;7 Nếu Verify thành công thì thực hiện voting cho sản phẩm&lt;/font&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="895" y="5" width="460" height="140" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
