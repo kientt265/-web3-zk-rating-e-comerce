@@ -28,7 +28,7 @@ template ZkAddress() {
 template Census(nLevels) {
 	var realNLevels = nLevels+1;
 	// defined by the process
-	signal input productID[2]; // public
+	signal input productID; // public
 	signal input censusRoot; // public
 
 	// defined by the user
@@ -68,10 +68,9 @@ template Census(nLevels) {
 	smtClaimExists.value <== 1;
 
 	// check nullifier (electionID + privateKey)
-	component computedNullifier = Poseidon(3);
+	component computedNullifier = Poseidon(2);
 	computedNullifier.inputs[0] <== privateKey;
-	computedNullifier.inputs[1] <== productID[0];
-	computedNullifier.inputs[2] <== productID[1];
+	computedNullifier.inputs[1] <== productID;
 	component checkNullifier = ForceEqualIfEnabled();
 	checkNullifier.enabled <== 1;
 	checkNullifier.in[0] <== computedNullifier.out;
