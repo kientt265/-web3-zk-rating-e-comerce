@@ -22,7 +22,7 @@ contract TestDealComerce is Test {
 
         // Set up a seller
         vm.prank(seller);
-        sellerComerce.createSeller("Shop A", "Type A", "shopA@example.com");
+        sellerComerce.createSeller("Shop A", "shopA@example.com");
         sellerComerce.uploadItems("itemHash1", 100);
 
         // Set up a user
