@@ -7,6 +7,7 @@ contract UserComerce{
         string email;
         uint8 age;
         address addressWallet;
+        bool isRegistered;
     }
 
     mapping (address => User) public users;
@@ -14,7 +15,7 @@ contract UserComerce{
 
 
     function SignUp(string memory _name, uint8 _age, string memory _email) public {
-        users[msg.sender] = User(_name, _email, _age , msg.sender);
+        users[msg.sender] = User(_name, _email, _age , msg.sender, true);
         emit NewUser(msg.sender);
     }
 

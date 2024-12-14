@@ -5,7 +5,8 @@ contract SellerComerce {
 
     mapping (address => Seller) public sellers;
     mapping (string => uint ) public quantityPerItem;
-
+    mapping (string => uint) public pricePerProduct;
+    mapping (string => address) public productBySeller;
     struct Seller{
         string shopName;
         string email;
@@ -18,16 +19,15 @@ contract SellerComerce {
         sellers[msg.sender] = Seller(_shopName, _email, msg.sender, emptyArray);
     }
 
-    function uploadItems(string memory _productID, uint _quantityPerItem) public {
+    function uploadItems(string memory _productID, uint _quantityPerItem, uint _pricePerProduct) public {
         sellers[msg.sender].idTypeItems.push(_productID);
         quantityPerItem[_productID] = _quantityPerItem;
+        productBySeller[_productID] = msg.sender;
+        pricePerProduct[_productID] = _pricePerProduct;
     }
-    // function addQuantifyItems(string memory _hashItems, uint _addQuantityItems) public {
-    //     for(uint i = 0; i < sellers[msg.sender].idTypeItems.length; i++) {
-    //         if(keccak256(abi.encodePacked(sellers[msg.sender].idTypeItems[i])) == keccak256(abi.encodePacked(_hashItems))){
-    //             quantityPerItem[_hashItems] += _addQuantityItems;
-    //         }
-    //     }
-    // }
+
+    function getDetailProduct(string memory _productID) public view returns(uint, uint) {
+        return (quantityPerItem[_productID], pricePerProduct[_productID] );
+    }
 
 }
