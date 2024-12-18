@@ -8,7 +8,7 @@ contract DealComerce is SellerComerce, UserComerce {
 
     event DealCreated(uint dealId, address buyer, string productId, uint amount, uint value);
     event DealConfirmed(uint dealId);
-    event DealCompleted(uint dealId, uint amount);
+    event DealCompleted(uint dealId, uint amount, address buyer);
 
     struct Deal {
         address buyer;
@@ -65,7 +65,7 @@ contract DealComerce is SellerComerce, UserComerce {
         payable(deals[_dealId].seller).transfer(deals[_dealId].value);
 
 
-        emit DealCompleted(_dealId, deals[_dealId].value);
+        emit DealCompleted(_dealId, deals[_dealId].value, msg.sender);
     }
 
     function getDealId(address _addressUser) public view returns(uint) {

@@ -49,6 +49,12 @@ function App() {
   const { address, isConnected } = useWeb3ModalAccount()
   const {walletProvider} = useWeb3ModalProvider()
   const { open } = useWeb3Modal()
+
+  const contractABI = import.meta.env.VITE_ABI_CONTRACT_PRIVATE_COMERCE
+  const contractAdr = import.meta.env.VITE_CONTRACT_ADDRESS_PRIVATE_COMERCE
+
+
+
   return (
     <div>
     <header className="mx-auto px-2 p-4 border-b">
@@ -73,7 +79,7 @@ function App() {
       </div>
     </header>
     <div>
-      <InteractPrivateChain/>
+      {/* <InteractPrivateChain/> */}
       <History />
     </div>
   </div>
