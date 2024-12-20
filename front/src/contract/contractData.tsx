@@ -1,4 +1,4 @@
-export const contractAdr = "0xD24EC197635f9c03ab0A39dE6f932da6e3420c03"
+export const contractAdr = "0xc221a771be70F2D8F6c31b927D6F9C6eFe5A1344"
 export const contractABI = [
     'function createDeal(string memory _productId, uint _amount) payable',
     'function completeDeal(uint _dealId)',

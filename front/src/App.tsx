@@ -66,7 +66,8 @@ createWeb3Modal({
       const [isSeller, setIsSeller] = useState(false); // Kiểm tra xem người dùng chọn là Seller hay User
       const [products, setProducts] = useState<FundedEvent[]>([]); // State to hold fetched products
       const [dealState, setDealState] = useState<DealEvent[]>([])
-      const [selectDealState, setSelectDealState] = useState<{dealId: string;
+      const [selectDealState, setSelectDealState] = useState<{
+        dealId: string;
         buyer: string;
         productID: string;
         amount: string;
@@ -82,13 +83,14 @@ createWeb3Modal({
           const browserProvider = new BrowserProvider(walletProvider);
           const signerProvider = browserProvider.getSigner();
           const contract = new Contract(contractAdr, contractABI, await signerProvider);
-          const dealStateEventFilter = contract.filters.DealState();
-          const newDealStateEvent = await contract.queryFilter(dealStateEventFilter, 100);
           const eventsDeal: DealEvent[] = [];
+          const dealStateEventFilter = contract.filters.DealState();
+          const newDealStateEvent = await contract.queryFilter(dealStateEventFilter, 10);
+
           for (let i = 0; i < newDealStateEvent.length; i++) {
             const currentEvent = newDealStateEvent[i];
             const eventObj1 = {
-              dealId: (currentEvent as any).args[0],
+              dealId: (currentEvent as any).args[0].toString(),
               buyer: (currentEvent as any).args[1].toString(),
               productID: (currentEvent as any).args[2],
               amount: (currentEvent as any).args[3].toString(),
@@ -98,6 +100,7 @@ createWeb3Modal({
             };
             eventsDeal.push(eventObj1);
           }
+          
           if (eventsDeal.length !== 0) {
             setDealState(eventsDeal);
             return eventsDeal.sort((a, b) => b.blockNumber - a.blockNumber);
@@ -105,9 +108,10 @@ createWeb3Modal({
             console.log("No events found.");
             alert("No deal state events found.");
           }
+
         } catch (error) {
-          console.error("Error fetching product events:", error);
-          alert("Error fetching deal state events.");
+          console.error("Error fetching deal state events:", error);
+          alert("An error occurred while fetching deal state events. Please try again.");
         }
       }
       const getEventProducts = async () => {
@@ -119,11 +123,11 @@ createWeb3Modal({
             const newProductEventFilter = contract.filters.NewProduct();
             const newProductEvents = await contract.queryFilter(
               newProductEventFilter,
-              20
+              10
             );
             const newQuantityProductFilter = contract.filters.NewQuantityProduct();
             const newQuantityProductEvents = await contract.queryFilter(
-              newQuantityProductFilter, 20
+              newQuantityProductFilter, 10
             );
             
 
@@ -259,7 +263,7 @@ createWeb3Modal({
                 <h1 className="text-2xl font-bold">VerifComerce</h1>
               </div>
               <div className="flex gap-4">
-                <button  className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
+                <button onClick={getEventDelivering}  className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
                   Lịch Sử Mua Hàng
                 </button>
                 <button onClick={getEventDelivering}  className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
