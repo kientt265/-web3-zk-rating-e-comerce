@@ -62,7 +62,7 @@ createWeb3Modal({
       const [userEmail, setUserEmail] = useState('');
       
       // Trạng thái điều khiển việc hiển thị form đăng ký
-      const [showSignUpForm, setShowSignUpForm] = useState(false);
+      const [showSignUpForm, setShowSignUpForm] = useState<boolean>(false);
       const [isSeller, setIsSeller] = useState(false); // Kiểm tra xem người dùng chọn là Seller hay User
       const [products, setProducts] = useState<FundedEvent[]>([]); // State to hold fetched products
       const [dealState, setDealState] = useState<DealEvent[]>([])
@@ -304,6 +304,10 @@ createWeb3Modal({
         setShowRatingInput(true); 
       };
     
+      const handleShowSignUpForm = () => {
+        setShowSignUpForm(true); // Hiển thị form đăng ký
+      };
+    
       return (
         <div>
           <header className="mx-auto px-2 p-4 border-b">
@@ -328,8 +332,8 @@ createWeb3Modal({
                 <button onClick={getEventProducts} className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
                   Mua Hàng
                 </button>
-                <button
-                  onClick={() => setShowSignUpForm(!showSignUpForm)} // Hiển thị form đăng ký khi nhấn nút Sign Up
+                <button 
+                  onClick={handleShowSignUpForm} // Gọi hàm để hiển thị form đăng ký
                   className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors"
                 >
                   Sign Up
@@ -345,82 +349,88 @@ createWeb3Modal({
           </header>
     
           {showSignUpForm && (
-            <div className="px-4 py-8">
-              <div className="flex gap-4 mb-8">
-                <button
-                  onClick={() => setIsSeller(true)} // Chọn Seller
-                  className={`py-2 px-4 rounded-lg ${isSeller ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                >
-                  Seller
-                </button>
-                <button
-                  onClick={() => setIsSeller(false)} // Chọn User
-                  className={`py-2 px-4 rounded-lg ${!isSeller ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                >
-                  User
-                </button>
-              </div>
-    
-              {isSeller ? (
-                <div>
-                  <h2 className="text-xl mb-4">Sign Up as Seller</h2>
-                  <input
-                    type="text"
-                    placeholder="Shop Name"
-                    value={shopName}
-                    onChange={(e) => setShopName(e.target.value)}
-                    className="border p-2 mb-2 w-full"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Shop Email"
-                    value={shopEmail}
-                    onChange={(e) => setShopEmail(e.target.value)}
-                    className="border p-2 mb-4 w-full"
-                  />
-                  <button
-                    onClick={handleSignupSeller}
-                    disabled={isLoading}
-                    className="bg-blue-500 text-white py-2 px-4 rounded-lg"
-                  >
-                    {isLoading ? "Processing..." : "Create Seller"}
-                  </button>
-                  {isSuccess && !isLoading && <p className="text-green-500 mt-2">Seller created successfully!</p>}
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 className="text-xl mb-4">Đăng Ký</h2>
+                    <div className="flex gap-4 mb-8">
+                        <button
+                            onClick={() => setIsSeller(true)} // Chọn Seller
+                            className={`py-2 px-4 rounded-lg ${isSeller ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+                        >
+                            Seller
+                        </button>
+                        <button
+                            onClick={() => setIsSeller(false)} // Chọn User
+                            className={`py-2 px-4 rounded-lg ${!isSeller ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+                        >
+                            User
+                        </button>
+                    </div>
+                    {isSeller ? (
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Shop Name"
+                                value={shopName}
+                                onChange={(e) => setShopName(e.target.value)}
+                                className="border p-2 mb-2 w-full"
+                            />
+                            <input
+                                type="email"
+                                placeholder="Shop Email"
+                                value={shopEmail}
+                                onChange={(e) => setShopEmail(e.target.value)}
+                                className="border p-2 mb-4 w-full"
+                            />
+                            <button
+                                onClick={handleSignupSeller}
+                                disabled={isLoading}
+                                className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                            >
+                                {isLoading ? "Processing..." : "Create Seller"}
+                            </button>
+                            {isSuccess && !isLoading && <p className="text-green-500 mt-2">Seller created successfully!</p>}
+                        </div>
+                    ) : (
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Your Name"
+                                value={userName}
+                                onChange={(e) => setUserName(e.target.value)}
+                                className="border p-2 mb-2 w-full"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Your Age"
+                                value={userAge}
+                                onChange={(e) => setUserAge(e.target.value)}
+                                className="border p-2 mb-2 w-full"
+                            />
+                            <input
+                                type="email"
+                                placeholder="Your Email"
+                                value={userEmail}
+                                onChange={(e) => setUserEmail(e.target.value)}
+                                className="border p-2 mb-4 w-full"
+                            />
+                            <button
+                                onClick={handleSignupUser}
+                                disabled={isLoading}
+                                className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                            >
+                                {isLoading ? "Processing..." : "Sign Up User"}
+                            </button>
+                            {isSuccess && !isLoading && <p className="text-green-500 mt-2">User signed up successfully!</p>}
+                        </div>
+                    )}
+                    <button
+                        onClick={() => setShowSignUpForm(false)} // Đóng form đăng ký
+                        className="mt-4 ml-2 bg-gray-300 text-black py-2 px-4 rounded-lg"
+                    >
+                        Hủy
+                    </button>
                 </div>
-              ) : (
-                <div>
-                  <h2 className="text-xl mb-4">Sign Up as User</h2>
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                    className="border p-2 mb-2 w-full"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Your Age"
-                    value={userAge}
-                    onChange={(e) => setUserAge(e.target.value)}
-                    className="border p-2 mb-2 w-full"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Your Email"
-                    value={userEmail}
-                    onChange={(e) => setUserEmail(e.target.value)}
-                    className="border p-2 mb-4 w-full"
-                  />
-                  <button
-                    onClick={handleSignupUser}
-                    disabled={isLoading}
-                    className="bg-blue-500 text-white py-2 px-4 rounded-lg"
-                  >
-                    {isLoading ? "Processing..." : "Sign Up User"}
-                  </button>
-                  {isSuccess && !isLoading && <p className="text-green-500 mt-2">User signed up successfully!</p>}
-                </div>
-              )}
             </div>
           )}
           <div>
