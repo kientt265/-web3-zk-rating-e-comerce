@@ -7,6 +7,7 @@ import {InteractPrivateChain} from './component/InteractPrivateChain'
 import History from './component/History'
 import useEthers from "./hooks/useEthers"
 import { FundedEvent } from  "./lib/type"
+import {contractABI, contractAdr} from "./contract/contractData"
 const projectId = import.meta.env.VITE_PROJECT_ID;
 
 const sepolia = {
@@ -45,21 +46,7 @@ createWeb3Modal({
   projectId,
   enableAnalytics: true,
 });
-const contractABI = [
-  'function createDeal(string memory _productId, uint _amount) payable',
-  'function completeDeal(uint _dealId)',
-  'function getDealId(address _addressUser) view returns(uint)',
-  'event DealCreated(uint dealId, address buyer, string productId, uint amount, uint value)',
-  'event DealConfirmed(uint dealId)',
-  'event DealCompleted(uint dealId, uint amount, address buyer)',
-  'function createSeller(string memory _shopName, string memory _email)',
-  'function uploadItems(string memory _productID, uint _quantityPerItem, uint _pricePerProduct)',
-  'function getDetailProduct(string memory _productID) view returns(uint, uint)',
-  'function SignUp(string memory _name, uint8 _age, string memory _email)',
-  'event NewUser(address _address)',
-  'event NewProduct(string  _productID, uint _quantityPerItem, uint _pricePerProduct)'
-    ]
-    const contractAdr = import.meta.env.VITE_CONTRACT_ADDRESS_PRIVATE_COMERCE
+
   function App() {
       const { address, isConnected } = useWeb3ModalAccount();
       const { walletProvider } = useWeb3ModalProvider();
@@ -78,6 +65,7 @@ const contractABI = [
       const [showSignUpForm, setShowSignUpForm] = useState(false);
       const [isSeller, setIsSeller] = useState(false); // Kiểm tra xem người dùng chọn là Seller hay User
       const [products, setProducts] = useState<FundedEvent[]>([]); // State to hold fetched products
+      const [selectedProduct, setSelectedProduct] = useState<{ productID: string; quantity: string; price: string } | null>(null); // State to hold selected product and quantity
       const getEventProducts = async () => {
         if (walletProvider) {
           try {
@@ -115,8 +103,46 @@ const contractABI = [
           }
         }
       };
-      
-      
+      const handleCreateDeal = async () => {
+        if (!selectedProduct) {
+            alert("Please select a product and enter the quantity!");
+            return;
+        }
+    
+        if (!selectedProduct.quantity || parseInt(selectedProduct.quantity) <= 0) {
+            alert("Please enter a valid quantity!");
+            return;
+        }
+    
+        // Lấy giá trị price từ selectedProduct
+        const price = parseFloat(selectedProduct.price);
+        const totalPrice = price * parseInt(selectedProduct.quantity); // Tính toán giá trị tổng
+    
+        setIsLoading(true); // Hiển thị trạng thái loading
+        try {
+            if (walletProvider) {
+                const browserProvider = new BrowserProvider(walletProvider);
+                const signerProvider = browserProvider.getSigner();
+                const contract = new Contract(contractAdr, contractABI, await signerProvider);
+    
+                // Thực hiện giao dịch với giá trị tổng
+                const transaction = await contract.createDeal(selectedProduct.productID, selectedProduct.quantity, { value: parseEther(totalPrice.toString()) });
+                await transaction.wait();
+    
+                console.log(`Purchased ${selectedProduct.quantity} of product ID: ${selectedProduct.productID} for total price: ${totalPrice}`);
+                setIsSuccess(true); // Giao dịch thành công
+                setSelectedProduct(null); // Reset sản phẩm được chọn
+            } else {
+                alert("Wallet provider not found. Please connect your wallet.");
+            }
+        } catch (error) {
+            console.error("Error creating deal:", error);
+            alert("Error creating deal, please try again!");
+        } finally {
+            setIsLoading(false); // Ẩn trạng thái loading
+        }
+    };
+    
       const handleSignupSeller = async () => {
         setIsLoading(true);
         if (walletProvider) {
@@ -169,6 +195,9 @@ const contractABI = [
               <div className="flex gap-4">
                 <button className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
                   Lịch Sử Mua Hàng
+                </button>
+                <button onClick={getEventProducts} className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
+                  Hàng Đang Vận Chuyển
                 </button>
                 <button onClick={getEventProducts} className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
                   Mua Hàng
@@ -271,9 +300,9 @@ const contractABI = [
           <div>
             <h2 className="text-xl mb-4">Products</h2>
             {products.length > 0 ? (
-                <ul>
+                <ul className="space-y-2">
                     {products.map((product, index) => (
-                        <li key={index}>
+                        <li className="p-4 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-100 hover:shadow-lg transition duration-200 cursor-pointer" key={index} onClick={() => setSelectedProduct({ productID: product.productID, quantity: '', price: product.pricePerProduct })}>
                             Product ID: {product.productID}, Quantity: {product.quantityPerItem}, Price: {product.pricePerProduct}
                         </li>
                     ))}
@@ -281,10 +310,26 @@ const contractABI = [
             ) : (
                 <p>No products found.</p>
             )}
+            {selectedProduct && (
+                <div>
+                    <input
+                        type="number"
+                        placeholder="Enter quantity"
+                        value={selectedProduct.quantity}
+                        onChange={(e) => setSelectedProduct({ ...selectedProduct, quantity: e.target.value })}
+                        className="border p-2 mb-2 w-full"
+                    />
+                    <button
+                        onClick={handleCreateDeal}
+                        className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                    >
+                        Purchase
+                    </button>
+                </div>
+            )}
           </div>
         </div>
       );
     }
-    
-    export default App;
-    
+  
+    export default App;    
