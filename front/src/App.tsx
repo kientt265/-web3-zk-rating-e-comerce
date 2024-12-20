@@ -6,6 +6,7 @@ import { shortenAddress } from './lib/utils'
 import { useWeb3Modal } from '@web3modal/ethers/react'
 import {InteractPrivateChain} from './component/InteractPrivateChain'
 import History from './component/History'
+import useEthers from "./hooks/useEthers"
 const projectId = import.meta.env.VITE_PROJECT_ID;
 
 const sepolia = {
@@ -47,13 +48,65 @@ createWeb3Modal({
 
 function App() {
   const { address, isConnected } = useWeb3ModalAccount()
+  const { provider } = useEthers();
+  const {signer} = useEthers()
   const {walletProvider} = useWeb3ModalProvider()
   const { open } = useWeb3Modal()
+  const [isSuccess, setIsSuccess] = useState(false); // State lưu trạng thái thành công
+  const [isLoading, setIsLoading] = useState(false);
 
-  const contractABI = import.meta.env.VITE_ABI_CONTRACT_PRIVATE_COMERCE
+  // const contractABI = [
+  //   'function setNumber(uint256)',
+  //   'function getNumber() view returns(uint256)'
+  // ]
+  // const contractAdr = "0x2e3d7efD0A31f2200b79e78E97dF0C8999EdD654"
+  const contractABI = [
+    'function createDeal(string memory _productId, uint _amount) payable',
+'function completeDeal(uint _dealId)',
+'function getDealId(address _addressUser) view returns(uint)',
+'event DealCreated(uint dealId, address buyer, string productId, uint amount, uint value)',
+'event DealConfirmed(uint dealId)',
+'event DealCompleted(uint dealId, uint amount, address buyer)',
+'function createSeller(string memory _shopName, string memory _email)',
+'function uploadItems(string memory _productID, uint _quantityPerItem, uint _pricePerProduct)',
+'function getDetailProduct(string memory _productID) view returns(uint, uint)',
+'function SignUp(string memory _name, uint8 _age, string memory _email)',
+'event NewUser(address _address)'
+  ]
   const contractAdr = import.meta.env.VITE_CONTRACT_ADDRESS_PRIVATE_COMERCE
+  const handleProvider = async () => {
+    setIsLoading(true);
+    if (walletProvider) {
+      try {
+        const browserProvider = new BrowserProvider(walletProvider);
+        const signerProvider = browserProvider.getSigner();
+        // Lấy thông tin về mạng mà provider đang kết nối
+        console.log(signerProvider);
+        const network = await browserProvider.getNetwork();
+        const chainId = network.chainId;
+        const networkName = network.name;
+        const contract = new Contract(contractAdr, contractABI, await signerProvider);
+        console.log(contract)
+        const numberToSet = 42;
 
+        // const transaction = await contract.setNumber(numberToSet);
+        const transaction = await contract.createSeller("Shop ABC", "shop@example.com");
+        await transaction.wait();
 
+        // Thông báo thành công
+        setIsSuccess(true);
+  
+      } catch (error) {
+        console.error("Error creating seller:", error);
+        alert("Error creating seller, please try again!");
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      console.log("No BrowserProvider connected.");
+    }
+
+  }
 
   return (
     <div>
@@ -79,8 +132,20 @@ function App() {
       </div>
     </header>
     <div>
+      
       {/* <InteractPrivateChain/> */}
-      <History />
+      {/* <History /> */}
+      {/* Your code in here */}
+      <button
+          onClick={handleProvider}
+          disabled={isLoading}
+          className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+        >
+          {isLoading ? "Processing..." : "Create Seller"}
+        </button>
+
+        {isSuccess && !isLoading && <p className="text-green-500 mt-2">Seller created successfully!</p>}
+        
     </div>
   </div>
   

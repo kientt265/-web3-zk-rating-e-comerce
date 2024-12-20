@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Contract, BrowserProvider } from 'ethers';
+import { Contract, BrowserProvider, formatEther } from 'ethers';
 import { useWeb3ModalProvider } from '@web3modal/ethers/react';
 import ao01 from '../assets/data/ao01.webp';
 import ao02 from '../assets/data/ao02.jpg';
@@ -57,9 +57,7 @@ export const InteractPrivateChain = () => {
   };
 
   useEffect(() => {
-    if (walletProvider) {
-      fetchProductDetails();
-    }
+    fetchProductDetails();
   }, [walletProvider]);
 
   return (
@@ -73,7 +71,7 @@ export const InteractPrivateChain = () => {
           />
           <div className="flex justify-between items-center">
             <div className="text-lg font-semibold text-gray-800">
-              Giá: {productDetails[product.id]?.price || 'Loading...'} ETH
+              Giá: {productDetails[product.id]?.price ? formatEther(productDetails[product.id].price) : 'Loading...'} ETH
             </div>
             <div className="text-sm text-gray-600">
               Số lượng: {productDetails[product.id]?.quantity || 'Loading...'}
