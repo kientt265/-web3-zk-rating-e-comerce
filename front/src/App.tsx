@@ -74,7 +74,27 @@ createWeb3Modal({
         value: string;
         isCompleted: boolean} | null>(null);
       const [selectedProduct, setSelectedProduct] = useState<{ productID: string; quantity: string; price: string } | null>(null); // State to hold selected product and quantity
-      const getEventDelivering = async () => {
+      const comfirmDeal = async (dealId: string) => {
+        setIsLoading(true);
+        if (walletProvider) {
+          try {
+            const browserProvider = new BrowserProvider(walletProvider);
+            const signerProvider = browserProvider.getSigner();
+            const contract = new Contract(contractAdr, contractABI, await signerProvider);
+    
+            const transaction = await contract.completeDeal(dealId);
+            await transaction.wait();
+    
+            setIsSuccess(true);
+          } catch (error) {
+            console.error("Error confirming deal:", error);
+            alert("Error confirming deal, please try again!");
+          } finally {
+            setIsLoading(false);
+          }
+        }
+      }
+      const getEventDelivering = async (filterCompleted: boolean | null = null) => {
         if (!walletProvider) {
           alert("Please connect your wallet first.");
           return;
@@ -83,13 +103,13 @@ createWeb3Modal({
           const browserProvider = new BrowserProvider(walletProvider);
           const signerProvider = browserProvider.getSigner();
           const contract = new Contract(contractAdr, contractABI, await signerProvider);
-          const eventsDeal: DealEvent[] = [];
+          const eventsDeal = [...dealState]; // Clone current state to ensure immutability
           const dealStateEventFilter = contract.filters.DealState();
           const newDealStateEvent = await contract.queryFilter(dealStateEventFilter, 10);
-
+      
           for (let i = 0; i < newDealStateEvent.length; i++) {
             const currentEvent = newDealStateEvent[i];
-            const eventObj1 = {
+            const newEvent = {
               dealId: (currentEvent as any).args[0].toString(),
               buyer: (currentEvent as any).args[1].toString(),
               productID: (currentEvent as any).args[2],
@@ -98,22 +118,42 @@ createWeb3Modal({
               isCompleted: (currentEvent as any).args[5],
               blockNumber: currentEvent.blockNumber,
             };
-            eventsDeal.push(eventObj1);
+      
+            // Find index of the existing event with the same dealId
+            const existingIndex = eventsDeal.findIndex(event => event.dealId === newEvent.dealId);
+      
+            if (existingIndex !== -1) {
+              // Overwrite the existing event with the new one
+              eventsDeal[existingIndex] = newEvent;
+            } else {
+              // Add the new event to the list
+              eventsDeal.push(newEvent);
+            }
           }
-          
-          if (eventsDeal.length !== 0) {
-            setDealState(eventsDeal);
-            return eventsDeal.sort((a, b) => b.blockNumber - a.blockNumber);
+      
+          let filteredEvents = eventsDeal;
+      
+          // Filter based on completion status if specified
+          if (filterCompleted !== null) {
+            filteredEvents = eventsDeal.filter(event => event.isCompleted === filterCompleted);
+          }
+      
+          if (filteredEvents.length !== 0) {
+            // Sort the events by blockNumber in descending order
+            const sortedEvents = filteredEvents.sort((a, b) => b.blockNumber - a.blockNumber);
+            setDealState(sortedEvents);
+            return sortedEvents;
           } else {
             console.log("No events found.");
             alert("No deal state events found.");
           }
-
+      
         } catch (error) {
           console.error("Error fetching deal state events:", error);
           alert("An error occurred while fetching deal state events. Please try again.");
         }
-      }
+      };
+      
       const getEventProducts = async () => {
         if (walletProvider) {
           try {
@@ -263,12 +303,19 @@ createWeb3Modal({
                 <h1 className="text-2xl font-bold">VerifComerce</h1>
               </div>
               <div className="flex gap-4">
-                <button onClick={getEventDelivering}  className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
-                  Lịch Sử Mua Hàng
-                </button>
-                <button onClick={getEventDelivering}  className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
-                  Hàng Đang Vận Chuyển
-                </button>
+              <button
+                onClick={() => getEventDelivering(true)}
+                className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
+                Lịch Sử Mua Hàng
+              </button>
+              <button
+                onClick={() => getEventDelivering(false)}
+                className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors"
+              >
+                Hàng Đang Vận Chuyển
+              </button>
+
+
                 <button onClick={getEventProducts} className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
                   Mua Hàng
                 </button>
@@ -372,8 +419,24 @@ createWeb3Modal({
             {dealState.length > 0 ? (
                     <ul className="space-y-2">
                         {dealState.map((dealState, index) => (
-                            <li key={index} className="p-4 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-100 hover:shadow-lg transition duration-200 cursor-pointer" onClick={() => setSelectDealState({ dealId: dealState.dealId, buyer: dealState.buyer, productID: dealState.productID, amount: dealState.amount, value: dealState.value, isCompleted: dealState.isCompleted  })}>
+                            <li key={index} className="p-4 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-100 hover:shadow-lg transition duration-200 cursor-pointer">
                                 Deal ID: {dealState.dealId}, Buyer: {dealState.buyer}, Product ID: {dealState.productID}, Amount: {dealState.amount}, Value: {dealState.value}, Completed: {dealState.isCompleted ? "Yes" : "No"}
+                                {!dealState.isCompleted && (
+                                    <button 
+                                        onClick={() => comfirmDeal(dealState.dealId)}
+                                        className="ml-4 bg-green-500 text-white py-1 px-2 rounded-lg hover:bg-green-400 transition-colors"
+                                    >
+                                        Đã Nhận được Hàng
+                                    </button>
+                                )}
+                                {dealState.isCompleted && (
+                                    <button 
+                                        // onClick={() => setShowRatingInput(dealState.dealId)} // Hiển thị ô nhập privateKey
+                                        className="ml-4 bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-400 transition-colors"
+                                    >
+                                        Đánh giá sản phẩm
+                                    </button>
+                                )}
                             </li>
                         ))}
                     </ul>
