@@ -6,10 +6,9 @@ import "./UserComerce.sol";
 
 contract DealComerce is SellerComerce, UserComerce {
 
-    event DealCreated(uint dealId, address buyer, string productId, uint amount, uint value);
+    event DealState(uint dealId, address buyer, string productId, uint amount, uint value, bool isCompleted);
     event DealConfirmed(uint dealId);
-    event DealCompleted(uint dealId, uint amount, address buyer);
-
+    event NewQuantityProduct(string productID, uint price, uint quantity);
     struct Deal {
         address buyer;
         address seller;
@@ -47,7 +46,8 @@ contract DealComerce is SellerComerce, UserComerce {
         quantityPerItem[_productId] -= _amount;
         buyerDeals[msg.sender].push(_dealId);
         getDealIDByAddress[msg.sender] = _dealId;
-        emit DealCreated(_dealId, msg.sender, _productId, _amount, msg.value);
+        emit DealState(_dealId, msg.sender, _productId, _amount, msg.value, deals[_dealId].isCompleted);
+        emit NewQuantityProduct(_productId, pricePerProduct[_productId], quantityPerItem[_productId]);
     }
 
 
@@ -63,9 +63,7 @@ contract DealComerce is SellerComerce, UserComerce {
 
 
         payable(deals[_dealId].seller).transfer(deals[_dealId].value);
-
-
-        emit DealCompleted(_dealId, deals[_dealId].value, msg.sender);
+        emit DealState(_dealId, msg.sender, deals[_dealId].productId , deals[_dealId].amount, deals[_dealId].value, deals[_dealId].isCompleted);
     }
 
     function getDealId(address _addressUser) public view returns(uint) {
