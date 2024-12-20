@@ -6,7 +6,7 @@ import { useWeb3Modal } from '@web3modal/ethers/react'
 import {InteractPrivateChain} from './component/InteractPrivateChain'
 import History from './component/History'
 import useEthers from "./hooks/useEthers"
-import { FundedEvent } from  "./lib/type"
+import { FundedEvent, DealEvent } from  "./lib/type"
 import {contractABI, contractAdr} from "./contract/contractData"
 const projectId = import.meta.env.VITE_PROJECT_ID;
 
@@ -66,18 +66,18 @@ createWeb3Modal({
       const [isSeller, setIsSeller] = useState(false); // Kiểm tra xem người dùng chọn là Seller hay User
       const [products, setProducts] = useState<FundedEvent[]>([]); // State to hold fetched products
       const [selectedProduct, setSelectedProduct] = useState<{ productID: string; quantity: string; price: string } | null>(null); // State to hold selected product and quantity
-      const getEventProducts = async () => {
+      const getEventDelivering = async () => {
         if (walletProvider) {
           try {
             const browserProvider = new BrowserProvider(walletProvider);
             const signerProvider = browserProvider.getSigner();
             const contract = new Contract(contractAdr, contractABI, await signerProvider);
-            const newProductEventFilter = contract.filters.NewProduct();
+            const newQuantityProductEventFilter = contract.filters.DealState();
             const newProductEvents = await contract.queryFilter(
-              newProductEventFilter,
-              20
+              newQuantityProductEventFilter,
+              100
             );
-            const events: FundedEvent[] = [];
+            const events: DealEvent[] = [];
             for (let i = 0; i < newProductEvents.length; i++) {
               const currentEvent = newProductEvents[i];
 
@@ -91,6 +91,64 @@ createWeb3Modal({
               events.push(eventObj);
               
             }
+              
+            if (events.length !== 0) {
+                setProducts(events); // Update state with fetched products
+                return events.sort((a, b) => b.blockNumber - a.blockNumber);
+            }
+
+          } catch (error) {
+            console.error("Error fetching product events:", error);
+            return null;  // Trả về null nếu có lỗi
+          }
+        }
+      }
+      const getEventProducts = async () => {
+        if (walletProvider) {
+          try {
+            const browserProvider = new BrowserProvider(walletProvider);
+            const signerProvider = browserProvider.getSigner();
+            const contract = new Contract(contractAdr, contractABI, await signerProvider);
+            const newProductEventFilter = contract.filters.NewProduct();
+            const newProductEvents = await contract.queryFilter(
+              newProductEventFilter,
+              20
+            );
+            const newQuantityProductFilter = contract.filters.NewQuantityProduct();
+            const newQuantityProductEvents = await contract.queryFilter(
+              newQuantityProductFilter, 20
+            );
+
+            const events: FundedEvent[] = [];
+
+            for (let i = 0; i < newProductEvents.length; i++) {
+              const currentEvent = newProductEvents[i];
+
+              const eventObj = {
+                productID: (currentEvent as any).args[0],
+                quantityPerItem: (currentEvent as any).args[1].toString(),
+                pricePerProduct: formatEther((currentEvent as any).args[2]),
+                blockNumber: currentEvent.blockNumber,
+              };
+               
+              events.push(eventObj);
+              
+            }
+
+            for (let i = 0; i < newQuantityProductEvents.length; i++) {
+              const currentEvent = newQuantityProductEvents[i];
+              const productID123 = (currentEvent as any).args[0];
+              const updatedQuantity = (currentEvent as any).args[2].toString();
+              // const priceOldProduct = formatEther((currentEvent as any).args[2]); 
+              const existingProduct = events.find(event => event.productID === productID123);
+              if (existingProduct) {
+                // Ghi đè updatedQuantity vào phần tử có productID trùng khớp
+                existingProduct.quantityPerItem = updatedQuantity;
+              }          
+            }
+
+
+
               
             if (events.length !== 0) {
                 setProducts(events); // Update state with fetched products
@@ -196,7 +254,7 @@ createWeb3Modal({
                 <button className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
                   Lịch Sử Mua Hàng
                 </button>
-                <button onClick={getEventProducts} className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
+                <button  className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
                   Hàng Đang Vận Chuyển
                 </button>
                 <button onClick={getEventProducts} className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">

@@ -1,11 +1,11 @@
-export const contractAdr = "0x7522494160d702D0e7Db8E93353435776Ac5503f"
+export const contractAdr = "0xD24EC197635f9c03ab0A39dE6f932da6e3420c03"
 export const contractABI = [
     'function createDeal(string memory _productId, uint _amount) payable',
     'function completeDeal(uint _dealId)',
     'function getDealId(address _addressUser) view returns(uint)',
-    'event DealCreated(uint dealId, address buyer, string productId, uint amount, uint value)',
+    'event DealState(uint dealId, address buyer, string productId, uint amount, uint value)',
     'event DealConfirmed(uint dealId)',
-    'event DealCompleted(uint dealId, uint amount, address buyer)',
+    'event NewQuantityProduct(string productID, uint price, uint quantity)',
     'function createSeller(string memory _shopName, string memory _email)',
     'function uploadItems(string memory _productID, uint _quantityPerItem, uint _pricePerProduct)',
     'function getDetailProduct(string memory _productID) view returns(uint, uint)',

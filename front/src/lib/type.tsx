@@ -4,3 +4,12 @@ export type FundedEvent = {
     quantityPerItem: string;
     blockNumber: number;
   }
+ 
+export type DealEvent = {
+    dealId: string;
+    buyer: string;
+    productID: string;
+    amount: string;
+    value: string;
+    blockNumber: number;
+}
