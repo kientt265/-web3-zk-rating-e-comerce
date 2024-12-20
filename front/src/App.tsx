@@ -66,14 +66,19 @@ createWeb3Modal({
       const [isSeller, setIsSeller] = useState(false); // Kiểm tra xem người dùng chọn là Seller hay User
       const [products, setProducts] = useState<FundedEvent[]>([]); // State to hold fetched products
       const [dealState, setDealState] = useState<DealEvent[]>([])
-      const [selectDealState, setSelectDealState] = useState<{
-        dealId: string;
-        buyer: string;
-        productID: string;
-        amount: string;
-        value: string;
-        isCompleted: boolean} | null>(null);
+      // const [selectDealState, setSelectDealState] = useState<{
+      //   dealId: string;
+      //   buyer: string;
+      //   productID: string;
+      //   amount: string;
+      //   value: string;
+      //   isCompleted: boolean} | null>(null);
       const [selectedProduct, setSelectedProduct] = useState<{ productID: string; quantity: string; price: string } | null>(null); // State to hold selected product and quantity
+      const [showRatingInput, setShowRatingInput] = useState<boolean>(false); // Trạng thái để hiển thị ô nhập
+      const [inputValue, setInputValue] = useState<string>(''); // Trạng thái để lưu giá trị ô nhập
+      // const toggleShowRatingInput = async (productId: string) => {
+        
+      // }
       const comfirmDeal = async (dealId: string) => {
         setIsLoading(true);
         if (walletProvider) {
@@ -295,6 +300,10 @@ createWeb3Modal({
         }
       };
     
+      const handleShowRatingInput = (productId: string) => {
+        setShowRatingInput(true); 
+      };
+    
       return (
         <div>
           <header className="mx-auto px-2 p-4 border-b">
@@ -431,7 +440,7 @@ createWeb3Modal({
                                 )}
                                 {dealState.isCompleted && (
                                     <button 
-                                        // onClick={() => setShowRatingInput(dealState.dealId)} // Hiển thị ô nhập privateKey
+                                        onClick={() => handleShowRatingInput(dealState.productID)} // Gọi hàm để hiển thị ô nhập
                                         className="ml-4 bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-400 transition-colors"
                                     >
                                         Đánh giá sản phẩm
@@ -474,6 +483,42 @@ createWeb3Modal({
                 </div>
             )}
           </div>
+          {showRatingInput && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 className="text-lg mb-4">Rating</h2>
+                    <input
+                        type="text"
+                        placeholder="Enter Your Private Key"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        className="border p-2 mb-4 w-full"
+                    />
+                    <input
+                        type="text"
+                        placeholder="1* to 5*"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        className="border p-2 mb-4 w-full"
+                    />
+                    <button
+                        onClick={() => {
+                            // Xử lý logic gửi đánh giá ở đây
+                            setShowRatingInput(false); // Ẩn ô nhập sau khi gửi
+                        }}
+                        className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                    >
+                        Send
+                    </button>
+                    <button
+                        onClick={() => setShowRatingInput(false)} // Đóng ô nhập
+                        className="ml-2 bg-gray-300 text-black py-2 px-4 rounded-lg"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        )}
         </div>
       );
     }
