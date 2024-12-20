@@ -11,5 +11,6 @@ export type DealEvent = {
     productID: string;
     amount: string;
     value: string;
+    isCompleted: boolean;
     blockNumber: number;
 }

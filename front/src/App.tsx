@@ -65,42 +65,49 @@ createWeb3Modal({
       const [showSignUpForm, setShowSignUpForm] = useState(false);
       const [isSeller, setIsSeller] = useState(false); // Kiểm tra xem người dùng chọn là Seller hay User
       const [products, setProducts] = useState<FundedEvent[]>([]); // State to hold fetched products
+      const [dealState, setDealState] = useState<DealEvent[]>([])
+      const [selectDealState, setSelectDealState] = useState<{dealId: string;
+        buyer: string;
+        productID: string;
+        amount: string;
+        value: string;
+        isCompleted: boolean} | null>(null);
       const [selectedProduct, setSelectedProduct] = useState<{ productID: string; quantity: string; price: string } | null>(null); // State to hold selected product and quantity
       const getEventDelivering = async () => {
-        if (walletProvider) {
-          try {
-            const browserProvider = new BrowserProvider(walletProvider);
-            const signerProvider = browserProvider.getSigner();
-            const contract = new Contract(contractAdr, contractABI, await signerProvider);
-            const newQuantityProductEventFilter = contract.filters.DealState();
-            const newProductEvents = await contract.queryFilter(
-              newQuantityProductEventFilter,
-              100
-            );
-            const events: DealEvent[] = [];
-            for (let i = 0; i < newProductEvents.length; i++) {
-              const currentEvent = newProductEvents[i];
-
-              const eventObj = {
-                productID: (currentEvent as any).args[0],
-                quantityPerItem: (currentEvent as any).args[1].toString(),
-                pricePerProduct: formatEther((currentEvent as any).args[2]),
-                blockNumber: currentEvent.blockNumber,
-              };
-               
-              events.push(eventObj);
-              
-            }
-              
-            if (events.length !== 0) {
-                setProducts(events); // Update state with fetched products
-                return events.sort((a, b) => b.blockNumber - a.blockNumber);
-            }
-
-          } catch (error) {
-            console.error("Error fetching product events:", error);
-            return null;  // Trả về null nếu có lỗi
+        if (!walletProvider) {
+          alert("Please connect your wallet first.");
+          return;
+        }
+        try {
+          const browserProvider = new BrowserProvider(walletProvider);
+          const signerProvider = browserProvider.getSigner();
+          const contract = new Contract(contractAdr, contractABI, await signerProvider);
+          const dealStateEventFilter = contract.filters.DealState();
+          const newDealStateEvent = await contract.queryFilter(dealStateEventFilter, 100);
+          const eventsDeal: DealEvent[] = [];
+          for (let i = 0; i < newDealStateEvent.length; i++) {
+            const currentEvent = newDealStateEvent[i];
+            const eventObj1 = {
+              dealId: (currentEvent as any).args[0],
+              buyer: (currentEvent as any).args[1].toString(),
+              productID: (currentEvent as any).args[2],
+              amount: (currentEvent as any).args[3].toString(),
+              value: formatEther((currentEvent as any).args[4]),
+              isCompleted: (currentEvent as any).args[5],
+              blockNumber: currentEvent.blockNumber,
+            };
+            eventsDeal.push(eventObj1);
           }
+          if (eventsDeal.length !== 0) {
+            setDealState(eventsDeal);
+            return eventsDeal.sort((a, b) => b.blockNumber - a.blockNumber);
+          } else {
+            console.log("No events found.");
+            alert("No deal state events found.");
+          }
+        } catch (error) {
+          console.error("Error fetching product events:", error);
+          alert("Error fetching deal state events.");
         }
       }
       const getEventProducts = async () => {
@@ -118,6 +125,7 @@ createWeb3Modal({
             const newQuantityProductEvents = await contract.queryFilter(
               newQuantityProductFilter, 20
             );
+            
 
             const events: FundedEvent[] = [];
 
@@ -251,10 +259,10 @@ createWeb3Modal({
                 <h1 className="text-2xl font-bold">VerifComerce</h1>
               </div>
               <div className="flex gap-4">
-                <button className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
+                <button  className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
                   Lịch Sử Mua Hàng
                 </button>
-                <button  className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
+                <button onClick={getEventDelivering}  className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
                   Hàng Đang Vận Chuyển
                 </button>
                 <button onClick={getEventProducts} className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
@@ -356,6 +364,19 @@ createWeb3Modal({
             </div>
           )}
           <div>
+          <h2 className="text-xl mb-4">Deal State Events</h2>
+            {dealState.length > 0 ? (
+                    <ul className="space-y-2">
+                        {dealState.map((dealState, index) => (
+                            <li key={index} className="p-4 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-100 hover:shadow-lg transition duration-200 cursor-pointer" onClick={() => setSelectDealState({ dealId: dealState.dealId, buyer: dealState.buyer, productID: dealState.productID, amount: dealState.amount, value: dealState.value, isCompleted: dealState.isCompleted  })}>
+                                Deal ID: {dealState.dealId}, Buyer: {dealState.buyer}, Product ID: {dealState.productID}, Amount: {dealState.amount}, Value: {dealState.value}, Completed: {dealState.isCompleted ? "Yes" : "No"}
+                            </li>
+                        ))}
+                    </ul>
+               
+            ): (
+              <p>Bạn chưa mua gì</p>
+          )}
             <h2 className="text-xl mb-4">Products</h2>
             {products.length > 0 ? (
                 <ul className="space-y-2">

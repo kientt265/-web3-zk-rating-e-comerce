@@ -3,7 +3,7 @@ export const contractABI = [
     'function createDeal(string memory _productId, uint _amount) payable',
     'function completeDeal(uint _dealId)',
     'function getDealId(address _addressUser) view returns(uint)',
-    'event DealState(uint dealId, address buyer, string productId, uint amount, uint value)',
+    'event DealState(uint dealId, address buyer, string productId, uint amount, uint value, bool isCompleted)',
     'event DealConfirmed(uint dealId)',
     'event NewQuantityProduct(string productID, uint price, uint quantity)',
     'function createSeller(string memory _shopName, string memory _email)',
