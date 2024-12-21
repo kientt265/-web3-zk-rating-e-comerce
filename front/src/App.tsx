@@ -107,8 +107,9 @@ createWeb3Modal({
         try {
           const browserProvider = new BrowserProvider(walletProvider);
           const signerProvider = browserProvider.getSigner();
+          const addr = (await signerProvider).getAddress(); // Lấy địa chỉ người dùng
           const contract = new Contract(contractAdr, contractABI, await signerProvider);
-          const eventsDeal = [...dealState]; // Clone current state to ensure immutability
+          const eventsDeal = [...dealState]; 
           const dealStateEventFilter = contract.filters.DealState();
           const newDealStateEvent = await contract.queryFilter(dealStateEventFilter, 10);
       
@@ -124,27 +125,30 @@ createWeb3Modal({
               blockNumber: currentEvent.blockNumber,
             };
       
-            // Find index of the existing event with the same dealId
-            const existingIndex = eventsDeal.findIndex(event => event.dealId === newEvent.dealId);
+            // Chỉ xử lý các sự kiện có buyer trùng với địa chỉ của người dùng
+            if (newEvent.buyer.toLowerCase() === (await addr).toLowerCase()) {
+              // Tìm chỉ số của sự kiện đã tồn tại với dealId tương ứng
+              const existingIndex = eventsDeal.findIndex(event => event.dealId === newEvent.dealId);
       
-            if (existingIndex !== -1) {
-              // Overwrite the existing event with the new one
-              eventsDeal[existingIndex] = newEvent;
-            } else {
-              // Add the new event to the list
-              eventsDeal.push(newEvent);
+              if (existingIndex !== -1) {
+                // Ghi đè sự kiện đã tồn tại bằng sự kiện mới
+                eventsDeal[existingIndex] = newEvent;
+              } else {
+                // Thêm sự kiện mới vào danh sách
+                eventsDeal.push(newEvent);
+              }
             }
           }
       
           let filteredEvents = eventsDeal;
       
-          // Filter based on completion status if specified
+          // Lọc dựa trên trạng thái hoàn thành nếu được chỉ định
           if (filterCompleted !== null) {
-            filteredEvents = eventsDeal.filter(event => event.isCompleted === filterCompleted);
+            filteredEvents = filteredEvents.filter(event => event.isCompleted === filterCompleted);
           }
       
           if (filteredEvents.length !== 0) {
-            // Sort the events by blockNumber in descending order
+            // Sắp xếp các sự kiện theo blockNumber giảm dần
             const sortedEvents = filteredEvents.sort((a, b) => b.blockNumber - a.blockNumber);
             setDealState(sortedEvents);
             return sortedEvents;
@@ -152,18 +156,19 @@ createWeb3Modal({
             console.log("No events found.");
             alert("No deal state events found.");
           }
-      
         } catch (error) {
           console.error("Error fetching deal state events:", error);
           alert("An error occurred while fetching deal state events. Please try again.");
         }
       };
       
+      
       const getEventProducts = async () => {
         if (walletProvider) {
           try {
             const browserProvider = new BrowserProvider(walletProvider);
             const signerProvider = browserProvider.getSigner();
+            
             const contract = new Contract(contractAdr, contractABI, await signerProvider);
             const newProductEventFilter = contract.filters.NewProduct();
             const newProductEvents = await contract.queryFilter(
@@ -486,7 +491,8 @@ createWeb3Modal({
                     />
                     <button
                         onClick={handleCreateDeal}
-                        className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                        disabled={!selectedProduct.quantity || parseInt(selectedProduct.quantity) <= 0}
+                        className={`bg-blue-500 text-white py-2 px-4 rounded-lg ${!selectedProduct.quantity || parseInt(selectedProduct.quantity) <= 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-400'}`}
                     >
                         Purchase
                     </button>

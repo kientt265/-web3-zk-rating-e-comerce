@@ -1,10 +1,37 @@
-import WebSocket from 'ws'; // Thay vì require('ws')
 import fetch from 'node-fetch';
 import * as circomlibjs from 'circomlibjs';
 import { MongoClient } from 'mongodb';
+import { poseidon } from 'circomlibjs';
+import { MerkleTree } from './MerkleTree';
 
-const poseidon = circomlibjs.poseidon;
+const besuHttpUrl = 'http://127.0.0.1:8545';
+async function getLatestBlock() {
+    try {
+        const response = await fetch(besuHttpUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: "2.0",
+                method: "eth_getBlockByNumber",
+                params: ["latest", true], // "latest" để lấy block mới nhất
+                id: 1
+            })
+        });
 
+        const data = await response.json();
+
+        if (data.result) {
+            console.log("Latest block data:", data.result);
+        } else {
+            console.error("Error fetching block:", data.error || "Unknown error");
+        }
+    } catch (err) {
+        console.error("Error connecting to Besu:", err);
+    }
+}
+
+// Gọi hàm để lấy block cuối cùng
+getLatestBlock();
 // Hàm băm Poseidon
 function poseidonHash(inputs) {
     return poseidon(inputs);
@@ -55,8 +82,8 @@ class MerkleTree {
 }
 
 // Kết nối WebSocket với Besu
-const besuWebSocketUrl = 'ws://127.0.0.1:8546'; // Địa chỉ node Besu
-const ws = new WebSocket(besuWebSocketUrl);
+
+
 
 // MongoDB URI và kết nối
 const uri = "mongodb+srv://21522250:jqJYggw856bCpVEQ@cluster0.skrd8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
@@ -65,7 +92,7 @@ const client = new MongoClient(uri);
 async function saveMerkleData(merkleRoot, merkleProof, blockHash) {
     try {
         await client.connect();
-        const database = client.db('merkleDB'); // Cơ sở dữ liệu bạn muốn sử dụng
+        const database = client.db('merkleDB'); // Cơ sở dữ li���u bạn muốn sử dụng
         const collection = database.collection('merkleTrees'); // Tên collection
 
         // Lưu dữ liệu vào MongoDB
@@ -85,53 +112,44 @@ async function saveMerkleData(merkleRoot, merkleProof, blockHash) {
     }
 }
 
-ws.on('open', () => {
-    console.log('Connected to Besu WebSocket');
-    ws.send(JSON.stringify({
-        jsonrpc: "2.0",
-        method: "eth_subscribe",
-        params: ["newHeads"],
-        id: 1
-    }));
-});
-
-ws.on('message', async (data) => {
-    const response = JSON.parse(data);
-    if (response.method === "eth_subscription") {
-        const blockHash = response.params.result.hash;
-        console.log(`New block detected: ${blockHash}`);
-        await fetchBlockData(blockHash);
-    }
-});
-
-// Lấy dữ liệu block từ JSON-RPC
-async function fetchBlockData(blockHash) {
-    const response = await fetch('http://127.0.0.1:8545', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            jsonrpc: "2.0",
-            method: "eth_getBlockByHash",
-            params: [blockHash, true],
-            id: 1
-        })
+async function createMerkleTreeFromTransactions(transactions, pubkey) {
+    // Tạo mảng các node lá
+    const leaves = transactions.map(tx => {
+        const transactionHash = tx.hash; // Lấy transaction hash
+        // Băm transactionHash với pubkey
+        return poseidon([BigInt(transactionHash), BigInt(pubkey)]);
     });
 
-    const blockData = await response.json();
-    if (blockData.result) {
-        const transactions = blockData.result.transactions.map(tx => tx.hash);
-        console.log(`Transactions in block:`, transactions);
-
-        // Tạo cây Merkle
-        const merkleTree = new MerkleTree(transactions);
-        const merkleRoot = merkleTree.getRoot();
-        console.log("Merkle Root:", merkleRoot);
-
-        // Lấy proof cho từng leaf (ví dụ index 0)
-        const merkleProof = merkleTree.getProof(0);
-        console.log("Merkle Proof:", merkleProof);
-
-        // Lưu dữ liệu vào MongoDB
-        await saveMerkleData(merkleRoot, merkleProof, blockHash);
-    }
+    // Tạo cây Merkle
+    const merkleTree = new MerkleTree(leaves);
+    return merkleTree;
 }
+
+async function main() {
+    // Giả sử bạn đã lấy được dữ liệu block
+    const blockData = {
+        // ... dữ liệu block như bạn đã cung cấp ...
+        transactions: [
+            {
+                hash: '0x5f532ffbbf99e736dfb4ae824654e24a819ac15606e05d8f28d7adae605cce76',
+                // ... các thông tin khác ...
+            },
+            // ... thêm các giao dịch khác nếu có ...
+        ]
+    };
+
+    const transactions = blockData.transactions; // Lấy danh sách giao dịch
+    const pubkey = 'your_public_key_here'; // Thay thế bằng public key của bạn
+
+    // Tạo cây Merkle từ các giao dịch
+    const merkleTree = await createMerkleTreeFromTransactions(transactions, pubkey);
+
+    // Lấy root và proof cho public key
+    const merkleRoot = merkleTree.getRoot();
+    const proof = merkleTree.getProof(0); // Lấy proof cho leaf đầu tiên (có thể thay đổi index)
+
+    console.log("Merkle Root:", merkleRoot);
+    console.log("Merkle Proof:", proof);
+}
+
+main().catch(console.error);
