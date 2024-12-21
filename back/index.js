@@ -1,137 +1,74 @@
-import WebSocket from 'ws'; // Thay vì require('ws')
-import fetch from 'node-fetch';
-import * as circomlibjs from 'circomlibjs';
-import { MongoClient } from 'mongodb';
+import createDebug from 'debug';
+import WebSocket from 'ws';
+import express from 'express';
+import cors from 'cors';
+import connectToMongoDb from './mongoDb.js';
 
-const poseidon = circomlibjs.poseidon;
+import { saveNewBlockService } from './src/service/latestBlock.service.js'; // LatestBlock service   
 
-// Hàm băm Poseidon
-function poseidonHash(inputs) {
-    return poseidon(inputs);
-}
+import blockRouter from './src/routes/data.route.js';
 
-// Tạo cây Merkle
-class MerkleTree {
-    constructor(leaves) {
-        this.leaves = leaves.map(leaf => poseidonHash([BigInt(leaf)]));
-        this.levels = [this.leaves];
+const debug = createDebug('api:Application');
+const wsDebug = createDebug('api:WebSocket');
 
-        while (this.levels[this.levels.length - 1].length > 1) {
-            this.levels.push(this.createNextLevel(this.levels[this.levels.length - 1]));
-        }
+const boostrap = async () => {
 
-        this.root = this.levels[this.levels.length - 1][0];
-    }
+  const app = express();
+  const port = 3000;
 
-    createNextLevel(previousLevel) {
-        const nextLevel = [];
-        for (let i = 0; i < previousLevel.length; i += 2) {
-            const left = previousLevel[i];
-            const right = previousLevel[i + 1] || left; // Nếu số lá lẻ
-            nextLevel.push(poseidonHash([left, right]));
-        }
-        return nextLevel;
-    }
+  connectToMongoDb();
 
-    getRoot() {
-        return this.root;
-    }
+  //TODO: MỞ COMMENT RA, CONNECT VỚI BESU
+  //TODO: SAU ĐÓ CALL LAEST BLOCK SERVICE ĐỂ LƯU VÀO MONGODB => CALL Ở CÁI EVENT NÀO MÀ FETCH DATA VỀ ẤY
+  //TODO: CÁI LATEST BLOCK MODEL LÀ VIẾT THEO SHAPE DATA CỦA E
 
-    getProof(index) {
-        let proof = [];
-        let level = this.leaves;
-        let currentIndex = index;
+  // // URL của node Besu với WebSocket (thay đổi theo cấu hình của bạn)
+  // const besuWsUrl = 'ws://127.0.0.1:8546'; // Đây là cổng WebSocket của Besu (thường là 8546)
+  // // Khởi tạo WebSocket client
+  // const ws = new WebSocket(besuWsUrl);
 
-        // Lấy proof cho một leaf tại index
-        for (let i = 0; i < this.levels.length - 1; i++) {
-            const pairIndex = currentIndex % 2 === 0 ? currentIndex + 1 : currentIndex - 1;
-            proof.push(level[pairIndex]);
-            currentIndex = Math.floor(currentIndex / 2);
-            level = this.levels[i + 1];
-        }
+  // // Hàm đăng ký để nhận thông báo khi có block mới
+  // function subscribeToNewBlocks() {
+  //   const subscriptionMessage = JSON.stringify({
+  //     jsonrpc: "2.0",
+  //     method: "eth_subscribe",
+  //     params: ["newHeads"], // Đăng ký nhận thông báo khi có block mới
+  //     id: 1
+  //   });
 
-        return proof;
-    }
-}
+  //   ws.send(subscriptionMessage);
+  // }
 
-// Kết nối WebSocket với Besu
-const besuWebSocketUrl = 'ws://127.0.0.1:8546'; // Địa chỉ node Besu
-const ws = new WebSocket(besuWebSocketUrl);
+  // ws.on('open', () => {
+  //   wsDebug("Connected to Besu WebSocket.");
+  //   subscribeToNewBlocks();
+  // });
 
-// MongoDB URI và kết nối
-const uri = "mongodb+srv://21522250:jqJYggw856bCpVEQ@cluster0.skrd8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const client = new MongoClient(uri);
+  // ws.on('message', (data) => {
+  //   const parsedData = JSON.parse(data);
+  //   // Kiểm tra xem có thông báo về block mới không
+  //   if (parsedData.method === 'eth_subscription' && parsedData.params.result) {
+  //     wsDebug("New block data:", parsedData.params.result);
+  //   }
+  // });
 
-async function saveMerkleData(merkleRoot, merkleProof, blockHash) {
-    try {
-        await client.connect();
-        const database = client.db('merkleDB'); // Cơ sở dữ liệu bạn muốn sử dụng
-        const collection = database.collection('merkleTrees'); // Tên collection
+  // ws.on('error', (err) => {
+  //   console.error("WebSocket error:", err);
+  // });
 
-        // Lưu dữ liệu vào MongoDB
-        const document = {
-            blockHash,
-            merkleRoot: merkleRoot.toString(),
-            merkleProof: merkleProof.map(item => item.toString()),
-            timestamp: new Date(),
-        };
+  // ws.on('close', () => {
+  //   wsDebug("WebSocket connection closed.");
+  // });
 
-        await collection.insertOne(document);
-        console.log('Merkle data saved to MongoDB');
-    } catch (err) {
-        console.error('Error saving data to MongoDB:', err);
-    } finally {
-        await client.close();
-    }
-}
+  app.use(cors)
+  app.use(express.json());
 
-ws.on('open', () => {
-    console.log('Connected to Besu WebSocket');
-    ws.send(JSON.stringify({
-        jsonrpc: "2.0",
-        method: "eth_subscribe",
-        params: ["newHeads"],
-        id: 1
-    }));
-});
 
-ws.on('message', async (data) => {
-    const response = JSON.parse(data);
-    if (response.method === "eth_subscription") {
-        const blockHash = response.params.result.hash;
-        console.log(`New block detected: ${blockHash}`);
-        await fetchBlockData(blockHash);
-    }
-});
+  app.use('/api', blockRouter);
 
-// Lấy dữ liệu block từ JSON-RPC
-async function fetchBlockData(blockHash) {
-    const response = await fetch('http://127.0.0.1:8545', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            jsonrpc: "2.0",
-            method: "eth_getBlockByHash",
-            params: [blockHash, true],
-            id: 1
-        })
-    });
+  app.listen(port, () => {
+    console.log(`App listening at http://localhost:${port}`);
+  });
+};
 
-    const blockData = await response.json();
-    if (blockData.result) {
-        const transactions = blockData.result.transactions.map(tx => tx.hash);
-        console.log(`Transactions in block:`, transactions);
-
-        // Tạo cây Merkle
-        const merkleTree = new MerkleTree(transactions);
-        const merkleRoot = merkleTree.getRoot();
-        console.log("Merkle Root:", merkleRoot);
-
-        // Lấy proof cho từng leaf (ví dụ index 0)
-        const merkleProof = merkleTree.getProof(0);
-        console.log("Merkle Proof:", merkleProof);
-
-        // Lưu dữ liệu vào MongoDB
-        await saveMerkleData(merkleRoot, merkleProof, blockHash);
-    }
-}
+boostrap(); 
