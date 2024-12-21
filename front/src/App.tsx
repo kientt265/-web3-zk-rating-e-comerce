@@ -513,8 +513,8 @@ createWeb3Modal({
                     <input
                         type="text"
                         placeholder="1* to 5*"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
+                        // value={inputValue}
+                        // onChange={(e) => setInputValue(e.target.value)}
                         className="border p-2 mb-4 w-full"
                     />
                     <button
