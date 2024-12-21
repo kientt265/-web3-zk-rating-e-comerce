@@ -1,3 +1,4 @@
+pragma circom 2.1.2;
 include "node_modules/circomlib/circuits/poseidon.circom";
 include "node_modules/circomlib/circuits/comparators.circom";
 include "node_modules/circomlib/circuits/smt/smtverifier.circom";
