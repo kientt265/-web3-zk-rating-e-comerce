@@ -24,11 +24,14 @@
     "debug": "^4.4.0",
     "dotenv": "^16.4.7",
     "envalid": "^8.0.0",
+    "ethers": "^6.13.4",
     "express": "^4.21.2",
     "express-session": "^1.17.0",
+    "merkle-poseidon": "^0.0.4",
     "mongodb": "6.11",
     "mongoose": "^8.9.2",
     "node-fetch": "^3.3.2",
-    "websocket": "^1.0.35"
+    "websocket": "^1.0.35",
+    "ws": "^8.18.0"
   }
 }
