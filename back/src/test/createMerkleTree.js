@@ -29,6 +29,8 @@ export const createMerkleTree = async (blockData) => {
     const merkleRoot = merkleTree.root;
     console.log("Merkle Root:", merkleRoot); // Log merkle root
 
+    const merkleRootString = merkleRoot.map(value => value.toString()).join('');
+    console.log("Merkle Root (String):", merkleRootString); // Log merkle root dưới dạng decimal
     const merkleRootHex = Array.from(merkleRoot).map(byte => byte.toString(16).padStart(2, '0')).join('');
     console.log("Merkle Root (Hex):", merkleRootHex); // Log merkle root dưới dạng hex
 

@@ -1,14 +1,18 @@
 pragma circom 2.1.2;
-include "node_modules/circomlib/circuits/poseidon.circom";
-include "node_modules/circomlib/circuits/comparators.circom";
-include "node_modules/circomlib/circuits/smt/smtverifier.circom";
+
+include "./circomlib/circuits/poseidon.circom";
+include "./circomlib/circuits/comparators.circom";
+include "./circomlib/circuits/smt/smtverifier.circom";
 
 template ZkComerceVerifyMerkleTree (nLevels) {
     var realNLevels = nLevels+1;
     signal input censusRoot;
     signal input censusSiblings[realNLevels];
-    signal input address;
+    signal input buyerAddress;
     signal input tsxHash;
+
+    
+    
 
     component censusVerifier = SMTVerifier(realNLevels);
         censusVerifier.enabled <== 1;
@@ -20,7 +24,7 @@ template ZkComerceVerifyMerkleTree (nLevels) {
         censusVerifier.oldKey <== 0;
 	    censusVerifier.oldValue <== 0;
 	    censusVerifier.isOld0 <== 0;
-        censusVerifier.key <== address ;
+        censusVerifier.key <== buyerAddress ;
         censusVerifier.value <== tsxHash;
 }
-component main {public [censusRoot, censusSiblings, address, tsxHash  ]} = ZkComerceVerifyMerkleTree(160);
+component main {public [censusRoot, censusSiblings, buyerAddress, tsxHash]} = ZkComerceVerifyMerkleTree(3);
