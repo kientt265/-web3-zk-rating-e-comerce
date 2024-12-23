@@ -6,8 +6,7 @@ import "./UserComerce.sol";
 
 contract DealComerce is SellerComerce, UserComerce {
 
-    event DealState(uint dealId, address buyer, string productId, uint amount, uint value, bool isCompleted);
-    event DealConfirmed(uint dealId);
+    event DealState(uint indexed dealId, address indexed buyer, string productId, uint amount, uint value, bool indexed isCompleted);
     event NewQuantityProduct(string productID, uint price, uint quantity);
     struct Deal {
         address buyer;

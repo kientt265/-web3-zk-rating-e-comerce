@@ -1,9 +1,10 @@
-export const contractAdr = "0xc221a771be70F2D8F6c31b927D6F9C6eFe5A1344"
+// export const contractAdr = "0xc221a771be70F2D8F6c31b927D6F9C6eFe5A1344"
+export const contractAdr = "0xbE80Fa520AD9EEB165565d42b66b549170D3aEf6"
 export const contractABI = [
     'function createDeal(string memory _productId, uint _amount) payable',
     'function completeDeal(uint _dealId)',
     'function getDealId(address _addressUser) view returns(uint)',
-    'event DealState(uint dealId, address buyer, string productId, uint amount, uint value, bool isCompleted)',
+    'event DealState(uint indexed dealId, address indexed buyer, string productId, uint amount, uint value, bool indexed isCompleted)',
     'event DealConfirmed(uint dealId)',
     'event NewQuantityProduct(string productID, uint price, uint quantity)',
     'function createSeller(string memory _shopName, string memory _email)',
