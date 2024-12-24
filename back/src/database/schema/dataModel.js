@@ -12,6 +12,7 @@ const dataSchema = new mongoose.Schema({
   blockNumber: { type: Number, required: true },
   transactionHash: { type: String, required: true },
   hash: { type: String, required: true },
+  dealID: { type: String, required: true },
   productID: { type: String, required: true },
   proofMerkle: { type: String, required: true },
   provingKey: { type: String, required: true },
