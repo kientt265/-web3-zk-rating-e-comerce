@@ -12,6 +12,8 @@ Dự án này tập trung vào việc phát triển một hệ thống rating s�
 - **Chuỗi Công Khai (Public Chain - Sepolia)**: 
   - Lưu trữ bằng chứng (Merkle root) được đẩy lên từ chuỗi riêng để chứng minh tính đúng đắn của giao dịch.
   - Đảm bảo rằng các giao dịch có thể được xác minh công khai mà không tiết lộ thông tin nhạy cảm của người dùng.
+- **Zero-Knowledge (ZkSnark)**:   
+  ![Alt text](./front/src/assets/flowCircuit.jpg "Optional title")
 
 ## Quy Trình Hoạt Động
 1. Ghi lại giao dịch mua bán trên chuỗi riêng.
