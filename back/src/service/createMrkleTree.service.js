@@ -29,7 +29,7 @@ export const createMerkleTree = async (dealId, buyerAddress) => {
         }
 
         const path = resFind.siblings.map((sibling) => poseidon.F.toString(sibling));
-        while (path.length < 11) {
+        while (path.length < 21) {
             path.push("0");
         }
 
@@ -65,10 +65,3 @@ export const createMerkleTree = async (dealId, buyerAddress) => {
 }
 
 
-// createMerkleTree(20, "1166269347138129896463093449554139502969982402535")
-//     .then((result) => {
-//         console.log("Result:", result);
-//     })
-//     .catch((error) => {
-//         console.error("Error:", error);
-//     });

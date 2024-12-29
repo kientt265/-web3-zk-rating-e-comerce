@@ -1,5 +1,5 @@
-export const logDataExample = {
-    Logsfromthecontract: [
+export const logDataExample = 
+[
     {
         "logIndex": "0x0",
         "removed": false,
@@ -16,7 +16,6 @@ export const logDataExample = {
         "0x0000000000000000000000000000000000000000000000000000000000000001"
         ]
     }
+]
 
 
-    ]
-}

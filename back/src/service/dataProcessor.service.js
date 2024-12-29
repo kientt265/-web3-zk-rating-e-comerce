@@ -3,6 +3,9 @@ import {createMerkleTree} from './createMrkleTree.service.js';
 import {hextoInt} from './utils/hextoInt.js';
 import {hexToBigInt} from './utils/hexToBigInt.js'
 import {logDataExample} from './utils/logDataExample.js'
+import dotenv from 'dotenv';
+dotenv.config();
+
 export const processBlockData = async (logsBlockData) => {
   try {
 
@@ -15,21 +18,36 @@ export const processBlockData = async (logsBlockData) => {
       process.env.CONTRACT_ABI_SAVE_MERKLE_ROOT,
       signer
     );
-
-    const transactionsInfo = logsBlockData.map(topics => ({
-      dealId: hextoInt(topics[1]),
-      buyerAddress: hexToBigInt(topics[2]),  
+    console.log("Contract:", contract);
+    console.log("Logs block data:", logsBlockData)
+    const transactionsInfo = logsBlockData.map(log => ({
+      dealId: hextoInt(log.topics[1]),       
+      buyerAddress: hexToBigInt(log.topics[2]),
     }));
     
-    const merkleTree = createMerkleTree(dealId, buyerAddress)
-  
-    const blockNumber = hextoInt(logsBlockData.blockNumber); 
+    console.log("Transactions info:", transactionsInfo);
+    // const merkleTree = createMerkleTree(dealId, buyerAddress)
+    const blockNumber = hextoInt(logsBlockData[0].blockNumber); 
+    console.log("Block number:", blockNumber);
+    
+
+
+    const dealIds = transactionsInfo.map(tx => tx.dealId); 
+    const buyerAddresses = transactionsInfo.map(tx => tx.buyerAddress.toString()); 
+    console.log("Deal IDs:", dealIds);
+    console.log("Buyer addresses:", buyerAddresses);
+    const merkleTree = await createMerkleTree(dealIds, buyerAddresses);
+    
+
+    
+
     const merkleRoot = merkleTree.root;
 
-    await contract.addRoot(blockNumber, merkleRoot);
+    const transaction = await contract.addRoot(blockNumber, merkleRoot);
+    await transaction.wait();
 
-
-
+    console.log("Merkle root:", typeof merkleRoot, merkleRoot);
+    console.log("Merkle Proof:", merkleTree.proof);
 
     const processedData = {
       blockNumber,
@@ -46,7 +64,7 @@ export const processBlockData = async (logsBlockData) => {
 
 processBlockData(logDataExample)
     .then((result) => {
-        console.log("Result:", result);
+        
     })
     .catch((error) => {
         console.error("Error:", error);
