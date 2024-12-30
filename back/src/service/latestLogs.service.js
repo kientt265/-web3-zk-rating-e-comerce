@@ -6,8 +6,6 @@ const saveNewLogsService = async (logs) => {
   try {
 
     // const processedData = processBlockData(logs);
-
-
     const newBlock = new LastLogData(logs);
     await newBlock.save();
 

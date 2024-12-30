@@ -3,6 +3,7 @@ import {createMerkleTree} from './createMrkleTree.service.js';
 import {hextoInt} from './utils/hextoInt.js';
 import {hexToBigInt} from './utils/hexToBigInt.js'
 import {logDataExample} from './utils/logDataExample.js'
+import Data from '../database/schema/dataModel.js'
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -43,29 +44,34 @@ export const processBlockData = async (logsBlockData) => {
 
     const merkleRoot = merkleTree.root;
 
-    const transaction = await contract.addRoot(blockNumber, merkleRoot);
-    await transaction.wait();
+    // const transaction = await contract.addRoot(blockNumber, merkleRoot);
+    // await transaction.wait();
 
     console.log("Merkle root:", typeof merkleRoot, merkleRoot);
     console.log("Merkle Proof:", merkleTree.proof);
 
+
     const processedData = {
-      blockNumber,
-      transactionsInfo,
-      merkleRoot, 
+      blockNumber: blockNumber,
+      dealID: dealIds.toString(),
+      proofMerkle: merkleTree.proof.path,
+      buyerAddress: buyerAddresses[0]
     };
 
-    return processedData;
+    const dealData = new Data(processedData);
+    await dealData.save();
+
+    return dealData;
   } catch (error) {
     console.error("Error processing block data:", error);
     throw error;
   }
 };
 
-processBlockData(logDataExample)
-    .then((result) => {
+// processBlockData(logDataExample)
+//     .then((result) => {
         
-    })
-    .catch((error) => {
-        console.error("Error:", error);
-    });
+//     })
+//     .catch((error) => {
+//         console.error("Error:", error);
+//     });

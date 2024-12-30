@@ -11,10 +11,10 @@ import mongoose from 'mongoose';
 const dataSchema = new mongoose.Schema({
   blockNumber: { type: Number, required: true },
   dealID: { type: String, required: true },
-  proofMerkle: { type: String, required: true },
+  proofMerkle: { type: [String], required: true }, // Mảng các chuỗi
   buyerAddress: { type: String, required: true },
+});
 
-}, { timestamps: true });
 
 const Data = mongoose.model('Data', dataSchema);
 

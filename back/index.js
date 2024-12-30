@@ -5,10 +5,12 @@ import cors from 'cors';
 import connectToMongoDb from './mongoDb.js';
 
 import blockRouter from './src/routes/data.route.js';
-
+import dealRouter from './src/routes/dataDeal.route.js';
 const debug = createDebug('api:Application');
 const wsDebug = createDebug('api:WebSocket');
 
+import {processBlockData} from './src/service/dataProcessor.service.js';
+import { saveNewLogsService } from './src/service/latestLogs.service.js';
 const boostrap = async () => {
   const app = express();
   const port = 3000;
@@ -32,24 +34,24 @@ const boostrap = async () => {
     ws.send(subscriptionMessage);
   }
 
-  // Lấy logs từ hợp đồng (không lọc theo bất kỳ điều kiện nào)
+
   function getLogs() {
     const requestMessage = JSON.stringify({
       jsonrpc: "2.0",
       method: "eth_getLogs",
       params: [
         {
-          fromBlock: "latest", // Bắt đầu từ block mới nhất
-          toBlock: "latest",   // Đến block mới nhất
+          fromBlock: "latest", 
+          toBlock: "latest",  
           address: "0xbE80Fa520AD9EEB165565d42b66b549170D3aEf6",
           topics: [
             null,
-            null,  // Topic đầu tiên có thể khớp với bất kỳ giá trị nào
-            null,  // Topic thứ hai có thể khớp với bất kỳ giá trị nào
+            null,  
+            null, 
             [
               '0x0000000000000000000000000000000000000000000000000000000000000001'  // Kiểm tra topic cuối cùng có giá trị này
             ]
-          ]// Địa chỉ contract chứa sự kiện
+          ]
         }
       ],
       id: 2
@@ -62,16 +64,15 @@ const boostrap = async () => {
     subscribeToNewBlocks();
   });
 
-  ws.on('message', (data) => {
+  ws.on('message', async (data) => {
     try {
       const parsedData = JSON.parse(data);
 
-      // Kiểm tra xem có phải là thông báo về block mới không
       if (parsedData.method === 'eth_subscription' && parsedData.params.result) {
         const blockHash = parsedData.params.result.hash;
         console.log("New block detected with hash:", blockHash);
         
-        // Khi có block mới, gọi getLogs để lấy logs từ hợp đồng
+
         getLogs();
       }
 
@@ -80,6 +81,9 @@ const boostrap = async () => {
         const logs = parsedData.result;
         if (logs && logs.length > 0) {
           console.log("Logs from the contract:", JSON.stringify(logs, null, 2));
+          console.log(logs)
+          //await saveNewLogsService(logs);
+          // await processBlockData(logs);
         } else {
           console.log("No logs found for this block.");
         }
@@ -101,7 +105,7 @@ const boostrap = async () => {
   app.use(express.json());
 
   app.use('/api', blockRouter);
-
+  app.use('/api', dealRouter);
   app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);
   });
