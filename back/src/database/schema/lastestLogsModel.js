@@ -12,10 +12,10 @@ const LastestLogSchema = new mongoose.Schema({
   topics: { type: [String], required: true },
 });
 
-const LogDataSchema = new mongoose.Schema({
-  Logsfromthecontract: { type: [LogSchema], default: [] },
-});
+// const LogDataSchema = new mongoose.Schema({
+//   Logsfromthecontract: { type: [LogSchema], default: [] },
+// });
 
-const LogData = mongoose.model("LogData", LogDataSchema);
+const LastLogData = mongoose.model("LogData", LastestLogSchema);
 
-export default LogData;
+export default LastLogData;
