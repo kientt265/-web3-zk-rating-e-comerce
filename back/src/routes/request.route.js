@@ -2,6 +2,6 @@ import { Router } from "express";
 import { getRquestController } from '../controller/request.controller.js';
 const router = Router();
 
-router.post('/dealId', getRquestController);
+router.post('/request/:dealId', getRquestController);
 
 export default router;
