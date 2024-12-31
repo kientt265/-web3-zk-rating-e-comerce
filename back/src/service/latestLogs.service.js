@@ -10,7 +10,7 @@ const saveNewLogsService = async (logs) => {
     await newBlock.save();
 
     console.log("New logs saved:", logs);
-    return newBlock;
+    return newBlock; // e call rieng cai nay xem no tra ve kieu gin // call postman de test
   } catch (error) {
     console.error("Error saving block:", error);
     throw error;
@@ -18,3 +18,6 @@ const saveNewLogsService = async (logs) => {
 };
 
 export { saveNewLogsService };  
+
+// xem coi array hay object
+// cái này là chỉ post đc 1 cái thôi 

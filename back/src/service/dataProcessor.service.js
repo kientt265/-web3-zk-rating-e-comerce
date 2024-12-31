@@ -21,20 +21,20 @@ export const processBlockData = async (logsBlockData) => {
     );
     console.log("Contract:", contract);
     console.log("Logs block data:", logsBlockData)
-    const transactionsInfo = logsBlockData.map(log => ({
-      dealId: hextoInt(log.topics[1]),       
-      buyerAddress: hexToBigInt(log.topics[2]),
-    }));
+    const transactionsInfo = {
+      dealId: hextoInt(logsBlockData.topics[1]),       
+      buyerAddress: hexToBigInt(logsBlockData.topics[2]),
+    };
     
     console.log("Transactions info:", transactionsInfo);
     // const merkleTree = createMerkleTree(dealId, buyerAddress)
-    const blockNumber = hextoInt(logsBlockData[0].blockNumber); 
+    const blockNumber = hextoInt(logsBlockData.blockNumber); 
     console.log("Block number:", blockNumber);
-    
+    // roi test lai di 
 
 
-    const dealIds = transactionsInfo.map(tx => tx.dealId); 
-    const buyerAddresses = transactionsInfo.map(tx => tx.buyerAddress.toString()); 
+    const dealIds = transactionsInfo.dealId; 
+    const buyerAddresses = transactionsInfo.buyerAddress.toString(); 
     console.log("Deal IDs:", dealIds);
     console.log("Buyer addresses:", buyerAddresses);
     const merkleTree = await createMerkleTree(dealIds, buyerAddresses);
@@ -43,7 +43,7 @@ export const processBlockData = async (logsBlockData) => {
     
 
     const merkleRoot = merkleTree.root;
-
+    
     // const transaction = await contract.addRoot(blockNumber, merkleRoot);
     // await transaction.wait();
 
@@ -55,8 +55,8 @@ export const processBlockData = async (logsBlockData) => {
       blockNumber: blockNumber,
       dealID: dealIds.toString(),
       proofMerkle: merkleTree.proof.path,
-      buyerAddress: buyerAddresses[0]
-    };
+      buyerAddress: buyerAddresses 
+    }; // lai di lan nay ok
 
     const dealData = new Data(processedData);
     await dealData.save();

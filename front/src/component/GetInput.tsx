@@ -65,9 +65,9 @@ const GetInput: React.FC<GetInputProps> = ({ dealId }) => {
       const blockNumberAttr = data.blockNumber
       const siblingsNodeAttr: string[] = data.proofMerkle; 
       const buyerAddressBigIntAttr = data.buyerAddress
-      console.log("blockNumberAttr", typeof blockNumberAttr);
-      console.log("siblingsNodeAttr", siblingsNodeAttr);
-      console.log("buyerAddressBigIntAttr",typeof buyerAddressBigIntAttr);
+      // console.log("blockNumberAttr", typeof blockNumberAttr);
+      // console.log("siblingsNodeAttr", siblingsNodeAttr);
+      // console.log("buyerAddressBigIntAttr",typeof buyerAddressBigIntAttr);
       if (!blockNumberAttr || !siblingsNodeAttr) {
         throw new Error("Missing blockNumber or siblingsNode attribute");
       }
@@ -78,7 +78,7 @@ const GetInput: React.FC<GetInputProps> = ({ dealId }) => {
       // console.log("Contract:", contract);
       const merkleRoot2 = await contract.getRootByBlockNuber(blockNumberAttr);
 
-      console.log("Merkle root:", merkleRoot2);
+      // console.log("Merkle root:", merkleRoot2);
       // const buyerAddressBigInt = await fetchAddress();
 
       

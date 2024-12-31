@@ -19,3 +19,4 @@ const LastestLogSchema = new mongoose.Schema({
 const LastLogData = mongoose.model("LogData", LastestLogSchema);
 
 export default LastLogData;
+
