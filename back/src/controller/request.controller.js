@@ -1,3 +1,5 @@
+import {getRequestService} from '../service/request.service.js';
+
 export const getRequestController = async (req, res) => {
   try {
     const request = await getRequestService(req.params.dealId);

@@ -9,6 +9,7 @@ import useEthers from "./hooks/useEthers"
 import GetInput from "./component/GetInput";
 import { FundedEvent, DealEvent } from  "./lib/type"
 import {contractABI, contractAdr} from "./contract/contractData"
+import Test from "./component/Test";
 const projectId = import.meta.env.VITE_PROJECT_ID;
 
 const sepolia = {
@@ -52,10 +53,10 @@ createWeb3Modal({
       const { address, isConnected } = useWeb3ModalAccount();
       const { walletProvider } = useWeb3ModalProvider();
       const { open } = useWeb3Modal();
-    
+
       const [isLoading, setIsLoading] = useState(false);
       const [isSuccess, setIsSuccess] = useState(false);
-    
+      const [testDealId, setTestDealId] = useState('');
       const [shopName, setShopName] = useState('');
       const [shopEmail, setShopEmail] = useState('');
       const [userName, setUserName] = useState('');
@@ -250,7 +251,7 @@ createWeb3Modal({
                 // Thực hiện giao dịch với giá trị tổng
                 const transaction = await contract.createDeal(selectedProduct.productID, selectedProduct.quantity, { value: parseEther(totalPrice.toString()) });
                 await transaction.wait();
-    
+                console.log("Transaction hash:", transaction);
                 console.log(`Purchased ${selectedProduct.quantity} of product ID: ${selectedProduct.productID} for total price: ${totalPrice}`);
                 setIsSuccess(true); // Giao dịch thành công
                 setSelectedProduct(null); // Reset sản phẩm được chọn
@@ -314,7 +315,23 @@ createWeb3Modal({
       const handleShowSignUpForm = () => {
         setShowSignUpForm(true); // Hiển thị form đăng ký
       };
-    
+      // const getSigner = async () => {
+      //   setIsLoading(true);
+      //   if (walletProvider) {
+      //     try {
+      //       const browserProvider = new BrowserProvider(walletProvider);
+      //       const signerProvider = browserProvider.getSigner();
+            
+      //       // setSigner(await signerProvider);
+      //       setIsSuccess(true);
+      //     } catch (error) {
+      //       console.error("Error getting signer:", error);
+      //       alert("Error getting signer, please try again!");
+      //     } finally {
+      //       setIsLoading(false);
+      //     }
+      //   }
+      // }
       return (
         <div>
           <header className="mx-auto px-2 p-4 border-b">
@@ -354,7 +371,16 @@ createWeb3Modal({
               </div>
             </div>
           </header>
-    
+          {/* <GetInput signer = {} dealId = {} /> */}
+          {/* <Test /> */}
+          <div>
+            <input className="border p-2 mb-2 " type="text" placeholder="Enter dealId" value={testDealId} onChange={(e) => setTestDealId(e.target.value)} />
+            <button  disabled={isLoading} className="bg-blue-600 border p-2 mb-2"> {isLoading ? "Loading..." : "Send Props"}</button>
+            { testDealId && walletProvider && (
+              <GetInput dealId={testDealId}  />
+            )}
+            {/* signer={await new BrowserProvider(walletProvider).getSigner()} */}
+          </div>
           {showSignUpForm && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -537,7 +563,7 @@ createWeb3Modal({
                 </div>
             </div>
         )}
-        {/* <GetInput /> */}
+        
         </div>
       );
     }

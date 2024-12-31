@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as snarkjs from "snarkjs";
-import { Contract, Signer } from "ethers";
+import { Contract, Signer, ethers } from "ethers";
 
 interface Proof {
   pi_a: [string, string];
@@ -13,26 +13,27 @@ type PublicSignal = string[];
 interface GenerateProofProps {
   rootMerkle: string;
   siblingsNode: string[];
-  key: string;
+  key1: string;
   value1: string;
   value2: string;
-  signer: Signer;
+  // signer: Signer;
 }
 
 const GenerateProof: React.FC<GenerateProofProps> = ({
   rootMerkle,
   siblingsNode,
-  key,
+  key1,
   value1,
   value2,
-  signer,
+  // signer,
 }) => {
   const contractAddress =
     import.meta.env.VITE_CONTRACT_ADDRESS_VERIFY_MERKLE_TREE || "";
   const contractABI = JSON.parse(
     import.meta.env.VITE_ABI_CONTRACT_VERIFY_MERKLE_TREE || "[]"
   );
-
+  const providerURL = import.meta.env.VITE_SEPOLIA_RPC_URL || "";
+  const provider = new ethers.JsonRpcProvider(providerURL); 
   const [proof, setProof] = useState<Proof | null>(null);
   const [publicSignals, setPublicSignals] = useState<PublicSignal | null>(null);
   const [result, setResult] = useState<string>("");
@@ -43,14 +44,46 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
   const calculateProof = async () => {
     setResult("Generating proof...");
     setLoading(true);
-
+    console.log("rootMerkle:@", rootMerkle);
+    console.log("siblingsNode:@", siblingsNode);
+    console.log("key1:@", key1);
+    console.log("value1:@", value1);
+    console.log("value2:@", value2);
     try {
       const input = {
-        rootMerkle,
-        siblingsNode: siblingsNode.map((node) => BigInt(node).toString()), // Ensure it's formatted correctly
-        key,
-        value1,
-        value2,
+        // rootMerkle: rootMerkle,
+        // // siblingsNode: siblingsNode.map((node) => BigInt(node).toString()), // Ensure it's formatted correctly
+        // siblingsMerkle: siblingsNode,
+        // key: key1,
+        // value1: value1,
+        // value2: value2,
+        rootMerkle: "9481786816471582978621498260206601135749596819625992801086595385400827592010",
+        siblingsMerkle: [
+          "12529056541846809529217246457372494600723992986394376628422662278812870050455",
+          "4343965691150138726836739709009779088887128583775798815903906342831540709849",
+          "14435695952389841705329121787475799705368560265147786064530681394982517048422",
+          "14480581944113935157249768595910922624714408677536379331020440249749389126385",
+          "4109670901569350840775997086470270738094016534713311173603755855620535170747",
+          "3492051532847727630668236136674136437776995179045199807202047066561305666028",
+          "13257911221733282532469653407639854300592169859311517010689452029842455849851",
+          "4543021426871245750249134529166887076743712938121958045973994421801628690682",
+          "13761808010043310001795736749831369310491525670071005836114489626640223405422",
+          "249847307026210478423945971673400928338356358469971988002497062552269378479",
+          "14629679841506407333712437201296291290074194035289118269686326137490253218613",
+          "11393746527195701540593297129800138069265845589140174535451399799832821530226",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+      ],
+        key: "20",
+        value1: "20",
+        value2: "250825070299687118886926865615334624570013855120"
       };
 
       const { proof, publicSignals } = await snarkjs.groth16.fullProve(
@@ -61,7 +94,8 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
 
       setProof(proof);
       setPublicSignals(publicSignals);
-
+      console.log("proof@", proof)
+      console.log("publicSignals@", publicSignals)
       generateCallFromProof(proof, publicSignals);
       setResult("Proof generated successfully.");
     } catch (error) {
@@ -113,17 +147,13 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
       return;
     }
 
-    if (!signer) {
-      console.error("Signer is undefined.");
-      setVerificationResult("Signer is not available.");
-      return;
-    }
+
 
     try {
       const { pi_a, pi_b, pi_c, finalPublicSignal } = generateCall;
 
       if (!contractABI) throw new Error("Contract ABI is not defined.");
-      const contract = new Contract(contractAddress, contractABI, signer);
+      const contract = new Contract(contractAddress, contractABI, provider);
 
       const res = await contract.verifyProof(
         pi_a,

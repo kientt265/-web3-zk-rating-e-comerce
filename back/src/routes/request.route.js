@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { getRquestController } from '../controller/request.controller.js';
+import { getRequestController } from '../controller/request.controller.js';
 const router = Router();
 
-router.post('/request/:dealId', getRquestController);
+router.get('/request/:dealId', getRequestController);
 
 export default router;
