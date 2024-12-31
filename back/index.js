@@ -6,10 +6,12 @@ import connectToMongoDb from './mongoDb.js';
 
 import blockRouter from './src/routes/data.route.js';
 import dealRouter from './src/routes/dataDeal.route.js';
+import requestRouter from './src/routes/request.route.js';
+
 const debug = createDebug('api:Application');
 const wsDebug = createDebug('api:WebSocket');
 
-import {processBlockData} from './src/service/dataProcessor.service.js';
+import { processBlockData } from './src/service/dataProcessor.service.js';
 import { saveNewLogsService } from './src/service/latestLogs.service.js';
 const boostrap = async () => {
   const app = express();
@@ -41,13 +43,13 @@ const boostrap = async () => {
       method: "eth_getLogs",
       params: [
         {
-          fromBlock: "latest", 
-          toBlock: "latest",  
+          fromBlock: "latest",
+          toBlock: "latest",
           address: "0xbE80Fa520AD9EEB165565d42b66b549170D3aEf6",
           topics: [
             null,
-            null,  
-            null, 
+            null,
+            null,
             [
               '0x0000000000000000000000000000000000000000000000000000000000000001'  // Kiểm tra topic cuối cùng có giá trị này
             ]
@@ -71,7 +73,7 @@ const boostrap = async () => {
       if (parsedData.method === 'eth_subscription' && parsedData.params.result) {
         const blockHash = parsedData.params.result.hash;
         console.log("New block detected with hash:", blockHash);
-        
+
 
         getLogs();
       }
@@ -106,6 +108,8 @@ const boostrap = async () => {
 
   app.use('/api', blockRouter);
   app.use('/api', dealRouter);
+  app.use('/api', requestRouter);
+
   app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);
   });
