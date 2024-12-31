@@ -1,11 +1,12 @@
 import { createWeb3Modal, defaultConfig,  useWeb3ModalAccount, useWeb3ModalProvider } from "@web3modal/ethers/react";
-import { BrowserProvider, Contract, formatEther, parseEther} from 'ethers'
+import { BrowserProvider, Contract, formatEther, parseEther, Signer} from 'ethers'
 import { useEffect, useState } from "react";
 import { shortenAddress } from './lib/utils'
 import { useWeb3Modal } from '@web3modal/ethers/react'
 import {InteractPrivateChain} from './component/InteractPrivateChain'
 import History from './component/History'
 import useEthers from "./hooks/useEthers"
+import GetInput from "./component/GetInput";
 import { FundedEvent, DealEvent } from  "./lib/type"
 import {contractABI, contractAdr} from "./contract/contractData"
 const projectId = import.meta.env.VITE_PROJECT_ID;
@@ -66,6 +67,7 @@ createWeb3Modal({
       const [isSeller, setIsSeller] = useState(false); // Kiểm tra xem người dùng chọn là Seller hay User
       const [products, setProducts] = useState<FundedEvent[]>([]); // State to hold fetched products
       const [dealState, setDealState] = useState<DealEvent[]>([])
+      
       // const [selectDealState, setSelectDealState] = useState<{
       //   dealId: string;
       //   buyer: string;
@@ -535,6 +537,7 @@ createWeb3Modal({
                 </div>
             </div>
         )}
+        {/* <GetInput /> */}
         </div>
       );
     }

@@ -82,8 +82,8 @@ const boostrap = async () => {
         if (logs && logs.length > 0) {
           console.log("Logs from the contract:", JSON.stringify(logs, null, 2));
           console.log(logs)
-          //await saveNewLogsService(logs);
-          // await processBlockData(logs);
+          await saveNewLogsService(logs);
+          await processBlockData(logs);
         } else {
           console.log("No logs found for this block.");
         }

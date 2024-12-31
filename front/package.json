@@ -18,7 +18,8 @@
     "@web3modal/ethers": "^5.1.2",
     "clsx": "^2.1.1",
     "ethers": "^6.13.2",
-    "tailwind-merge": "^2.5.3"
+    "tailwind-merge": "^2.5.3",
+    "snarkjs": "^0.7.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
