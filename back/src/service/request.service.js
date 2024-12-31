@@ -9,4 +9,6 @@ export const getRequestService = async (dealId) => {
 
   return { blockNumber, proofMerkle, buyerAddress }; // Tra ve blockNumber va proofMerkle duoi dang Oject
 
+
 }
+
