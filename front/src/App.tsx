@@ -78,7 +78,16 @@ createWeb3Modal({
       //   isCompleted: boolean} | null>(null);
       const [selectedProduct, setSelectedProduct] = useState<{ productID: string; quantity: string; price: string } | null>(null); // State to hold selected product and quantity
       const [showRatingInput, setShowRatingInput] = useState<boolean>(false); // Trạng thái để hiển thị ô nhập
-      const [inputValue, setInputValue] = useState<string>(''); // Trạng thái để lưu giá trị ô nhập
+      const [dealId, setDealId] = useState<string>(''); // Trạng thái để lưu giá trị ô nhập
+      const [productId, setProductId] = useState<string>(''); // Trạng thái để lưu giá trị ô nhập
+      const [inputValuePrivateKey, setInputValuePrivateKey] = useState<string>('');
+      const [inputValueRating, setInputValueRating] = useState<string>('') // Trạng thái để lưu giá trị ô nhập
+      const [submittedData, setSubmittedData] = useState<{
+        dealId: string;
+        productId: string;
+        rating: string;
+        password: string;
+      } | null>(null);
       // const toggleShowRatingInput = async (productId: string) => {
         
       // }
@@ -308,10 +317,23 @@ createWeb3Modal({
         }
       };
     
-      const handleShowRatingInput = (productId: string) => {
+      const handleShowRatingInput = (dealId: string, productId: string) => {
+        setDealId(dealId);
+        setProductId(productId);
         setShowRatingInput(true); 
       };
-    
+      const handleSubmit = () => {
+        const data = {
+          dealId,
+          productId,
+          rating: inputValueRating,
+          password: inputValuePrivateKey,
+        };
+        setSubmittedData(data);
+        console.log("DATAAAAAA", data)
+        // console.log("DATAAAAA@@@", submittedData) // Lưu giá trị vào state để truyền vào component GetInput
+        setShowRatingInput(false); // Đóng modal
+      };
       const handleShowSignUpForm = () => {
         setShowSignUpForm(true); // Hiển thị form đăng ký
       };
@@ -372,15 +394,17 @@ createWeb3Modal({
             </div>
           </header>
           {/* <GetInput signer = {} dealId = {} /> */}
-          {/* <Test /> */}
-          <div>
-            <input className="border p-2 mb-2 " type="text" placeholder="Enter dealId" value={testDealId} onChange={(e) => setTestDealId(e.target.value)} />
-            <button  disabled={isLoading} className="bg-blue-600 border p-2 mb-2"> {isLoading ? "Loading..." : "Send Props"}</button>
-            { testDealId && walletProvider && (
-              <GetInput dealId={testDealId}  />
-            )}
-            {/* signer={await new BrowserProvider(walletProvider).getSigner()} */}
-          </div>
+          {submittedData && (
+            <div>
+              {/* <p>Deal ID: {submittedData.dealId}</p>
+              <p>Product ID: {submittedData.productId}</p>
+              <p>Rating: {submittedData.rating}</p>
+              <p>Password: {submittedData.password}</p> */}
+              <GetInput dealId={submittedData.dealId} productId = {submittedData.productId} rating = {submittedData.rating} password = {submittedData.password} />
+            </div>
+            
+          )}
+
           {showSignUpForm && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -483,7 +507,7 @@ createWeb3Modal({
                                 )}
                                 {dealState.isCompleted && (
                                     <button 
-                                        onClick={() => handleShowRatingInput(dealState.productID)} // Gọi hàm để hiển thị ô nhập
+                                        onClick={() => handleShowRatingInput(dealState.dealId, dealState.productID)} // Gọi hàm để hiển thị ô nhập
                                         className="ml-4 bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-400 transition-colors"
                                     >
                                         Đánh giá sản phẩm
@@ -532,21 +556,22 @@ createWeb3Modal({
                 <div className="bg-white p-6 rounded-lg shadow-lg">
                     <h2 className="text-lg mb-4">Rating</h2>
                     <input
-                        type="text"
-                        placeholder="Enter Your Private Key"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
+                        type="password"
+                        placeholder="Enter Your Password"
+                        value={inputValuePrivateKey}
+                        onChange={(e) => setInputValuePrivateKey(e.target.value)}
                         className="border p-2 mb-4 w-full"
                     />
                     <input
                         type="text"
                         placeholder="1* to 5*"
-                        // value={inputValue}
-                        // onChange={(e) => setInputValue(e.target.value)}
+                        value={inputValueRating}
+                        onChange={(e) => setInputValueRating(e.target.value)}
                         className="border p-2 mb-4 w-full"
                     />
                     <button
                         onClick={() => {
+                            handleSubmit();
                             // Xử lý logic gửi đánh giá ở đây
                             setShowRatingInput(false); // Ẩn ô nhập sau khi gửi
                         }}

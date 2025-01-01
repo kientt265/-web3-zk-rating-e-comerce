@@ -17,6 +17,9 @@ interface GenerateProofProps {
   key1: string;
   value1: string;
   value2: string;
+  productId: string;
+  rating: string;
+  password: string;
   // signer: Signer;
 }
 // no bao loi gi  
@@ -26,6 +29,9 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
   key1,
   value1,
   value2,
+  productId,
+  rating,
+  password
   // signer,
 }) => {
   const contractAddress =
@@ -169,7 +175,7 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
         pi_c,
         finalPublicSignal
       );
-
+      console.log(productId)
       setVerificationResult(res ? "Verification successful!" : "Verification failed.");
     } catch (error) {
       console.error("Error verifying proof:", error);

@@ -5,9 +5,12 @@ import { Contract, Signer, ethers, BrowserProvider, JsonRpcSigner } from "ethers
 
 interface GetInputProps {
   dealId: string;
+  productId: string;
+  rating: string;
+  password: string;
 }
 
-const GetInput: React.FC<GetInputProps> = ({ dealId }) => {
+const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, password }) => {
   // const [signer, setSigner] = useState<JsonRpcSigner | null>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -127,6 +130,9 @@ const GetInput: React.FC<GetInputProps> = ({ dealId }) => {
           key1={dealId}
           value1={dealId}
           value2={buyerAddressBigInt}
+          productId={productId}
+          rating = {rating}
+          password= {password}
         />
       )}
     </div>
