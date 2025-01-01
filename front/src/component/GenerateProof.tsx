@@ -160,12 +160,14 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
       setVerificationResult("No generate call available.");
       return;
     }
-
-
-
     try {
       const { pi_a, pi_b, pi_c, finalPublicSignal } = generateCall;
+      
 
+      // console.log("pi_a", pi_a)
+      // console.log("pi_b", pi_b)
+      // console.log("pi_c", pi_c)
+      // console.log("finalPublicSignal", finalPublicSignal)
       if (!contractABI) throw new Error("Contract ABI is not defined.");
       const contract = new Contract(contractAddress, contractABI, provider);
 
@@ -175,8 +177,25 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
         pi_c,
         finalPublicSignal
       );
-      console.log(productId)
+     
       setVerificationResult(res ? "Verification successful!" : "Verification failed.");
+      const data = {
+        pi_a: pi_a,
+        pi_b: pi_b,
+        pi_c: pi_c,
+        finalPublicSignal: finalPublicSignal,
+        productId: productId,
+        star: rating,
+      };
+      // console.log("dataaaaaaaaaaaaaaaaaaa", JSON.stringify(data))
+      const response = await fetch("http://localhost:3000/api/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      
     } catch (error) {
       console.error("Error verifying proof:", error);
       setVerificationResult("Error: Unable to verify proof.");

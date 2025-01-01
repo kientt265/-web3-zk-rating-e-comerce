@@ -362,6 +362,25 @@ createWeb3Modal({
                 <h1 className="text-2xl font-bold">VerifComerce</h1>
               </div>
               <div className="flex gap-4">
+              <div className="flex flex-col gap-4">
+                <a 
+                  href="https://sepolia.etherscan.io/address/0x83abF096267849fcDDb7fcAb2DDfbbD636d8eAe8" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  ContractSaveMerkleRoot
+                </a>
+                <a 
+                  href="https://sepolia.etherscan.io/address/0x84aD7B5667E4eBD82149Cd484e2E54a0f17cc79c" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  ContractRating
+                </a>
+              </div>
+
               <button
                 onClick={() => getEventDelivering(true)}
                 className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
