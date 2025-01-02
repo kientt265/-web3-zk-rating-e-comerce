@@ -113,6 +113,8 @@ createWeb3Modal({
           }
         }
       }
+      const [ratingEvents, setRatingEvents] = useState<{ productId: string; rating: string; ratingCount: string }[]>([]);
+
       const getEventRating = async () => {
         try {
             const providerURL = import.meta.env.VITE_SEPOLIA_RPC_URL || "";
@@ -122,27 +124,21 @@ createWeb3Modal({
             const ratingEventFilter = contractRating.filters.NewRating();
             const newRatingEvents = await contractRating.queryFilter(ratingEventFilter, 10);
     
-            // Sử dụng Map để lưu trữ sự kiện mới nhất theo productId
             const latestEvents = new Map<string, { productId: string; rating: string; ratingCount: string }>();
     
             for (const event of newRatingEvents) {
                 const newEvent = {
-                    productId: (event as any).args[0],
-                    rating: (event as any).args[1],
-                    ratingCount: (event as any).args[2],
+                    productId: (event as any).args[0].toString(),
+                    rating: (event as any).args[1].toString(),
+                    ratingCount: (event as any).args[2].toString(),
                 };
-    
-                // Cập nhật Map với sự kiện mới nhất
+            
                 latestEvents.set(newEvent.productId, newEvent);
-    
-                // Xuất sự kiện ra console
                 console.log("Processing Event:", newEvent);
             }
     
-            // Chuyển Map thành array nếu cần lưu vào trạng thái
             const eventsRating = Array.from(latestEvents.values());
-    
-            // Xuất toàn bộ sự kiện mới nhất
+            setRatingEvents(eventsRating);
             console.log("Latest Events:", eventsRating);
     
         } catch (error) {
@@ -262,7 +258,8 @@ createWeb3Modal({
               }          
             }
 
-
+            const ratingEvents = await getEventRating();
+            console.log("Rating Events:", ratingEvents);
 
               
             if (events.length !== 0) {
@@ -395,6 +392,16 @@ createWeb3Modal({
       //     }
       //   }
       // }
+
+      const combinedData = products.map(product => {
+        const ratingEvent = ratingEvents.find(event => event.productId === product.productID);
+        return {
+            ...product,
+            rating: ratingEvent ? ratingEvent.rating : null,
+            ratingCount: ratingEvent ? ratingEvent.ratingCount : null,
+        };
+    });
+
       return (
         <div>
           <header className="mx-auto px-2 p-4 border-b">
@@ -430,11 +437,11 @@ createWeb3Modal({
                 </a>
                 
               </div>
-              <button
+              {/* <button
                 onClick={() => getEventRating()}
                 className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
                 Lấy events Rating
-              </button>
+              </button> */}
               <button
                 onClick={() => getEventDelivering(true)}
                 className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
@@ -594,11 +601,14 @@ createWeb3Modal({
               <p>Bạn chưa mua gì</p>
           )}
             <h2 className="text-xl mb-4">Products</h2>
-            {products.length > 0 ? (
+            {combinedData.length > 0 ? (
                 <ul className="space-y-2">
-                    {products.map((product, index) => (
-                        <li className="p-4 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-100 hover:shadow-lg transition duration-200 cursor-pointer" key={index} onClick={() => setSelectedProduct({ productID: product.productID, quantity: '', price: product.pricePerProduct })}>
-                            Product ID: {product.productID}, Quantity: {product.quantityPerItem}, Price: {product.pricePerProduct}
+                    {combinedData.map((item, index) => (
+                        <li key={index} className="p-4 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-100 hover:shadow-lg transition duration-200">
+                            Product ID: {item.productID}, Quantity: {item.quantityPerItem}, Price: {item.pricePerProduct}
+                            {item.rating && item.ratingCount && (
+                                <span>, Rating: {item.rating}, Rating Count: {item.ratingCount}</span>
+                            )}
                         </li>
                     ))}
                 </ul>
@@ -661,6 +671,21 @@ createWeb3Modal({
                 </div>
             </div>
         )}
+        
+        {/* <div>
+            <h2 className="text-xl mb-4">Rating Events</h2>
+            {ratingEvents.length > 0 ? (
+                <ul className="space-y-2">
+                    {ratingEvents.map((event, index) => (
+                        <li key={index} className="p-4 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-100 hover:shadow-lg transition duration-200">
+                            Product ID: {event.productId}, Rating: {event.rating}, Rating Count: {event.ratingCount}
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>No rating events found.</p>
+            )}
+        </div> */}
         
         </div>
       );
