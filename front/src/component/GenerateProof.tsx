@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as snarkjs from "snarkjs";
 import { Contract, Signer, ethers } from "ethers";
-import { root } from "@reown/appkit/networks";
+
 
 interface Proof {
   pi_a: [string, string];
@@ -19,7 +19,7 @@ interface GenerateProofProps {
   value2: string;
   productId: string;
   rating: string;
-  password: string;
+  // password: string;
   // signer: Signer;
 }
 // no bao loi gi  
@@ -30,8 +30,7 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
   value1,
   value2,
   productId,
-  rating,
-  password
+  rating
   // signer,
 }) => {
   const contractAddress =
@@ -57,7 +56,7 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
     console.log("value1:@", value1);
     console.log("value2:@", value2);
     try {
-
+      
       // 19276106215637265997330401575650134520637790411210210147702464783678946045070
       // 19276106215637265997330401575650134520637790411210210147702464783678946045070
       const input = {

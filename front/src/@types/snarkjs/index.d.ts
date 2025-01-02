@@ -4,3 +4,8 @@ declare module 'snarkjs' {
     export const zKey: any;
     export const wtns: any;
 }
+declare module 'circomlibjs' {
+    export const babyJub: any;
+    export const poseidon: any;
+    export const buildPoseidon: any;
+}

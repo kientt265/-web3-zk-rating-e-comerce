@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from "react";
 import GenerateProof from "./GenerateProof";
 import { Contract, Signer, ethers, BrowserProvider, JsonRpcSigner } from "ethers";
-
+import * as circomlib from 'circomlibjs'; 
 
 interface GetInputProps {
   dealId: string;
@@ -58,19 +58,31 @@ const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, password
   //     return null;
   //   }
   // };
+  const  hexToBigInt = (hexAddress: string) => {
 
+    if (hexAddress.startsWith("0x")) {
+      hexAddress = hexAddress.slice(2);
+    }
+  
+    return BigInt(`0x${hexAddress}`);
+  };
   const getMerkleRoot1 = async () => {
     try {
       setLoading(true);
       const data = await fetchSiblingsandBlockNumber(dealId);
-  
 
+    //   async function createValue() {
+    //     const hashArray = poseidon([dealId.toString(), buyerAddress]);
+    //     return poseidon.F.toString(hashArray);
+    // }
       const blockNumberAttr = data.blockNumber
       const siblingsNodeAttr: string[] = data.proofMerkle; 
-      const buyerAddressBigIntAttr = data.buyerAddress
-      // console.log("blockNumberAttr", typeof blockNumberAttr);
-      // console.log("siblingsNodeAttr", siblingsNodeAttr);
-      // console.log("buyerAddressBigIntAttr",typeof buyerAddressBigIntAttr);
+      // const buyerAddressBigIntAttr = data.buyerAddress
+      
+      const value2BigInt =  hexToBigInt(password);
+      const realValue2 = value2BigInt.toString();
+      
+
       if (!blockNumberAttr || !siblingsNodeAttr) {
         throw new Error("Missing blockNumber or siblingsNode attribute");
       }
@@ -87,7 +99,7 @@ const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, password
       
         setMerkleRoot(merkleRoot2);
         setSiblingsNode(siblingsNodeAttr);
-        setBuyerAddressBigInt(buyerAddressBigIntAttr);
+        setBuyerAddressBigInt(realValue2);
       
     } catch (error) {
       console.error("Error fetching Merkle root or related data:", error);
@@ -132,7 +144,7 @@ const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, password
           value2={buyerAddressBigInt}
           productId={productId}
           rating = {rating}
-          password= {password}
+          // password= {password}
         />
       )}
     </div>
