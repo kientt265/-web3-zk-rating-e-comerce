@@ -14,3 +14,9 @@ export type DealEvent = {
     isCompleted: boolean;
     blockNumber: number;
 }
+export type RatingEvent = {
+    productId: string;
+    rating: number;
+    ratingCount: number;
+
+}

@@ -1,5 +1,5 @@
 import { createWeb3Modal, defaultConfig,  useWeb3ModalAccount, useWeb3ModalProvider } from "@web3modal/ethers/react";
-import { BrowserProvider, Contract, formatEther, parseEther, Signer} from 'ethers'
+import { BrowserProvider, Contract, formatEther, parseEther, Signer, ethers} from 'ethers'
 import { useEffect, useState } from "react";
 import { shortenAddress } from './lib/utils'
 import { useWeb3Modal } from '@web3modal/ethers/react'
@@ -7,11 +7,13 @@ import {InteractPrivateChain} from './component/InteractPrivateChain'
 import History from './component/History'
 import useEthers from "./hooks/useEthers"
 import GetInput from "./component/GetInput";
-import { FundedEvent, DealEvent } from  "./lib/type"
+import { FundedEvent, DealEvent, RatingEvent } from  "./lib/type"
 import {contractABI, contractAdr} from "./contract/contractData"
 import Test from "./component/Test";
 const projectId = import.meta.env.VITE_PROJECT_ID;
 
+const contractAddressRating = import.meta.env.VITE_CONTRACT_ADDRESS_RATING || "0x84aD7B5667E4eBD82149Cd484e2E54a0f17cc79c";
+const contractABIRating = JSON.parse(import.meta.env.VITE_CONTRACT_ABI_RATING || "[]");
 const sepolia = {
   chainId: 11155111,
   name: "Sepolia",
@@ -68,7 +70,7 @@ createWeb3Modal({
       const [isSeller, setIsSeller] = useState(false); // Kiểm tra xem người dùng chọn là Seller hay User
       const [products, setProducts] = useState<FundedEvent[]>([]); // State to hold fetched products
       const [dealState, setDealState] = useState<DealEvent[]>([])
-      
+      const [ratingState, setRatingState] = useState<RatingEvent[]>([])
       // const [selectDealState, setSelectDealState] = useState<{
       //   dealId: string;
       //   buyer: string;
@@ -111,6 +113,45 @@ createWeb3Modal({
           }
         }
       }
+      const getEventRating = async () => {
+        try {
+            const providerURL = import.meta.env.VITE_SEPOLIA_RPC_URL || "";
+            const provider = new ethers.JsonRpcProvider(providerURL);
+    
+            const contractRating = new Contract(contractAddressRating, contractABIRating, provider);
+            const ratingEventFilter = contractRating.filters.NewRating();
+            const newRatingEvents = await contractRating.queryFilter(ratingEventFilter, 10);
+    
+            // Sử dụng Map để lưu trữ sự kiện mới nhất theo productId
+            const latestEvents = new Map<string, { productId: string; rating: string; ratingCount: string }>();
+    
+            for (const event of newRatingEvents) {
+                const newEvent = {
+                    productId: (event as any).args[0],
+                    rating: (event as any).args[1],
+                    ratingCount: (event as any).args[2],
+                };
+    
+                // Cập nhật Map với sự kiện mới nhất
+                latestEvents.set(newEvent.productId, newEvent);
+    
+                // Xuất sự kiện ra console
+                console.log("Processing Event:", newEvent);
+            }
+    
+            // Chuyển Map thành array nếu cần lưu vào trạng thái
+            const eventsRating = Array.from(latestEvents.values());
+    
+            // Xuất toàn bộ sự kiện mới nhất
+            console.log("Latest Events:", eventsRating);
+    
+        } catch (error) {
+            console.error("Error fetching deal state events:", error);
+            alert("An error occurred while fetching deal state events. Please try again.");
+        }
+    };
+    
+    
       const getEventDelivering = async (filterCompleted: boolean | null = null) => {
         if (!walletProvider) {
           alert("Please connect your wallet first.");
@@ -389,7 +430,11 @@ createWeb3Modal({
                 </a>
                 
               </div>
-
+              <button
+                onClick={() => getEventRating()}
+                className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
+                Lấy events Rating
+              </button>
               <button
                 onClick={() => getEventDelivering(true)}
                 className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
