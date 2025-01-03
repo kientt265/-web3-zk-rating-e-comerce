@@ -601,20 +601,31 @@ createWeb3Modal({
               <p>Bạn chưa mua gì</p>
           )}
             <h2 className="text-xl mb-4">Products</h2>
-            {combinedData.length > 0 ? (
-                <ul className="space-y-2">
-                    {combinedData.map((item, index) => (
-                        <li key={index} className="p-4 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-100 hover:shadow-lg transition duration-200">
-                            Product ID: {item.productID}, Quantity: {item.quantityPerItem}, Price: {item.pricePerProduct}
-                            {item.rating && item.ratingCount && (
-                                <span>, Rating: {item.rating}, Rating Count: {item.ratingCount}</span>
-                            )}
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No products found.</p>
-            )}
+{combinedData.length > 0 ? (
+    <ul className="space-y-2">
+        {combinedData.map((item, index) => (
+            <li
+                key={index}
+                className="p-4 border cursor-pointer border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-100 hover:shadow-lg transition duration-200"
+                onClick={() =>
+                    setSelectedProduct({
+                        productID: item.productID,
+                        quantity: '',
+                        price: item.pricePerProduct,
+                    })
+                }
+            >
+                Product ID: {item.productID}, Quantity: {item.quantityPerItem}, Price: {item.pricePerProduct}
+                {item.rating && item.ratingCount && (
+                    <span>, Rating: {item.rating}, Rating Count: {item.ratingCount}</span>
+                )}
+            </li>
+        ))}
+    </ul>
+) : (
+    <p>No products found.</p>
+)}
+
             {selectedProduct && (
                 <div>
                     <input
