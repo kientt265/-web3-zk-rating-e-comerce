@@ -1,12 +1,8 @@
-# Đường dẫn dữ liệu
 RAW_DATA_PATH = "data/raw/sample_reviews.csv"
 PROCESSED_DATA_PATH = "data/processed/preprocessed_reviews.csv"
+MODEL_PATH = "models/trained_model.pth"
 
-# Đường dẫn model
-MODEL_PATH = "models/trained_model.pkl"
-
-# Tham số model
-RANDOM_FOREST_PARAMS = {
-    "n_estimators": 100,
-    "random_state": 42,
-}
+# Tham số mô hình
+EPOCHS = 20
+BATCH_SIZE = 32
+LEARNING_RATE = 0.001

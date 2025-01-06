@@ -1,5 +1,6 @@
+torch
 pandas
 scikit-learn
-numpy
-matplotlib
-pickle5
+python scripts/preprocess.py
+python scripts/train_model.py
+python scripts/evaluate_model.py
