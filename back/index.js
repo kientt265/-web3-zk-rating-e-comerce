@@ -4,6 +4,7 @@ import express from 'express';
 import cors from 'cors';
 import connectToMongoDb from './mongoDb.js';
 
+import userRouter from './src/routes/user.route.js';
 import blockRouter from './src/routes/data.route.js';
 import dealRouter from './src/routes/dataDeal.route.js';
 import requestRouter from './src/routes/request.route.js';
@@ -78,14 +79,14 @@ const boostrap = async () => {
         getLogs();
       }
       //chay lai
-  
+
       // Kiểm tra nếu có logs
       if (parsedData.id === 2 && parsedData.result) {
         const logs = parsedData.result;
-        if (logs && logs.length > 0) { 
+        if (logs && logs.length > 0) {
           // console.log("Logs from the contract:", JSON.stringify(logs, null, 2));
           console.log(logs[0])
-          await saveNewLogsService(logs[0]); 
+          await saveNewLogsService(logs[0]);
           await processBlockData(logs[0]);   // bay gio cai nay no la 1 object 
 
         } else {
@@ -108,6 +109,7 @@ const boostrap = async () => {
   app.use(cors());
   app.use(express.json());
 
+  app.use('/api', userRouter);
   app.use('/api', blockRouter);
   app.use('/api', dealRouter);
   app.use('/api', requestRouter);
