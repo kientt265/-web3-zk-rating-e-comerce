@@ -10,12 +10,12 @@ template ZkComerceVerifyMerkleTree () {
     signal input dealId;
     signal input censusRoot;
     signal input censusSiblings[realNLevels];
-    signal input buyerAddress;
+    signal input password;
     signal input tsxHash[2];
 
     
     component createValue = Poseidon(3);
-        createValue.inputs[0] <== buyerAddress;
+        createValue.inputs[0] <== password;
         createValue.inputs[1] <== tsxHash[0];
         createValue.inputs[2] <== tsxHash[1];
 

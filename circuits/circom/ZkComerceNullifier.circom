@@ -17,3 +17,4 @@ template ZkCoZkComerceNullifier() {
 	checkNullifier.in[0] <== computedNullifier.out;
 	checkNullifier.in[1] <== nullifier;
 }
+

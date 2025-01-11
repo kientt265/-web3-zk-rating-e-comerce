@@ -7,7 +7,7 @@ contract SaveMerkleRoot {
         listMerkleRoot[_blockNumber] = _merkleRoot;
     }
 
-    function getRootByBlockNuber(uint256 _blockNumber) public view returns(string memory) {
+    function getRootByBlockNumber(uint256 _blockNumber) public view returns(string memory) {
         return listMerkleRoot[_blockNumber];
     }
 }

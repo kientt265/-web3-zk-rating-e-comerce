@@ -10,10 +10,12 @@ import GetInput from "./component/GetInput";
 import { FundedEvent, DealEvent, RatingEvent } from  "./lib/type"
 import {contractABI, contractAdr} from "./contract/contractData"
 import Test from "./component/Test";
-const projectId = import.meta.env.VITE_PROJECT_ID;
+
 
 const contractAddressRating = import.meta.env.VITE_CONTRACT_ADDRESS_RATING || "0x84aD7B5667E4eBD82149Cd484e2E54a0f17cc79c";
 const contractABIRating = JSON.parse(import.meta.env.VITE_CONTRACT_ABI_RATING || "[]");
+
+const projectId = import.meta.env.VITE_PROJECT_ID;
 const sepolia = {
   chainId: 11155111,
   name: "Sepolia",

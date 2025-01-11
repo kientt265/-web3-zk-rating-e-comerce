@@ -1,7 +1,5 @@
 
 import { ethers } from 'ethers';
-
-
 export const verifyProofService = async (proof) => {
     const { pi_a, pi_b, pi_c, finalPublicSignal, productId, star } = proof;
     const starNumber = Number(star);
@@ -34,7 +32,6 @@ export const verifyProofService = async (proof) => {
                     await rating.wait();
                     const avgRating = await contractRating.getRatingProduct(productId);
                     return avgRating;
-                    console.log("Proof is valid@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", avgRating);
                 }
     return {
       verificationResult,

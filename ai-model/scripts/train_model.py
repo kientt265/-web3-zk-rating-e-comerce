@@ -59,4 +59,4 @@ def train_model(data_file, model_path, epochs=20, batch_size=32, learning_rate=0
     print(f"Model saved to {model_path}")
 
 if __name__ == "__main__":
-    train_model("data/processed/preprocessed_reviews.csv", "models/trained_model.pth")
+    train_model("../dataset/processed/preprocessed_reviews.csv", "../models/trained_model.pth")

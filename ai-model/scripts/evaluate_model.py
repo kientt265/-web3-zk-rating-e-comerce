@@ -22,4 +22,6 @@ def evaluate_model(data_file, model_path):
     print(classification_report(y, y_pred))
 
 if __name__ == "__main__":
-    evaluate_model("data/processed/preprocessed_reviews.csv", "models/trained_model.pth")
+    evaluate_model("../dataset/processed/preprocessed_reviews.csv", "../models/trained_model.pth")
+
+

@@ -19,17 +19,16 @@ const boostrap = async () => {
 
   connectToMongoDb();
 
-  // URL của node Besu với WebSocket (thay đổi theo cấu hình của bạn)
-  const besuWsUrl = 'ws://127.0.0.1:8546'; // Đây là cổng WebSocket của Besu (thường là 8546)
-  // Khởi tạo WebSocket client
+
+  const besuWsUrl = 'ws://127.0.0.1:8546'; 
+
   const ws = new WebSocket(besuWsUrl);
 
-  // Hàm đăng ký để nhận thông báo khi có block mới
   function subscribeToNewBlocks() {
     const subscriptionMessage = JSON.stringify({
       jsonrpc: "2.0",
       method: "eth_subscribe",
-      params: ["newHeads"], // Đăng ký nhận thông báo khi có block mới
+      params: ["newHeads"],
       id: 1
     });
 
