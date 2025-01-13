@@ -685,21 +685,6 @@ createWeb3Modal({
             </div>
         )}
         
-        {/* <div>
-            <h2 className="text-xl mb-4">Rating Events</h2>
-            {ratingEvents.length > 0 ? (
-                <ul className="space-y-2">
-                    {ratingEvents.map((event, index) => (
-                        <li key={index} className="p-4 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-100 hover:shadow-lg transition duration-200">
-                            Product ID: {event.productId}, Rating: {event.rating}, Rating Count: {event.ratingCount}
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No rating events found.</p>
-            )}
-        </div> */}
-        
         </div>
       );
     }
