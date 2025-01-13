@@ -12,7 +12,7 @@ import {contractABI, contractAdr} from "./contract/contractData"
 import Test from "./component/Test";
 
 
-const contractAddressRating = import.meta.env.VITE_CONTRACT_ADDRESS_RATING || "0x84aD7B5667E4eBD82149Cd484e2E54a0f17cc79c";
+const contractAddressRating = import.meta.env.VITE_CONTRACT_ADDRESS_RATING || "0x204369E4c844DE8D5299Baa86D62fa76174CD670";
 const contractABIRating = JSON.parse(import.meta.env.VITE_CONTRACT_ABI_RATING || "[]");
 
 const projectId = import.meta.env.VITE_PROJECT_ID;
@@ -422,7 +422,7 @@ createWeb3Modal({
                   ContractSaveMerkleRoot
                 </a>
                 <a 
-                  href="https://sepolia.etherscan.io/address/0x84aD7B5667E4eBD82149Cd484e2E54a0f17cc79c" 
+                  href="https://sepolia.etherscan.io/address/0x204369e4c844de8d5299baa86d62fa76174cd670" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-blue-500 hover:underline"
