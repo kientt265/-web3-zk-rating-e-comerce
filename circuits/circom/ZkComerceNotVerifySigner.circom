@@ -12,12 +12,13 @@ template ZkComerceVerifyMerkleTree () {
     signal input censusSiblings[realNLevels];
     signal input password;
     signal input tsxHash[2];
+    signal input nullifier;
+    signal input productId;
 
     
-    component createValue = Poseidon(3);
+    component createValue = Poseidon(2);
         createValue.inputs[0] <== password;
-        createValue.inputs[1] <== tsxHash[0];
-        createValue.inputs[2] <== tsxHash[1];
+        createValue.inputs[1] <== dealId;
 
     component censusVerifier = SMTVerifier(realNLevels);
         censusVerifier.enabled <== 1;
@@ -31,5 +32,16 @@ template ZkComerceVerifyMerkleTree () {
 	    censusVerifier.isOld0 <== 0;
         censusVerifier.key <== dealId ;
         censusVerifier.value <== createValue.out;
+
+    component computedNullifier = Poseidon(3);
+	    computedNullifier.inputs[0] <== password;
+        computedNullifier.inputs[1] <== dealId;
+        computedNullifier.inputs[2] <== productId;
+
+    component checkNullifier = ForceEqualIfEnabled();
+        checkNullifier.enabled <== 1;
+        checkNullifier.in[0] <== computedNullifier.out;
+        checkNullifier.in[1] <== nullifier;        
+        
 }
-component main {public [nLevels, dealId, censusRoot, censusSiblings, buyerAddress, tsxHash]} = ZkComerceVerifyMerkleTree();
+component main {public [nLevels, dealId, censusRoot, censusSiblings, buyerAddress, tsxHash, nullifier, productId]} = ZkComerceVerifyMerkleTree();

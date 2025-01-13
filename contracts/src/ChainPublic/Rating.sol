@@ -18,40 +18,34 @@ contract Rating {
     mapping(string => uint256) private totalRating; 
     mapping(string => uint256) private ratingCount; 
     mapping(string => uint8) public currentRating; 
+    mapping(uint  => string) public saveNullifier;
     mapping(string => bool) public nullifierUsed;
 
-    constructor(address _verifyContract) {
+
+
+    function setVerifyContract(address _verifyContract) public {
         verifyContract = _verifyContract;
     }
-    // function verifyProof(uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[25] calldata _pubSignals) public view returns (bool) 
     function ratingProduct(uint8 _star, string memory _productId, string memory _nullifier,  uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[25] calldata _pubSignals) public {
         bool proofValid = IVerifier(verifyContract).verifyProof(_pA, _pB, _pC, _pubSignals);
         require(proofValid, "Invalid proof");
         require(!nullifierUsed[_nullifier], "Nullifier already used");
-        nullifierUsed[_nullifier] = true;
-
         require(_star >= 1 && _star <= 5, "Rating must be between 1 and 5 stars"); 
-
+        nullifierUsed[_nullifier] = true;
         totalRating[_productId] += _star; 
         ratingCount[_productId] += 1;
-
         currentRating[_productId] = _star;
-        uint256 averageRating = totalRating[_productId] / ratingCount[_productId];
-        emit NewRating(_productId, uint8(averageRating), ratingCount[_productId]);
+        emit NewRating(_productId, _star, ratingCount[_productId]);
     }
 
-    function addNullifier(string memory _nullifier) public {
+    function addNullifier(string memory _nullifier, uint _dealId) public {
+        saveNullifier[_dealId] = _nullifier;
         nullifierUsed[_nullifier] = false;
     }
 
-    // function getRatingProduct(string memory _productId) public view returns (uint256) {
-    //     if (ratingCount[_productId] == 0) {
-    //         return 0;
-    //     }
-
-    //     uint256 averageRating = totalRating[_productId] / ratingCount[_productId];
-    //     return averageRating;
-    // }
+    function getNullifierByDealId(uint _dealId) public view returns(string memory) {
+        return saveNullifier[_dealId];
+    }
 
     function getRatingCount(string memory _productId) public view returns (uint256) {
         return ratingCount[_productId];

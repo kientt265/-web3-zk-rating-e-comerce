@@ -125,7 +125,7 @@
         <mxCell id="hEmQehjzcuKqoeFt75kn-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" parent="1" source="hEmQehjzcuKqoeFt75kn-17" target="hEmQehjzcuKqoeFt75kn-26" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="hEmQehjzcuKqoeFt75kn-17" value="MerkleRoot(Public)" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="hEmQehjzcuKqoeFt75kn-17" value="MerkleRoot" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="77.5" y="1038" width="115" height="50" as="geometry" />
         </mxCell>
         <mxCell id="hEmQehjzcuKqoeFt75kn-18" value="INPUT" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
@@ -136,7 +136,7 @@
             <mxPoint x="380" y="1160" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="hEmQehjzcuKqoeFt75kn-19" value="Merkle Proof&lt;div&gt;(Private)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="hEmQehjzcuKqoeFt75kn-19" value="Merkle Proof" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="75" y="1108" width="120" height="50" as="geometry" />
         </mxCell>
         <mxCell id="sezrSmu4SnytrrbVDdDT-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" parent="1" source="hEmQehjzcuKqoeFt75kn-20" target="hEmQehjzcuKqoeFt75kn-22" edge="1">
@@ -147,7 +147,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="hEmQehjzcuKqoeFt75kn-20" value="PASSWORD(Private)" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="hEmQehjzcuKqoeFt75kn-20" value="PASSWORD" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="75" y="1328" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="hEmQehjzcuKqoeFt75kn-22" value="Verify MerkleProof" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -174,7 +174,7 @@
         <mxCell id="VJ5Vr7njhhJx2uqY9w5U-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="hEmQehjzcuKqoeFt75kn-40" target="hEmQehjzcuKqoeFt75kn-41">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="hEmQehjzcuKqoeFt75kn-40" value="Nullifier&lt;div&gt;(Public)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="hEmQehjzcuKqoeFt75kn-40" value="Nullifier" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="72.5" y="1470" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="hEmQehjzcuKqoeFt75kn-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" parent="1" source="hEmQehjzcuKqoeFt75kn-41" target="hEmQehjzcuKqoeFt75kn-32" edge="1">
@@ -390,8 +390,8 @@
         <mxCell id="YTfJnnb_gsRbAbClFj2Y-4" value="Equal" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="655" y="1630" width="160" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="AhMuQMy06goDo5ATTpQo-1" value="Save Merkle Root" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="535" y="348" width="120" height="30" as="geometry" />
+        <mxCell id="AhMuQMy06goDo5ATTpQo-1" value="Save Merkle Root&lt;br&gt;Save Nullifier" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="535" y="343" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="AhMuQMy06goDo5ATTpQo-2" value="-Create Merkle Tree" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="745" y="240" width="110" height="30" as="geometry" />

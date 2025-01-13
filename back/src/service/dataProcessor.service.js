@@ -13,6 +13,7 @@ export const processBlockData = async (logsBlockData) => {
     const provider = new ethers.JsonRpcProvider(process.env.URL_RPC_INFURA);
     const signer = new ethers.Wallet(process.env.PRIVATE_KEY_ADMIN, provider);
 
+    const contractRating = new ethers.Contract(process.env.CONTRACT_ADDRESS_RATING, process.env.CONTRACT_ABI_RATING, signer)
 
     const contract = new ethers.Contract(
       process.env.CONTRACT_ADDRESS_SAVE_MERKLE_ROOT,
@@ -50,6 +51,10 @@ export const processBlockData = async (logsBlockData) => {
     console.log("Merkle root:", typeof merkleRoot, merkleRoot);
     console.log("Merkle Proof:", merkleTree.proof);
 
+    const nullifier = merkleTree.nullifier;
+
+    const transactionRating = await contractRating.addNullifier(nullifier, dealIds)
+    await transactionRating.wait()
 
     const processedData = {
       blockNumber: blockNumber,
