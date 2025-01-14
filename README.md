@@ -1,5 +1,5 @@
 # Dự Án Minh Bạch và Ẩn Danh trong Rating Sản Phẩm trên Sàn Thương Mại Điện Tử
-![Alt text](./front/src/assets/flowSystem.jpg "Optional title")
+![Alt text](./front/src/assets/FlowSystem.png "Optional title")
 
 ## Giới thiệu
 Dự án này tập trung vào việc phát triển một hệ thống rating sản phẩm trên sàn thương mại điện tử, sử dụng công nghệ Zero Knowledge Proof (ZKP) để đảm bảo tính minh bạch và ẩn danh cho người dùng. Hệ thống sẽ sử dụng hai chuỗi: chuỗi riêng (private chain) và chuỗi công khai (public chain).
@@ -13,7 +13,7 @@ Dự án này tập trung vào việc phát triển một hệ thống rating s�
   - Lưu trữ bằng chứng (Merkle root) được đẩy lên từ chuỗi riêng để chứng minh tính đúng đắn của giao dịch.
   - Đảm bảo rằng các giao dịch có thể được xác minh công khai mà không tiết lộ thông tin nhạy cảm của người dùng.
 - **Zero-Knowledge (ZkSnark)**:   
-  ![Alt text](./front/src/assets/flowCircuit.jpg "Optional title")
+  ![Alt text](./front/src/assets/FlowZK.png "Optional title")
 
 ## Quy Trình Hoạt Động
 1. Ghi lại giao dịch mua bán trên chuỗi riêng.
@@ -25,13 +25,13 @@ Dự án này tập trung vào việc phát triển một hệ thống rating s�
 7. Nếu verify thành công, thực hiện voting cho sản phẩm.
 
 ## Công Nghệ Sử Dụng
-- **Hyperledger Fabric**: Để xây dựng chuỗi riêng, cung cấp tính bảo mật và khả năng mở rộng.
+- **Hyperledger Besu**: Để xây dựng chuỗi riêng, cung cấp tính bảo mật và khả năng mở rộng.
 - **Ethereum (Sepolia)**: Để triển khai các smart contract và lưu trữ bằng chứng công khai.
 - **Zero Knowledge Proof**: Để đảm bảo tính ẩn danh và bảo mật cho người dùng trong quá trình voting.
 
 ## Cài Đặt
 1. Cài đặt các phụ thuộc cần thiết cho chuỗi riêng và chuỗi công khai.
-2. Triển khai chuỗi riêng bằng Hyperledger Fabric.
+2. Triển khai chuỗi riêng bằng Hyperledger Besu.
 3. Triển khai smart contract trên chuỗi công khai (Sepolia).
 4. Chạy ứng dụng và kiểm tra các chức năng.
 
