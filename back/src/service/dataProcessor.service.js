@@ -44,9 +44,10 @@ export const processBlockData = async (logsBlockData) => {
     
 
     const merkleRoot = merkleTree.root;
-    
+    console.time("Add Root")
     const transaction = await contract.addRoot(blockNumber, merkleRoot);
     await transaction.wait();
+    console.timeEnd("Add Root")
 
     console.log("Merkle root:", typeof merkleRoot, merkleRoot);
     console.log("Merkle Proof:", merkleTree.proof);

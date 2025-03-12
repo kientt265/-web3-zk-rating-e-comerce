@@ -9,9 +9,10 @@ export const verifyProofService = async (proof) => {
     console.log('Received productId:', productId);
     const contractRating = new ethers.Contract(process.env.CONTRACT_ADDRESS_RATING, process.env.CONTRACT_ABI_RATING, signer)
     const nullifier = await contractRating.getNullifierByDealId(dealId)
-
+    console.time("Rating Time")
     const ratingProduct = await contractRating.ratingProduct(starNumber, productId, nullifier, pi_a, pi_b, pi_c, finalPublicSignal)
     await ratingProduct.wait()
+    console.timeEnd("Rating Time")
     // const contractVerify = new ethers.Contract(
     //   process.env.CONTRACT_ADDRESS_VERIFY_MERKLE_TREE,
     //   process.env.ABI_CONTRACT_VERIFY_MERKLE_TREE,

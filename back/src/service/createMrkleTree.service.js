@@ -2,7 +2,7 @@ import * as circomlib from 'circomlibjs';
 import { randomBytes } from 'crypto';
 
 export const createMerkleTree = async (dealId, buyerAddress) => {
-
+    console.time("createMerkleTree");
     const poseidon = await circomlib.buildPoseidon();
 
 
@@ -57,12 +57,13 @@ export const createMerkleTree = async (dealId, buyerAddress) => {
     }
 
     // console.log("Root Hash:", poseidon.F.toString(smt.root));
-
+    console.time("Create Proof and Nullifier");
     const nullifier = await createNullifier();
     const proofKey = await getMerkleProof(smt, key);
+    console.timeEnd("Create Proof and Nullifier");
     // console.log("Merkle Proof for the key:", proofKey);
 
-
+    console.timeEnd("createMerkleTree");
     return {
         root: poseidon.F.toString(smt.root),
         proof: proofKey,

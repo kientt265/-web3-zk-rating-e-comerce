@@ -276,13 +276,17 @@ createWeb3Modal({
         }
       };
       const handleCreateDeal = async () => {
+        console.time("handleCreateDeal"); // Bắt đầu đo thời gian
+    
         if (!selectedProduct) {
             alert("Please select a product and enter the quantity!");
+            console.timeEnd("handleCreateDeal"); // Kết thúc đo thời gian
             return;
         }
     
         if (!selectedProduct.quantity || parseInt(selectedProduct.quantity) <= 0) {
             alert("Please enter a valid quantity!");
+            console.timeEnd("handleCreateDeal"); // Kết thúc đo thời gian
             return;
         }
     
@@ -292,6 +296,7 @@ createWeb3Modal({
     
         setIsLoading(true); // Hiển thị trạng thái loading
         try {
+            console.time("transactionTime"); // Bắt đầu đo thời gian giao dịch
             if (walletProvider) {
                 const browserProvider = new BrowserProvider(walletProvider);
                 const signerProvider = browserProvider.getSigner();
@@ -300,6 +305,8 @@ createWeb3Modal({
                 // Thực hiện giao dịch với giá trị tổng
                 const transaction = await contract.createDeal(selectedProduct.productID, selectedProduct.quantity, { value: parseEther(totalPrice.toString()) });
                 await transaction.wait();
+                console.timeEnd("transactionTime"); // Kết thúc đo thời gian giao dịch
+    
                 console.log("Transaction hash:", transaction);
                 console.log(`Purchased ${selectedProduct.quantity} of product ID: ${selectedProduct.productID} for total price: ${totalPrice}`);
                 setIsSuccess(true); // Giao dịch thành công
@@ -312,8 +319,10 @@ createWeb3Modal({
             alert("Error creating deal, please try again!");
         } finally {
             setIsLoading(false); // Ẩn trạng thái loading
+            console.timeEnd("handleCreateDeal"); // Kết thúc đo thời gian
         }
     };
+    
     
       const handleSignupSeller = async () => {
         setIsLoading(true);

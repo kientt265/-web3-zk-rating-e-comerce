@@ -1,7 +1,7 @@
 pragma circom 2.1.2;
 
-include "../circomlib/circuits/poseidon.circom";
-include "../circomlib/circuits/smt/smtverifier.circom";
+include "../node_modules/circomlib/circuits/poseidon.circom";
+include "../node_modules/circomlib/circuits/smt/smtverifier.circom";
 
 template ZKVerifyRootMerkle(nLevels) {
     var realNLevels = nLevels+1;

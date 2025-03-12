@@ -63,11 +63,14 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
         value1: value1,
         value2: value2,
       };
+      console.time("Create ZK Proof")
       const { proof, publicSignals } = await snarkjs.groth16.fullProve(
         input, 
         "./prove/testing5.wasm",
         "./prove/testing5_0001.zkey"
       );
+      console.timeEnd("Create ZK Proof")
+
       setProof(proof);
       setPublicSignals(publicSignals);
       console.log("proof@", proof)
@@ -133,13 +136,14 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
       if (!contractABI) throw new Error("Contract ABI is not defined.");
       const contract = new Contract(contractAddress, contractABI, provider);
 
+      console.time("Verify Zk Proof")
       const res = await contract.verifyProof(
         pi_a,
         pi_b,
         pi_c,
         finalPublicSignal
       );
-     
+      console.timeEnd("Verify Zk Proof")
       setVerificationResult(res ? "Verification successful!" : "Verification failed.");
       const data = {
         pi_a: pi_a,

@@ -67,49 +67,41 @@ const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, password
     return BigInt(`0x${hexAddress}`);
   };
   const getMerkleRoot1 = async () => {
+    console.time("getMerkleRoot1"); // Bắt đầu đo thời gian cho hàm getMerkleRoot1
     try {
       setLoading(true);
+  
+      console.time("fetchSiblingsandBlockNumber"); // Bắt đầu đo thời gian fetchSiblingsandBlockNumber
       const data = await fetchSiblingsandBlockNumber(dealId);
-
-    //   async function createValue() {
-    //     const hashArray = poseidon([dealId.toString(), buyerAddress]);
-    //     return poseidon.F.toString(hashArray);
-    // }
-      const blockNumberAttr = data.blockNumber
-      const siblingsNodeAttr: string[] = data.proofMerkle; 
-      // const buyerAddressBigIntAttr = data.buyerAddress
-      
-      const value2BigInt =  hexToBigInt(password);
+      console.timeEnd("fetchSiblingsandBlockNumber"); // Kết thúc đo thời gian fetchSiblingsandBlockNumber
+  
+      const blockNumberAttr = data.blockNumber;
+      const siblingsNodeAttr: string[] = data.proofMerkle;
+      const value2BigInt = hexToBigInt(password);
       const realValue2 = value2BigInt.toString();
-      
-
+  
       if (!blockNumberAttr || !siblingsNodeAttr) {
         throw new Error("Missing blockNumber or siblingsNode attribute");
       }
   
-
-
+      console.time("contract.getRootByBlockNuber"); // Bắt đầu đo thời gian getRootByBlockNuber
       const contract = new Contract(contractAdr, contractABI, provider);
-      // console.log("Contract:", contract);
       const merkleRoot2 = await contract.getRootByBlockNuber(blockNumberAttr);
-
-      // console.log("Merkle root:", merkleRoot2);
-      // const buyerAddressBigInt = await fetchAddress();
-
-      
-        setMerkleRoot(merkleRoot2);
-        setSiblingsNode(siblingsNodeAttr);
-        setBuyerAddressBigInt(realValue2);
-      
+      console.timeEnd("contract.getRootByBlockNuber"); // Kết thúc đo thời gian getRootByBlockNuber
+  
+      setMerkleRoot(merkleRoot2);
+      setSiblingsNode(siblingsNodeAttr);
+      setBuyerAddressBigInt(realValue2);
     } catch (error) {
       console.error("Error fetching Merkle root or related data:", error);
     } finally {
       setLoading(false);
+      console.timeEnd("getMerkleRoot1"); // Kết thúc đo thời gian getMerkleRoot1
     }
   };
   
-
   const fetchSiblingsandBlockNumber = async (dealId: string) => {
+    console.time("fetchSiblingsandBlockNumber function"); // Bắt đầu đo thời gian cho hàm fetchSiblingsandBlockNumber
     try {
       const response = await fetch(
         `http://localhost:3000/api/request/${dealId}/`
@@ -120,8 +112,11 @@ const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, password
     } catch (error) {
       console.error("Error fetching siblings and block number:", error);
       throw error;
+    } finally {
+      console.timeEnd("fetchSiblingsandBlockNumber function"); // Kết thúc đo thời gian fetchSiblingsandBlockNumber
     }
   };
+  
 
   return (
     <div>
