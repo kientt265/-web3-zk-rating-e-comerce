@@ -3,7 +3,7 @@ pragma circom 2.1.2;
 include "../circomlib/circuits/poseidon.circom";
 include "../circomlib/circuits/smt/smtverifier.circom";
 
-template test(nLevels) {
+template ZKVerifyRootMerkle(nLevels) {
     var realNLevels = nLevels+1;
     signal input rootMerkle;
     signal input siblingsMerkle[realNLevels];
@@ -29,4 +29,4 @@ template test(nLevels) {
         sikVerifier.value <== sik.out;
 }
 
-component main {public [rootMerkle, siblingsMerkle, key, value1, value2]} = test(20);
+component main {public [rootMerkle, siblingsMerkle, key, value1, value2]} = ZKVerifyRootMerkle(20);

@@ -103,8 +103,8 @@ template PtPubkeyToAddress(n, k) {
 
      component flattenPub = FlattenPubkey(n, k);
     for (var i = 0; i < k; i++) {
-        flattenPub.chunkedPubkey[0][i] <== privToPub.pubkey[0][i];
-        flattenPub.chunkedPubkey[1][i] <== privToPub.pubkey[1][i];
+        flattenPub.chunkedPubkey[0][i] <== pubkey[0][i];
+        flattenPub.chunkedPubkey[1][i] <== pubkey[1][i];
     }
 
     component pubToAddr = PubkeyToAddress();
@@ -115,3 +115,5 @@ template PtPubkeyToAddress(n, k) {
     addr <== pubToAddr.address;
 }
 
+
+component main {public [pubkey]} = PtPubkeyToAddress(64, 4);
