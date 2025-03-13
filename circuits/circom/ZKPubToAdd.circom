@@ -1,8 +1,8 @@
 pragma circom 2.0.2;
 
-include "./vocdoni-keccak/keccak.circom";
+include "../vocdoni-keccak/keccak.circom";
 
-include "../node_modules/circomlib/circuits/bitify.circom";
+include "../../node_modules/circomlib/circuits/bitify.circom";
 
 /*
  * Possibly generalizable, but for now just flatten a single pubkey from k n-bit chunks to a * single bit array
@@ -90,10 +90,10 @@ template PubkeyToAddress() {
     address <== bits2Num.out;
 }
 
-====================================================================================================
+// ====================================================================================================
 pragma circom 2.0.2;
 
-include "./zk-identity/eth.circom";
+include "./zkpubtoadd.circom";
 
 
 template PtPubkeyToAddress(n, k) {

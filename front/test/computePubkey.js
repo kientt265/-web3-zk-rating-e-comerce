@@ -36,16 +36,17 @@ function recoverPublicKey(msgHash, r, s, v) {
 
 // Ví dụ sử dụng
 const msgHash = "25674ba4b416425b2ac42fdb33d0b0c20c59824a76e1ee4ecc04b8d48f8f6af7";
-const r = "33d940fd83ec3f5b612e02fde2c37196e7a03a9611da3cc4f4fc902d49d3c412";
-const s = "30745b6cb8cc806f8d7beb8e0f3492e5c6d5d4ebad9ca80cdd74f669b1783b0f";
+const r = "e88e97e359a3726328cf645eea673a647c302331bd1770d1fcf3d1bd3111e740";
+const s = "6beaf3cc64acdfbe5b6c672903ff9e6b717e117d5f055461dd18bec7e6003745";
+const v = 27;
 
 try {
-    const { compressed, uncompressed } = recoverPublicKey(msgHash, r, s, 28);
-    console.log("Recovered Public Key (compressed, v=28):", compressed);
-    console.log("Recovered Public Key (uncompressed, v=28):", uncompressed);
+    const { compressed, uncompressed } = recoverPublicKey(msgHash, r, s, v);
+    console.log("Recovered Public Key (compressed, v):", compressed);
+    console.log("Recovered Public Key (uncompressed, v):", uncompressed);
 } catch (e) {
-    console.log("Trying v=27...");
-    const { compressed, uncompressed } = recoverPublicKey(msgHash, r, s, 27);
-    console.log("Recovered Public Key (compressed, v=27):", compressed);
-    console.log("Recovered Public Key (uncompressed, v=27):", uncompressed);
+    // console.log("Trying v=27...");
+    // const { compressed, uncompressed } = recoverPublicKey(msgHash, r, s, 27);
+    // console.log("Recovered Public Key (compressed, v=27):", compressed);
+    // console.log("Recovered Public Key (uncompressed, v=27):", uncompressed);
 }

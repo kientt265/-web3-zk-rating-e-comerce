@@ -6,6 +6,7 @@ include "./ZKSignature.circom";
 include "./ZKPubToAdd.circom";
 
 
+
 template ZKEComerce(n, k, nLevels) {
     var realNLevels = nLevels+1;
     signal input rootMerkle;
@@ -50,3 +51,5 @@ template ZKEComerce(n, k, nLevels) {
     res <== ecdsaVerify.result;
     //Mặc định zkverifyMerRoot là true nếu mạch được tạo thành công, nếu mạch không tạo được thì ZkverifyMerRoot sẽ trả về false 
 }
+
+component main {public [rootMerkle, siblingsMerkle, pubkey, dealId, r, s, msghash]} = ZKEComerce(64, 4, 20);
