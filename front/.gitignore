@@ -14,6 +14,7 @@ dist-ssr
 .env
 public/prove/zkecomerce.wasm
 public/prove/test.json
+public/prove/zkecomerce_0001.zkey
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
