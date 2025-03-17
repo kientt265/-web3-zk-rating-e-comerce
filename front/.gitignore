@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 .env
-public/prove
+public/prove/zkecomerce.wasm
 public/prove/test.json
 # Editor directories and files
 .vscode/*
