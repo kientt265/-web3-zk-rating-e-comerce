@@ -1,5 +1,5 @@
 import { createWeb3Modal, defaultConfig,  useWeb3ModalAccount, useWeb3ModalProvider } from "@web3modal/ethers/react";
-import { BrowserProvider, Contract, formatEther, parseEther, Signer, ethers} from 'ethers'
+import { BrowserProvider, Contract, formatEther, parseEther, Signer, ethers, hashMessage} from 'ethers'
 import { useEffect, useState } from "react";
 import { shortenAddress } from './lib/utils'
 import { useWeb3Modal } from '@web3modal/ethers/react'
@@ -10,7 +10,7 @@ import GetInput from "./component/GetInput";
 import { FundedEvent, DealEvent, RatingEvent } from  "./lib/type"
 import {contractABI, contractAdr} from "./contract/contractData"
 import Test from "./component/Test";
-
+import { ComputePubkey } from "./component/ComputePubkey";
 
 const contractAddressRating = import.meta.env.VITE_CONTRACT_ADDRESS_RATING || "0x204369E4c844DE8D5299Baa86D62fa76174CD670";
 const contractABIRating = JSON.parse(import.meta.env.VITE_CONTRACT_ABI_RATING || "[]");
@@ -66,7 +66,13 @@ createWeb3Modal({
       const [userName, setUserName] = useState('');
       const [userAge, setUserAge] = useState('');
       const [userEmail, setUserEmail] = useState('');
-      
+      const [signatureData, setSignatureData] = useState<{
+        msgHash: string;
+        r: string;
+        s: string;
+        v: number;
+    } | null>(null);
+
       // Trạng thái điều khiển việc hiển thị form đăng ký
       const [showSignUpForm, setShowSignUpForm] = useState<boolean>(false);
       const [isSeller, setIsSeller] = useState(false); // Kiểm tra xem người dùng chọn là Seller hay User
@@ -95,6 +101,33 @@ createWeb3Modal({
       // const toggleShowRatingInput = async (productId: string) => {
         
       // }
+            const handleSignMessege =  async () => {
+              
+              if (walletProvider) {
+                try {
+                  const ethersProvider = new BrowserProvider(walletProvider);
+                  const signer = await ethersProvider.getSigner();
+      
+                  const msgHash = await hashMessage(inputValueRating);
+                  console.log("Message Hash: ", msgHash); // In ra msgHash
+            
+                  // Ký message
+                  const signature = await signer.signMessage(inputValueRating);
+                  console.log("Signed Message: ", signature); // Hiển thị chữ ký
+            
+                  // Tách r, s, v từ chữ ký
+                  const { r, s, v } = ethers.Signature.from(signature);
+                  setSignatureData({msgHash, r, s, v});
+                  console.log("r:", r); // In ra phần r
+                  console.log("s:", s); // In ra phần s
+                  console.log("v:", v); // In ra phần v
+                } catch (error) {
+                  console.error("Error signing message: ", error);
+                }
+              }
+      
+            }
+      
       const comfirmDeal = async (dealId: string) => {
         setIsLoading(true);
         if (walletProvider) {
@@ -660,13 +693,13 @@ createWeb3Modal({
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <div className="bg-white p-6 rounded-lg shadow-lg">
                     <h2 className="text-lg mb-4">Rating</h2>
-                    <input
+                    {/* <input
                         type="password"
                         placeholder="Enter Your Password"
                         value={inputValuePrivateKey}
                         onChange={(e) => setInputValuePrivateKey(e.target.value)}
                         className="border p-2 mb-4 w-full"
-                    />
+                    /> */}
                     <input
                         type="text"
                         placeholder="1* to 5*"
@@ -676,7 +709,8 @@ createWeb3Modal({
                     />
                     <button
                         onClick={() => {
-                            handleSubmit();
+                            // handleSubmit();
+                            handleSignMessege()
                             // Xử lý logic gửi đánh giá ở đây
                             setShowRatingInput(false); // Ẩn ô nhập sau khi gửi
                         }}
