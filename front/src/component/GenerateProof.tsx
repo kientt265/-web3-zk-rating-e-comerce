@@ -14,6 +14,11 @@ type PublicSignal = string[];
 interface GenerateProofProps {
   rootMerkle: string;
   siblingsNode: string[];
+  pubkey: string[][];
+  r: string;
+  s: string;
+  v: string;
+  msgHash: string;
   key1: string;
   value1: string;
   value2: string;
@@ -26,6 +31,11 @@ interface GenerateProofProps {
 const GenerateProof: React.FC<GenerateProofProps> = ({
   rootMerkle,
   siblingsNode,
+  pubkey,
+  r,
+  s,
+  v,
+  msgHash,
   key1,
   value1,
   value2,
@@ -58,7 +68,11 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
     try {
       const input = {
         rootMerkle: rootMerkle,
-       siblingsMerkle: siblingsNode,
+        siblingsMerkle: siblingsNode,
+        pubkey: pubkey,
+        r: r,
+        s: s,
+        msgHash: msgHash,
         key: key1,
         value1: value1,
         value2: value2,
@@ -66,8 +80,8 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
       console.time("Create ZK Proof")
       const { proof, publicSignals } = await snarkjs.groth16.fullProve(
         input, 
-        "./prove/testing5.wasm",
-        "./prove/testing5_0001.zkey"
+        "./prove/zkecomerce.wasm",
+        "./prove/zkecomerce.zkey"
       );
       console.timeEnd("Create ZK Proof")
 

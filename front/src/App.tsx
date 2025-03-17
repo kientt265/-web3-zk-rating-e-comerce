@@ -96,6 +96,7 @@ createWeb3Modal({
         dealId: string;
         productId: string;
         rating: string;
+        address: string;
         msgHash: string;
         r: string;
         s: string;
@@ -111,7 +112,8 @@ createWeb3Modal({
                 try {
                   const ethersProvider = new BrowserProvider(walletProvider);
                   const signer = await ethersProvider.getSigner();
-      
+                  const addr = (await signer).getAddress();
+                  const addr1 = addr.toString();
                   const msgHash = await hashMessage(inputValueRating);
                   console.log("Message Hash: ", msgHash); // In ra msgHash
             
@@ -125,7 +127,7 @@ createWeb3Modal({
                   console.log("r:", r); // In ra phần r
                   console.log("s:", s); // In ra phần s
                   console.log("v:", v); // In ra phần vsignatureData
-                  handleSubmit(msgHash, r, s, v);
+                  handleSubmit(addr1, msgHash, r, s, v);
                 } catch (error) {
                   console.error("Error signing message: ", error);
                 }
@@ -409,11 +411,12 @@ createWeb3Modal({
         setProductId(productId);
         setShowRatingInput(true); 
       };
-      const handleSubmit = (msgHash: string, r: string, s: string, v: number) => {
+      const handleSubmit = (addr: string, msgHash: string, r: string, s: string, v: number) => {
         const data = {
           dealId,
           productId,
           rating: inputValueRating,
+          address: addr,
           msgHash: msgHash,
           r: r,
           s: s,
@@ -533,7 +536,7 @@ createWeb3Modal({
               <p>Rating: {submittedData.rating}</p>
               <p>Password: {submittedData.password}</p> */}
               {/* <GetInput dealId={submittedData.dealId} productId = {submittedData.productId} rating = {submittedData.rating}  /> */
-              <ComputePubkey dealId={submittedData.dealId} productId = {submittedData.productId} rating = {submittedData.rating} msgHash={submittedData.msgHash} r={submittedData.r} s={submittedData.s} v={submittedData.v} />}
+              <ComputePubkey dealId={submittedData.dealId} productId = {submittedData.productId} rating = {submittedData.rating} address = {submittedData.address} msgHash={submittedData.msgHash} r={submittedData.r} s={submittedData.s} v={submittedData.v} />}
             </div>
             
           )}

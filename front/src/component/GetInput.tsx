@@ -7,14 +7,15 @@ interface GetInputProps {
   dealId: string;
   productId: string;
   rating: string;
+  address: string;
   msgHash: string;
   r: string;
   s: string;
   v: string;
-  pubkey: string;
+  pubkey: string[][];
 }
 
-const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, password }) => {
+const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, address, msgHash, r, s, v, pubkey }) => {
   // const [signer, setSigner] = useState<JsonRpcSigner | null>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -81,7 +82,7 @@ const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, password
   
       const blockNumberAttr = data.blockNumber;
       const siblingsNodeAttr: string[] = data.proofMerkle;
-      const value2BigInt = hexToBigInt(password);
+      const value2BigInt = hexToBigInt(address);
       const realValue2 = value2BigInt.toString();
   
       if (!blockNumberAttr || !siblingsNodeAttr) {
@@ -138,6 +139,11 @@ const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, password
         <GenerateProof
           rootMerkle={merkleRoot}
           siblingsNode={siblingsNode}
+          pubkey={pubkey}
+          msgHash={msgHash}
+          r={r}
+          s={s}
+          v={v}
           key1={dealId}
           value1={dealId}
           value2={buyerAddressBigInt}

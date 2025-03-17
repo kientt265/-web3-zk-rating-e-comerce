@@ -7,12 +7,17 @@ interface ComputePubkeyProps {
     dealId: string;
     productId: string;
     rating: string;
+    address: string;
     msgHash: string;
     r: string;
     s: string;
     v: number;  
 }
 export const ComputePubkey: React.FC<ComputePubkeyProps> = ({
+    dealId,
+    productId,
+    rating,
+    address,
     msgHash,
     r,
     s,
@@ -80,7 +85,18 @@ export const ComputePubkey: React.FC<ComputePubkeyProps> = ({
     
   return (
     <div>
-      
+      <GetInput 
+        dealId = {dealId}
+        productId= {productId}
+        rating={rating}
+        address = {address}
+        msgHash= {msgHash}
+        r= {r}
+        s={s}
+        v= {vString}
+        pubkey={input.pubkey}
+
+      />
     </div>
   )
 }
