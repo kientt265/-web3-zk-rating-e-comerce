@@ -483,7 +483,7 @@ createWeb3Modal({
                   ContractRating
                 </a>
                 <a 
-                  href="https://sepolia.etherscan.io/address/0x3B0637f8E71c4F7993eAA0Ad8944Ae07bfF18034" 
+                  href="https://sepolia.etherscan.io/address/0x48985c6aADB9Fd141c8D9962D78d75Df18d5deE7" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-blue-500 hover:underline"
