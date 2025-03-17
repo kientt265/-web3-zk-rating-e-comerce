@@ -2,12 +2,15 @@
 import React from 'react'
 import { secp256k1 } from "ethereum-cryptography/secp256k1";
 import { hexToBytes, bytesToHex } from "ethereum-cryptography/utils";
-
+import GetInput from './GetInput';
 interface ComputePubkeyProps {
+    dealId: string;
+    productId: string;
+    rating: string;
     msgHash: string;
     r: string;
     s: string;
-    v: number;
+    v: number;  
 }
 export const ComputePubkey: React.FC<ComputePubkeyProps> = ({
     msgHash,
@@ -75,5 +78,9 @@ export const ComputePubkey: React.FC<ComputePubkeyProps> = ({
         };
         console.log(JSON.stringify(input, null, 2));
     
-  return JSON.stringify(input, null, 2);
+  return (
+    <div>
+      
+    </div>
+  )
 }

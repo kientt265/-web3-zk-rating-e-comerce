@@ -7,7 +7,11 @@ interface GetInputProps {
   dealId: string;
   productId: string;
   rating: string;
-  password: string;
+  msgHash: string;
+  r: string;
+  s: string;
+  v: string;
+  pubkey: string;
 }
 
 const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, password }) => {

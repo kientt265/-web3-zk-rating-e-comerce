@@ -96,7 +96,11 @@ createWeb3Modal({
         dealId: string;
         productId: string;
         rating: string;
-        password: string;
+        msgHash: string;
+        r: string;
+        s: string;
+        v: number;
+        
       } | null>(null);
       // const toggleShowRatingInput = async (productId: string) => {
         
@@ -120,7 +124,8 @@ createWeb3Modal({
                   setSignatureData({msgHash, r, s, v});
                   console.log("r:", r); // In ra phần r
                   console.log("s:", s); // In ra phần s
-                  console.log("v:", v); // In ra phần v
+                  console.log("v:", v); // In ra phần vsignatureData
+                  handleSubmit(msgHash, r, s, v);
                 } catch (error) {
                   console.error("Error signing message: ", error);
                 }
@@ -404,12 +409,15 @@ createWeb3Modal({
         setProductId(productId);
         setShowRatingInput(true); 
       };
-      const handleSubmit = () => {
+      const handleSubmit = (msgHash: string, r: string, s: string, v: number) => {
         const data = {
           dealId,
           productId,
           rating: inputValueRating,
-          password: inputValuePrivateKey,
+          msgHash: msgHash,
+          r: r,
+          s: s,
+          v: v
         };
         setSubmittedData(data);
         console.log("DATAAAAAA", data)
@@ -524,11 +532,22 @@ createWeb3Modal({
               <p>Product ID: {submittedData.productId}</p>
               <p>Rating: {submittedData.rating}</p>
               <p>Password: {submittedData.password}</p> */}
-              <GetInput dealId={submittedData.dealId} productId = {submittedData.productId} rating = {submittedData.rating} password = {submittedData.password} />
+              {/* <GetInput dealId={submittedData.dealId} productId = {submittedData.productId} rating = {submittedData.rating}  /> */
+              <ComputePubkey dealId={submittedData.dealId} productId = {submittedData.productId} rating = {submittedData.rating} msgHash={submittedData.msgHash} r={submittedData.r} s={submittedData.s} v={submittedData.v} />}
             </div>
             
           )}
-
+          {/* {
+            signatureData && (
+              <div>
+                <p>Message Hash: {signatureData.msgHash}</p>
+                <p>r: {signatureData.r}</p>
+                <p>s: {signatureData.s}</p>
+                <p>v: {signatureData.v}</p>
+                <ComputePubkey msgHash={signatureData.msgHash} r={signatureData.r} s={signatureData.s} v={signatureData.v} />
+              </div>
+            )
+          } */}
           {showSignUpForm && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <div className="bg-white p-6 rounded-lg shadow-lg">
