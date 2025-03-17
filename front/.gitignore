@@ -12,8 +12,8 @@ dist
 dist-ssr
 *.local
 .env
-./public/prove/tesing5.wasm
-./public/prove/testing_0001.zkey
+public/prove
+public/prove/test.json
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
