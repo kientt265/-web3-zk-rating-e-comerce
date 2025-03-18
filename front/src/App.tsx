@@ -4,54 +4,13 @@ import { useEffect, useState } from "react";
 import { shortenAddress } from './lib/utils'
 import { useWeb3Modal } from '@web3modal/ethers/react'
 
-import useEthers from "./hooks/useEthers"
-import GetInput from "./component/GetInput";
 import { FundedEvent, DealEvent, RatingEvent } from  "./lib/type"
 import {contractABI, contractAdr} from "./contract/contractData"
+import { ComputePubkey } from "./components/ComputePubkey";
+import { initWeb3Modal, contractAddressRating, contractABIRating } from './components/Web3Config';
+import RatingModal from './components/RatingModal';
 
-import { ComputePubkey } from "./component/ComputePubkey";
-
-const contractAddressRating = import.meta.env.VITE_CONTRACT_ADDRESS_RATING || "0x204369E4c844DE8D5299Baa86D62fa76174CD670";
-const contractABIRating = JSON.parse(import.meta.env.VITE_CONTRACT_ABI_RATING || "[]");
-
-const projectId = import.meta.env.VITE_PROJECT_ID;
-const sepolia = {
-  chainId: 11155111,
-  name: "Sepolia",
-  currency: "ETH",
-  explorerUrl: "https://sepolia.etherscan.io/",
-  rpcUrl: import.meta.env.VITE_SEPOLIA_RPC_URL,
-};
-
-const besu = {
-  chainId: 1337,
-  name: "Besu-network",
-  currency: "ETH",
-  explorerUrl: "",
-  rpcUrl: import.meta.env.VITE_BESU_RPC_URL,
-}
-
-const metadata = {
-  name: "Crowfunding",
-  description: "Website help people donation for me",
-  url: "https://mywebsite.com", // custom your domain here
-  icons: ["https://avatars.mywebsite.com/"], //custom your logo here
-};
-
-const ethersConfig = defaultConfig({
-  metadata,
-  enableEIP6963: true,
-  enableInjected: true,
-  enableCoinbase: true,
-});
-
-createWeb3Modal({
-  ethersConfig,
-  chains: [sepolia, besu],
-  projectId,
-  enableAnalytics: true,
-});
-
+initWeb3Modal();
   function App() {
       const { address, isConnected } = useWeb3ModalAccount();
       const { walletProvider } = useWeb3ModalProvider();
@@ -710,47 +669,20 @@ createWeb3Modal({
                 </div>
             )}
           </div>
-          {showRatingInput && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <h2 className="text-lg mb-4">Rating</h2>
-                    {/* <input
-                        type="password"
-                        placeholder="Enter Your Password"
-                        value={inputValuePrivateKey}
-                        onChange={(e) => setInputValuePrivateKey(e.target.value)}
-                        className="border p-2 mb-4 w-full"
-                    /> */}
-                    <input
-                        type="text"
-                        placeholder="1* to 5*"
-                        value={inputValueRating}
-                        onChange={(e) => setInputValueRating(e.target.value)}
-                        className="border p-2 mb-4 w-full"
-                    />
-                    <button
-                        onClick={() => {
-                            // handleSubmit();
-                            handleSignMessege()
-                            // Xử lý logic gửi đánh giá ở đây
-                            setShowRatingInput(false); // Ẩn ô nhập sau khi gửi
-                        }}
-                        className="bg-blue-500 text-white py-2 px-4 rounded-lg"
-                    >
-                        Send
-                    </button>
-                    <button
-                        onClick={() => setShowRatingInput(false)} // Đóng ô nhập
-                        className="ml-2 bg-gray-300 text-black py-2 px-4 rounded-lg"
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        )}
+       
+         <RatingModal 
+                                        isOpen={showRatingInput}
+                                        onClose={() => setShowRatingInput(false)}
+                                        onSubmit={() => {
+                                            handleSignMessege();
+                                            setShowRatingInput(false);
+                                        }}
+                                        rating={inputValueRating}
+                                        onRatingChange={(value) => setInputValueRating(value)}
+                                    />
         
         </div>
       );
     }
   
-    export default App;    
+    export default App;

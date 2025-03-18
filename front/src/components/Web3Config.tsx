@@ -1,8 +1,11 @@
-import { defaultConfig } from "@web3modal/ethers/react";
+import { createWeb3Modal, defaultConfig } from "@web3modal/ethers/react";
+
+const contractAddressRating = import.meta.env.VITE_CONTRACT_ADDRESS_RATING || "0x204369E4c844DE8D5299Baa86D62fa76174CD670";
+const contractABIRating = JSON.parse(import.meta.env.VITE_CONTRACT_ABI_RATING || "[]");
 
 const projectId = import.meta.env.VITE_PROJECT_ID;
 
-export const sepolia = {
+const sepolia = {
   chainId: 11155111,
   name: "Sepolia",
   currency: "ETH",
@@ -10,13 +13,13 @@ export const sepolia = {
   rpcUrl: import.meta.env.VITE_SEPOLIA_RPC_URL,
 };
 
-export const besu = {
+const besu = {
   chainId: 1337,
   name: "Besu-network",
   currency: "ETH",
   explorerUrl: "",
   rpcUrl: import.meta.env.VITE_BESU_RPC_URL,
-};
+}
 
 const metadata = {
   name: "Crowfunding",
@@ -25,9 +28,20 @@ const metadata = {
   icons: ["https://avatars.mywebsite.com/"],
 };
 
-export const ethersConfig = defaultConfig({
+const ethersConfig = defaultConfig({
   metadata,
   enableEIP6963: true,
   enableInjected: true,
   enableCoinbase: true,
 });
+
+export const initWeb3Modal = () => {
+  createWeb3Modal({
+    ethersConfig,
+    chains: [sepolia, besu],
+    projectId,
+    enableAnalytics: true,
+  });
+};
+
+export { contractAddressRating, contractABIRating };
