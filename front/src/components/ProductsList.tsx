@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { FundedEvent } from '../lib/type';
 import productImage from '../assets/data/quan02.jpg';
 
@@ -12,6 +12,7 @@ interface ProductsListProps {
   onQuantityChange: (quantity: string) => void;
   onPurchase: () => void;
   isLoading?: boolean;
+  onGetProducts: () => void; // Add this new prop
 }
 
 const ProductsList: FC<ProductsListProps> = ({
@@ -20,8 +21,15 @@ const ProductsList: FC<ProductsListProps> = ({
   selectedProduct,
   onQuantityChange,
   onPurchase,
-  isLoading
+  isLoading,
+  onGetProducts
 }) => {
+  useEffect(() => {
+    if (combinedData.length === 0) {
+      onGetProducts();
+    }
+  }, [onGetProducts, combinedData]);
+
   return (
     <div className="container mx-auto px-4">
       <h2 className="text-2xl font-bold mb-6">Available Products</h2>

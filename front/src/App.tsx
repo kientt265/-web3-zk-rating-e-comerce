@@ -122,6 +122,7 @@ function App() {
           }
           onPurchase={handleCreateDeal}
           isLoading={isLoading}
+          onGetProducts={getEventProducts} // Add this prop
         />
       </div>
 
