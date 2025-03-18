@@ -1,7 +1,6 @@
-import { createWeb3Modal, defaultConfig,  useWeb3ModalAccount, useWeb3ModalProvider } from "@web3modal/ethers/react";
+import {  useWeb3ModalAccount, useWeb3ModalProvider } from "@web3modal/ethers/react";
 import { BrowserProvider, Contract, formatEther, parseEther, Signer, ethers, hashMessage} from 'ethers'
-import { useEffect, useState } from "react";
-import { shortenAddress } from './lib/utils'
+import { useState } from "react";
 import { useWeb3Modal } from '@web3modal/ethers/react'
 import Header from './components/Header';
 import { FundedEvent, DealEvent, RatingEvent } from  "./lib/type"
@@ -11,6 +10,7 @@ import { initWeb3Modal, contractAddressRating, contractABIRating } from './compo
 import RatingModal from './components/RatingModal';
 import SignUpForm from './components/SignUpForm';
 import ProductsList from './components/ProductsList';
+import DealStateList from './components/DealStateList';
 initWeb3Modal();
   function App() {
       const { address, isConnected } = useWeb3ModalAccount();
@@ -19,7 +19,6 @@ initWeb3Modal();
 
       const [isLoading, setIsLoading] = useState(false);
       const [isSuccess, setIsSuccess] = useState(false);
-      const [testDealId, setTestDealId] = useState('');
 
       const [signatureData, setSignatureData] = useState<{
         msgHash: string;
@@ -33,12 +32,10 @@ initWeb3Modal();
 
       const [products, setProducts] = useState<FundedEvent[]>([]); // State to hold fetched products
       const [dealState, setDealState] = useState<DealEvent[]>([])
-      const [ratingState, setRatingState] = useState<RatingEvent[]>([])
       const [selectedProduct, setSelectedProduct] = useState<{ productID: string; quantity: string; price: string } | null>(null); // State to hold selected product and quantity
       const [showRatingInput, setShowRatingInput] = useState<boolean>(false); // Trạng thái để hiển thị ô nhập
       const [dealId, setDealId] = useState<string>(''); // Trạng thái để lưu giá trị ô nhập
       const [productId, setProductId] = useState<string>(''); // Trạng thái để lưu giá trị ô nhập
-      const [inputValuePrivateKey, setInputValuePrivateKey] = useState<string>('');
       const [inputValueRating, setInputValueRating] = useState<string>('') // Trạng thái để lưu giá trị ô nhập
       const [submittedData, setSubmittedData] = useState<{
         dealId: string;
@@ -51,9 +48,7 @@ initWeb3Modal();
         v: number;
         
       } | null>(null);
-      // const toggleShowRatingInput = async (productId: string) => {
-        
-      // }
+
             const handleSignMessege =  async () => {
               
               if (walletProvider) {
@@ -310,10 +305,6 @@ initWeb3Modal();
             console.timeEnd("handleCreateDeal"); // Kết thúc đo thời gian
         }
     };
-    
-    
-
-    
       const handleShowRatingInput = (dealId: string, productId: string) => {
         setDealId(dealId);
         setProductId(productId);
@@ -377,36 +368,12 @@ initWeb3Modal();
 
   
           <div>
-          <h2 className="text-xl mb-4">Deal State Events</h2>
-            {dealState.length > 0 ? (
-                    <ul className="space-y-2">
-                        {dealState.map((dealState, index) => (
-                            <li key={index} className="p-4 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-100 hover:shadow-lg transition duration-200 cursor-pointer">
-                                Deal ID: {dealState.dealId}, Buyer: {dealState.buyer}, Product ID: {dealState.productID}, Amount: {dealState.amount}, Value: {dealState.value}, Completed: {dealState.isCompleted ? "Yes" : "No"}
-                                {!dealState.isCompleted && (
-                                    <button 
-                                        onClick={() => comfirmDeal(dealState.dealId)}
-                                        className="ml-4 bg-green-500 text-white py-1 px-2 rounded-lg hover:bg-green-400 transition-colors"
-                                    >
-                                        Đã Nhận được Hàng
-                                    </button>
-                                )}
-                                {dealState.isCompleted && (
-                                    <button 
-                                        onClick={() => handleShowRatingInput(dealState.dealId, dealState.productID)} // Gọi hàm để hiển thị ô nhập
-                                        className="ml-4 bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-400 transition-colors"
-                                    >
-                                        Đánh giá sản phẩm
-                                    </button>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-               
-            ): (
-              <p>Bạn chưa mua gì</p>
-          )}
- <ProductsList 
+          <DealStateList 
+          deals={dealState}
+          onConfirmDeal={comfirmDeal}
+          onShowRating={handleShowRatingInput}
+        />       
+        <ProductsList 
           combinedData={combinedData}
           onSelectProduct={setSelectedProduct}
           selectedProduct={selectedProduct}
