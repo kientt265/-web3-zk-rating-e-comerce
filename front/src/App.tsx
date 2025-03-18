@@ -3,7 +3,7 @@ import { BrowserProvider, Contract, formatEther, parseEther, Signer, ethers, has
 import { useEffect, useState } from "react";
 import { shortenAddress } from './lib/utils'
 import { useWeb3Modal } from '@web3modal/ethers/react'
-
+import Header from './components/Header';
 import { FundedEvent, DealEvent, RatingEvent } from  "./lib/type"
 import {contractABI, contractAdr} from "./contract/contractData"
 import { ComputePubkey } from "./components/ComputePubkey";
@@ -33,13 +33,6 @@ initWeb3Modal();
       const [products, setProducts] = useState<FundedEvent[]>([]); // State to hold fetched products
       const [dealState, setDealState] = useState<DealEvent[]>([])
       const [ratingState, setRatingState] = useState<RatingEvent[]>([])
-      // const [selectDealState, setSelectDealState] = useState<{
-      //   dealId: string;
-      //   buyer: string;
-      //   productID: string;
-      //   amount: string;
-      //   value: string;
-      //   isCompleted: boolean} | null>(null);
       const [selectedProduct, setSelectedProduct] = useState<{ productID: string; quantity: string; price: string } | null>(null); // State to hold selected product and quantity
       const [showRatingInput, setShowRatingInput] = useState<boolean>(false); // Trạng thái để hiển thị ô nhập
       const [dealId, setDealId] = useState<string>(''); // Trạng thái để lưu giá trị ô nhập
@@ -344,23 +337,6 @@ initWeb3Modal();
       const handleShowSignUpForm = () => {
         setShowSignUpForm(true); // Hiển thị form đăng ký
       };
-      // const getSigner = async () => {
-      //   setIsLoading(true);
-      //   if (walletProvider) {
-      //     try {
-      //       const browserProvider = new BrowserProvider(walletProvider);
-      //       const signerProvider = browserProvider.getSigner();
-            
-      //       // setSigner(await signerProvider);
-      //       setIsSuccess(true);
-      //     } catch (error) {
-      //       console.error("Error getting signer:", error);
-      //       alert("Error getting signer, please try again!");
-      //     } finally {
-      //       setIsLoading(false);
-      //     }
-      //   }
-      // }
 
       const combinedData = products.map(product => {
         const ratingEvent = ratingEvents.find(event => event.productId === product.productID);
@@ -373,82 +349,18 @@ initWeb3Modal();
 
       return (
         <div>
-          <header className="mx-auto px-2 p-4 border-b">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-bold">VerifComerce</h1>
-              </div>
-              <div className="flex gap-4">
-              <div className="flex  gap-4">
-                <a 
-                  href="https://sepolia.etherscan.io/address/0x83abF096267849fcDDb7fcAb2DDfbbD636d8eAe8" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  ContractSaveMerkleRoot
-                </a>
-                <a 
-                  href="https://sepolia.etherscan.io/address/0x204369e4c844de8d5299baa86d62fa76174cd670" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  ContractRating
-                </a>
-                <a 
-                  href="https://sepolia.etherscan.io/address/0x48985c6aADB9Fd141c8D9962D78d75Df18d5deE7" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  ContractVerifyZK
-                </a>
-                
-              </div>
-              {/* <button
-                onClick={() => getEventRating()}
-                className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
-                Lấy events Rating
-              </button> */}
-              <button
-                onClick={() => getEventDelivering(true)}
-                className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
-                Lịch Sử Mua Hàng
-              </button>
-              <button
-                onClick={() => getEventDelivering(false)}
-                className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors"
-              >
-                Hàng Đang Vận Chuyển
-              </button>
-
-
-                <button onClick={getEventProducts} className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
-                  Mua Hàng
-                </button>
-                <button 
-                  onClick={handleShowSignUpForm} // Gọi hàm để hiển thị form đăng ký
-                  className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors"
-                >
-                  Sign Up
-                </button>
-                <button 
-                  onClick={() => open()} 
-                  className="bg-slate-900 text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors"
-                >
-                  {isConnected ? `${shortenAddress(address)}` : "Connect Wallet"}
-                </button>
-              </div>
-            </div>
-          </header>
+         
+        <Header 
+          address={address}
+          isConnected={isConnected}
+          onOpenWallet={open}
+          onShowSignUp={handleShowSignUpForm}
+          onGetProducts={getEventProducts}
+          onGetDelivering={getEventDelivering}
+        />
           {/* <GetInput signer = {} dealId = {} /> */}
           {submittedData && (
             <div>
-              {/* <p>Deal ID: {submittedData.dealId}</p>
-              <p>Product ID: {submittedData.productId}</p>
-              <p>Rating: {submittedData.rating}</p>
-              <p>Password: {submittedData.password}</p> */}
               {/* <GetInput dealId={submittedData.dealId} productId = {submittedData.productId} rating = {submittedData.rating}  /> */
               <ComputePubkey dealId={submittedData.dealId} productId = {submittedData.productId} rating = {submittedData.rating} address = {submittedData.address} msgHash={submittedData.msgHash} r={submittedData.r} s={submittedData.s} v={submittedData.v} />}
             </div>
