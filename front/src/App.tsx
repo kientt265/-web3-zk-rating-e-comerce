@@ -10,6 +10,7 @@ import { ComputePubkey } from "./components/ComputePubkey";
 import { initWeb3Modal, contractAddressRating, contractABIRating } from './components/Web3Config';
 import RatingModal from './components/RatingModal';
 import SignUpForm from './components/SignUpForm';
+import ProductsList from './components/ProductsList';
 initWeb3Modal();
   function App() {
       const { address, isConnected } = useWeb3ModalAccount();
@@ -405,50 +406,16 @@ initWeb3Modal();
             ): (
               <p>Bạn chưa mua gì</p>
           )}
-            <h2 className="text-xl mb-4">Products</h2>
-{combinedData.length > 0 ? (
-    <ul className="space-y-2">
-        {combinedData.map((item, index) => (
-            <li
-                key={index}
-                className="p-4 border cursor-pointer border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-100 hover:shadow-lg transition duration-200"
-                onClick={() =>
-                    setSelectedProduct({
-                        productID: item.productID,
-                        quantity: '',
-                        price: item.pricePerProduct,
-                    })
-                }
-            >
-                Product ID: {item.productID}, Quantity: {item.quantityPerItem}, Price: {item.pricePerProduct}
-                {item.rating && item.ratingCount && (
-                    <span>, Rating: {item.rating}, Rating Count: {item.ratingCount}</span>
-                )}
-            </li>
-        ))}
-    </ul>
-) : (
-    <p>No products found.</p>
-)}
-
-            {selectedProduct && (
-                <div>
-                    <input
-                        type="number"
-                        placeholder="Enter quantity"
-                        value={selectedProduct.quantity}
-                        onChange={(e) => setSelectedProduct({ ...selectedProduct, quantity: e.target.value })}
-                        className="border p-2 mb-2 w-full"
-                    />
-                    <button
-                        onClick={handleCreateDeal}
-                        disabled={!selectedProduct.quantity || parseInt(selectedProduct.quantity) <= 0}
-                        className={`bg-blue-500 text-white py-2 px-4 rounded-lg ${!selectedProduct.quantity || parseInt(selectedProduct.quantity) <= 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-400'}`}
-                    >
-                        Purchase
-                    </button>
-                </div>
-            )}
+ <ProductsList 
+          combinedData={combinedData}
+          onSelectProduct={setSelectedProduct}
+          selectedProduct={selectedProduct}
+          onQuantityChange={(quantity) => 
+            setSelectedProduct(prev => prev ? { ...prev, quantity } : null)
+          }
+          onPurchase={handleCreateDeal}
+          isLoading={isLoading}
+        />
           </div>
        
          <RatingModal 
