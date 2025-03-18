@@ -3,13 +3,12 @@ import { BrowserProvider, Contract, formatEther, parseEther, Signer, ethers, has
 import { useEffect, useState } from "react";
 import { shortenAddress } from './lib/utils'
 import { useWeb3Modal } from '@web3modal/ethers/react'
-import {InteractPrivateChain} from './component/InteractPrivateChain'
-import History from './component/History'
+
 import useEthers from "./hooks/useEthers"
 import GetInput from "./component/GetInput";
 import { FundedEvent, DealEvent, RatingEvent } from  "./lib/type"
 import {contractABI, contractAdr} from "./contract/contractData"
-import Test from "./component/Test";
+
 import { ComputePubkey } from "./component/ComputePubkey";
 
 const contractAddressRating = import.meta.env.VITE_CONTRACT_ADDRESS_RATING || "0x204369E4c844DE8D5299Baa86D62fa76174CD670";
