@@ -1,6 +1,7 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FundedEvent } from '../lib/type';
 import productImage from '../assets/data/quan02.jpg';
+import { DetailProduct } from './DetailProduct';
 
 interface ProductsListProps {
   combinedData: (FundedEvent & {
@@ -30,6 +31,11 @@ const ProductsList: FC<ProductsListProps> = ({
     }
   }, [onGetProducts, combinedData]);
 
+  const [selectedDetailProduct, setSelectedDetailProduct] = useState<(FundedEvent & {
+    rating: string | null;
+    ratingCount: string | null;
+  }) | null>(null);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">Available Products</h2>
@@ -42,13 +48,6 @@ const ProductsList: FC<ProductsListProps> = ({
                 <div
                   key={index}
                   className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-                  onClick={() =>
-                    onSelectProduct({
-                      productID: item.productID,
-                      quantity: '',
-                      price: item.pricePerProduct,
-                    })
-                  }
                 >
                   <div className="relative">
                     <img 
@@ -82,6 +81,30 @@ const ProductsList: FC<ProductsListProps> = ({
                           </div>
                         </div>
                       )}
+                      <div className="mt-4 flex gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedDetailProduct(item);
+                          }}
+                          className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 font-semibold transition duration-200"
+                        >
+                          View Details
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSelectProduct({
+                              productID: item.productID,
+                              quantity: '',
+                              price: item.pricePerProduct,
+                            });
+                          }}
+                          className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition duration-200"
+                        >
+                          Buy Now
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -152,6 +175,12 @@ const ProductsList: FC<ProductsListProps> = ({
             </div>
           </div>
         </div>
+      )}
+      {selectedDetailProduct && (
+        <DetailProduct 
+          product={selectedDetailProduct} 
+          onClose={() => setSelectedDetailProduct(null)} 
+        />
       )}
     </div>
   );
