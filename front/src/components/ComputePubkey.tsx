@@ -12,6 +12,8 @@ interface ComputePubkeyProps {
     r: string;
     s: string;
     v: number;  
+    comment: string;
+    images: File[];
 }
 export const ComputePubkey: React.FC<ComputePubkeyProps> = ({
     dealId,
@@ -21,7 +23,9 @@ export const ComputePubkey: React.FC<ComputePubkeyProps> = ({
     msgHash,
     r,
     s,
-    v
+    v,
+    comment,
+    images
 })=> {
     const vString = v.toString();
     const recoverPubkey = (msgHash: string, r: string, s: string, v: string) => {
@@ -95,6 +99,8 @@ export const ComputePubkey: React.FC<ComputePubkeyProps> = ({
         s={s}
         v= {vString}
         pubkey={input.pubkey}
+        comment={comment}
+        images={images}
 
       />
     </div>

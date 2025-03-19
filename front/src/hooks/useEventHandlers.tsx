@@ -7,7 +7,7 @@ export function useEventHandlers(walletProvider: any, appState: any) {
         setIsLoading, setIsSuccess, setProducts, setDealState,
         setSelectedProduct, setShowRatingInput, dealId, productId,
         inputValueRating, setSubmittedData, setSignatureData,
-        setRatingEvents, dealState, selectedProduct
+        setRatingEvents, dealState, selectedProduct, comment, images
     } = appState;
 
     const handleSignMessege = async () => {
@@ -21,6 +21,7 @@ export function useEventHandlers(walletProvider: any, appState: any) {
                 
                 const signature = await signer.signMessage(inputValueRating);
                 const { r, s, v } = ethers.Signature.from(signature);
+                
                 setSignatureData({msgHash, r, s, v});
                 handleSubmit(addr1, msgHash, r, s, v);
             } catch (error) {
@@ -243,7 +244,9 @@ export function useEventHandlers(walletProvider: any, appState: any) {
             msgHash,
             r,
             s,
-            v
+            v,
+            comment: comment,
+            images: images
         };
         setSubmittedData(data);
         setShowRatingInput(false);

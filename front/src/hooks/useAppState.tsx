@@ -13,6 +13,8 @@ export function useAppState() {
     const [productId, setProductId] = useState<string>('');
     const [inputValueRating, setInputValueRating] = useState<string>('');
     const [ratingEvents, setRatingEvents] = useState<{ productId: string; rating: string; ratingCount: string }[]>([]);
+    const [comment, setComment] = useState('');
+    const [images, setImages] = useState<File[]>([]);
     const [signatureData, setSignatureData] = useState<{
         msgHash: string;
         r: string;
@@ -28,6 +30,8 @@ export function useAppState() {
         r: string;
         s: string;
         v: number;
+        comment: string;
+        images: File[];
     } | null>(null);
 
     return {
@@ -43,6 +47,8 @@ export function useAppState() {
         inputValueRating, setInputValueRating,
         ratingEvents, setRatingEvents,
         signatureData, setSignatureData,
-        submittedData, setSubmittedData
+        submittedData, setSubmittedData,
+        comment, setComment,
+        images, setImages
     };
 }

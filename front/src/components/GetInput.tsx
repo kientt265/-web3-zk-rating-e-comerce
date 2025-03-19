@@ -13,9 +13,11 @@ interface GetInputProps {
   s: string;
   v: string;
   pubkey: string[][];
+  comment: string;
+  images: File[];
 }
 
-const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, address, msgHash, r, s, v, pubkey }) => {
+const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, address, msgHash, r, s, v, pubkey, comment, images }) => {
   // const [signer, setSigner] = useState<JsonRpcSigner | null>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -149,6 +151,8 @@ const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, address,
           value2={buyerAddressBigInt}
           productId={productId}
           rating = {rating}
+          comment = {comment}
+          images ={images}
           // password= {password}
         />
       )}

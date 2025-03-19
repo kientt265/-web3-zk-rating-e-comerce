@@ -5,7 +5,11 @@ interface RatingModalProps {
   onClose: () => void;
   onSubmit: () => void;
   rating: string;
+  commentRating: string;
+  imagesRating: File[];
   onRatingChange: (value: string) => void;
+  onCommentChange: (value: string) => void;
+  onImagesChange: (files: File[]) => void;
 }
 
 const RatingModal: FC<RatingModalProps> = ({
@@ -13,7 +17,11 @@ const RatingModal: FC<RatingModalProps> = ({
   onClose,
   onSubmit,
   rating,
+  commentRating,
+  imagesRating,
   onRatingChange,
+  onCommentChange,
+  onImagesChange
 }) => {
   if (!isOpen) return null;
 
@@ -35,12 +43,13 @@ const RatingModal: FC<RatingModalProps> = ({
               className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Your Review
             </label>
             <textarea
+              value={commentRating}
+              onChange={(e) => onCommentChange(e.target.value)}
               placeholder="Write your review here..."
               className="border border-gray-300 rounded-lg p-3 w-full h-32 resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
             />
@@ -54,8 +63,14 @@ const RatingModal: FC<RatingModalProps> = ({
               <input
                 type="file"
                 accept="image/*"
+                multiple
                 className="hidden"
                 id="file-upload"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    onImagesChange(Array.from(e.target.files));
+                  }
+                }}
               />
               <label htmlFor="file-upload" className="cursor-pointer">
                 <div className="text-blue-500 hover:text-blue-600">
@@ -63,6 +78,19 @@ const RatingModal: FC<RatingModalProps> = ({
                   <span className="text-sm text-gray-500">or drag and drop</span>
                 </div>
               </label>
+              {imagesRating.length > 0 && (
+                <div className="mt-4 grid grid-cols-3 gap-2">
+                  {imagesRating.map((file, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-20 object-cover rounded"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>

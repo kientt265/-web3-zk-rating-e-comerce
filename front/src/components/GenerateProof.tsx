@@ -24,6 +24,8 @@ interface GenerateProofProps {
   value2: string;
   productId: string;
   rating: string;
+  comment: string;
+  images: File[];
   // password: string;
   // signer: Signer;
 }
@@ -40,7 +42,9 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
   value1,
   value2,
   productId,
-  rating
+  rating,
+  comment,
+  images
   // signer,
 }) => {
   const contractAddress =
@@ -166,7 +170,9 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
         finalPublicSignal: finalPublicSignal,
         productId: productId,
         star: rating,
-        dealId: key1
+        dealId: key1,
+        comment: comment,
+        images: images
       };
       // console.log("dataaaaaaaaaaaaaaaaaaa", JSON.stringify(data))
       const response = await fetch("http://localhost:3000/api/verify", {

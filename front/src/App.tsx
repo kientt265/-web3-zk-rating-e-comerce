@@ -29,7 +29,9 @@ function App() {
     inputValueRating, setInputValueRating,
     ratingEvents, setRatingEvents,
     signatureData, setSignatureData,
-    submittedData, setSubmittedData
+    submittedData, setSubmittedData,
+    comment, setComment,
+    images, setImages
   } = appState;
 
   const { address, isConnected } = useWeb3ModalAccount();
@@ -96,7 +98,7 @@ function App() {
       {submittedData && (
         <div>
           {/* <GetInput dealId={submittedData.dealId} productId = {submittedData.productId} rating = {submittedData.rating}  /> */
-            <ComputePubkey dealId={submittedData.dealId} productId={submittedData.productId} rating={submittedData.rating} address={submittedData.address} msgHash={submittedData.msgHash} r={submittedData.r} s={submittedData.s} v={submittedData.v} />}
+            <ComputePubkey dealId={submittedData.dealId} productId={submittedData.productId} rating={submittedData.rating} address={submittedData.address} msgHash={submittedData.msgHash} r={submittedData.r} s={submittedData.s} v={submittedData.v} comment={submittedData.comment} images={submittedData.images}/>}
         </div>
 
       )}
@@ -134,7 +136,11 @@ function App() {
           setShowRatingInput(false);
         }}
         rating={inputValueRating}
+        commentRating={comment}
+        imagesRating={images}
         onRatingChange={(value) => setInputValueRating(value)}
+        onCommentChange={(value) => setComment(value)}
+        onImagesChange={(files) => setImages(files)}
       />
 
     </div>
