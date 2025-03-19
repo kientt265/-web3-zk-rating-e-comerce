@@ -1,16 +1,26 @@
 
 import { ethers } from 'ethers';
+import Rating from '../database/schema/ratingModel.js';
 export const verifyProofService = async (proof) => {
-    const { pi_a, pi_b, pi_c, finalPublicSignal, productId, star, dealId } = proof;
+    const { pi_a, pi_b, pi_c, finalPublicSignal, productId, star, dealId, comment, images } = proof;
     const starNumber = Number(star);
     const provider = new ethers.JsonRpcProvider(process.env.URL_RPC_INFURA);
     const signer = new ethers.Wallet(process.env.PRIVATE_KEY_ADMIN, provider);
   
+      const ratingInfo = {
+        dealId,
+        productId,
+        rating: starNumber,
+        comment: comment || '',
+        images: images || [],
+        timestamp: Date.now()
+    };
+    const ratingHash = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(ratingInfo)));
     console.log('Received productId:', productId);
     const contractRating = new ethers.Contract(process.env.CONTRACT_ADDRESS_RATING, process.env.CONTRACT_ABI_RATING, signer)
     const nullifier = await contractRating.getNullifierByDealId(dealId)
     console.time("Rating Time")
-    const ratingProduct = await contractRating.ratingProduct(starNumber, productId, nullifier, pi_a, pi_b, pi_c, finalPublicSignal)
+    const ratingProduct = await contractRating.ratingProduct(starNumber, productId, nullifier, pi_a, pi_b, pi_c, finalPublicSignal, ratingHash)
     await ratingProduct.wait()
     console.timeEnd("Rating Time")
     // const contractVerify = new ethers.Contract(
@@ -38,6 +48,14 @@ export const verifyProofService = async (proof) => {
     //                 const avgRating = await contractRating.getRatingProduct(productId);
     //                 return avgRating;
     //             }
+    const ratingData = new Rating({
+      dealId,
+      productId,
+      rating: starNumber,
+      comment,
+      images
+    });
+    await ratingData.save();
     return {
       verificationResult,
       productId,
