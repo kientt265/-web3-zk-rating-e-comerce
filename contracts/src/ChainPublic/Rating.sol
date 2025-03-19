@@ -20,17 +20,19 @@ contract Rating {
     mapping(string => uint8) public currentRating; 
     mapping(uint  => string) public saveNullifier;
     mapping(string => bool) public nullifierUsed;
+    mapping(string => string) public hashRating;
 
 
 
     function setVerifyContract(address _verifyContract) public {
         verifyContract = _verifyContract;
     }
-    function ratingProduct(uint8 _star, string memory _productId, string memory _nullifier,  uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[25] calldata _pubSignals) public {
+    function ratingProduct(uint8 _star, string memory _productId, string memory _nullifier,  uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[25] calldata _pubSignals, string memory hashM) public {
         bool proofValid = IVerifier(verifyContract).verifyProof(_pA, _pB, _pC, _pubSignals);
         require(proofValid, "Invalid proof");
         require(!nullifierUsed[_nullifier], "Nullifier already used");
         require(_star >= 1 && _star <= 5, "Rating must be between 1 and 5 stars"); 
+        hashRating[_productId] = hashM;
         nullifierUsed[_nullifier] = true;
         totalRating[_productId] += _star; 
         ratingCount[_productId] += 1;

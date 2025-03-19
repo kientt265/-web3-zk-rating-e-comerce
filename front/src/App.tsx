@@ -13,6 +13,7 @@ import ProductsList from './components/ProductsList';
 import DealStateList from './components/DealStateList';
 import { useEventHandlers } from './hooks/useEventHandlers';
 import { useAppState } from './hooks/useAppState';
+import  ProductsAndDeals  from './components/ProductsAndDeals';
 initWeb3Modal();
 function App() {
   const appState = useAppState();
@@ -31,7 +32,9 @@ function App() {
     signatureData, setSignatureData,
     submittedData, setSubmittedData,
     comment, setComment,
-    images, setImages
+    images, setImages,
+    showDealState, setShowDealState,
+    showProduct, setShowProduct
   } = appState;
 
   const { address, isConnected } = useWeb3ModalAccount();
@@ -109,25 +112,21 @@ function App() {
         contractABI={contractABI}
         contractAdr={contractAdr}
       />
-      <div>
-        <DealStateList
-          deals={dealState}
-          onConfirmDeal={comfirmDeal}
-          onShowRating={handleShowRatingInput}
-        />
-        <ProductsList
-          combinedData={combinedData}
-          onSelectProduct={setSelectedProduct}
-          selectedProduct={selectedProduct}
-          onQuantityChange={(quantity) =>
-            setSelectedProduct(prev => prev ? { ...prev, quantity } : null)
-          }
-          onPurchase={handleCreateDeal}
-          isLoading={isLoading}
-          onGetProducts={getEventProducts} // Add this prop
-        />
-      </div>
 
+            <ProductsAndDeals
+        combinedData={combinedData}
+        onSelectProduct={setSelectedProduct}
+        selectedProduct={selectedProduct}
+        onQuantityChange={(quantity) =>
+          setSelectedProduct(prev => prev ? { ...prev, quantity } : null)
+        }
+        onPurchase={handleCreateDeal}
+        isLoading={isLoading}
+        onGetProducts={getEventProducts}
+        deals={dealState}
+        onConfirmDeal={comfirmDeal}
+        onShowRating={handleShowRatingInput}
+      />
       <RatingModal
         isOpen={showRatingInput}
         onClose={() => setShowRatingInput(false)}

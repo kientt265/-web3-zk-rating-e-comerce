@@ -5,6 +5,8 @@ export function useAppState() {
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [showSignUpForm, setShowSignUpForm] = useState<boolean>(false);
+    const [showProduct, setShowProduct] = useState<boolean>(false);
+    const [showDealState, setShowDealState] = useState<boolean>(false);
     const [products, setProducts] = useState<FundedEvent[]>([]);
     const [dealState, setDealState] = useState<DealEvent[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<{ productID: string; quantity: string; price: string } | null>(null);
@@ -49,6 +51,8 @@ export function useAppState() {
         signatureData, setSignatureData,
         submittedData, setSubmittedData,
         comment, setComment,
-        images, setImages
+        images, setImages,
+        showDealState, setShowDealState,
+        showProduct, setShowProduct
     };
 }
