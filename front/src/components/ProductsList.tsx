@@ -38,7 +38,7 @@ const ProductsList: FC<ProductsListProps> = ({
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">Available Products</h2>
+      {/* <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">Available Products</h2> */}
       
       {combinedData.length > 0 ? (
         <div className="relative">

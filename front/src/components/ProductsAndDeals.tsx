@@ -1,9 +1,8 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import ProductsList from './ProductsList';
 import DealStateList from './DealStateList';
 
 interface ProductsAndDealsProps {
-  // Thêm tất cả props từ cả hai component
   combinedData: any[];
   onSelectProduct: (product: { productID: string; quantity: string; price: string } | null) => void;
   selectedProduct: { productID: string; quantity: string; price: string } | null;
@@ -14,37 +13,35 @@ interface ProductsAndDealsProps {
   deals: any[];
   onConfirmDeal: (dealId: string) => void;
   onShowRating: (dealId: string, productId: string) => void;
+  activeView: 'products' | 'deals';
+  onGetDelivering: (completed: boolean) => void;
 }
 
 const ProductsAndDeals: FC<ProductsAndDealsProps> = (props) => {
-  const [activeView, setActiveView] = useState<'products' | 'deals'>('products');
-
   return (
     <div>
-      <div className="flex justify-center space-x-4 mb-6">
+      <div className="flex items-center gap-3 justify-center mb-6">
         <button
-          onClick={() => setActiveView('products')}
-          className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
-            activeView === 'products'
-              ? 'bg-blue-500 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
+          onClick={() => props.onGetDelivering(true)}
+          className="text-gray-700 hover:text-blue-600 transition-colors text-sm font-medium"
         >
-          Sản phẩm
+          Lịch Sử Mua Hàng
         </button>
         <button
-          onClick={() => setActiveView('deals')}
-          className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
-            activeView === 'deals'
-              ? 'bg-blue-500 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
+          onClick={() => props.onGetDelivering(false)}
+          className="text-gray-700 hover:text-blue-600 transition-colors text-sm font-medium"
         >
-          Đơn hàng của tôi
+          Hàng Đang Vận Chuyển
         </button>
+        {/* <button 
+          onClick={props.onGetProducts} 
+          className="text-gray-700 hover:text-blue-600 transition-colors text-sm font-medium"
+        >
+          Mua Hàng
+        </button> */}
       </div>
 
-      {activeView === 'products' ? (
+      {props.activeView === 'products' ? (
         <ProductsList
           combinedData={props.combinedData}
           onSelectProduct={props.onSelectProduct}

@@ -14,7 +14,7 @@ const DealStateList: FC<DealStateListProps> = ({
 }) => {
   return (
     <div>
-      <h2 className="text-xl mb-4">Deal State Events</h2>
+      {/* <h2 className="text-xl mb-4">Deal State Events</h2> */}
       {deals.length > 0 ? (
         <ul className="space-y-2">
           {deals.map((deal, index) => (

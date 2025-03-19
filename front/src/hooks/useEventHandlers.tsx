@@ -39,26 +39,37 @@ export function useEventHandlers(walletProvider: any, appState: any) {
             const ratingEventFilter = contractRating.filters.NewRating();
             const newRatingEvents = await contractRating.queryFilter(ratingEventFilter, 10);
     
-            const latestEvents = new Map<string, { productId: string; rating: string; ratingCount: string }>();
+            // Tạo Map để lưu trữ tổng rating và số lượng rating cho mỗi sản phẩm
+            const productRatings = new Map<string, { totalRating: number; count: number }>();
     
+            // Tính tổng rating và đếm số lượng rating cho mỗi sản phẩm
             for (const event of newRatingEvents) {
-                const newEvent = {
-                    productId: (event as any).args[0].toString(),
-                    rating: (event as any).args[1].toString(),
-                    ratingCount: (event as any).args[2].toString(),
-                };
-            
-                latestEvents.set(newEvent.productId, newEvent);
-                console.log("Processing Event:", newEvent);
+                const productId = (event as any).args[0].toString();
+                const rating = parseFloat((event as any).args[1].toString());
+                
+                if (!productRatings.has(productId)) {
+                    productRatings.set(productId, { totalRating: 0, count: 0 });
+                }
+                
+                const current = productRatings.get(productId)!;
+                current.totalRating += rating;
+                current.count += 1;
+                productRatings.set(productId, current);
             }
     
-            const eventsRating = Array.from(latestEvents.values());
+            // Chuyển đổi thành mảng các đối tượng với rating trung bình
+            const eventsRating = Array.from(productRatings.entries()).map(([productId, data]) => ({
+                productId,
+                rating: (data.totalRating / data.count).toFixed(1), // Làm tròn đến 1 chữ số thập phân
+                ratingCount: data.count.toString()
+            }));
+    
             setRatingEvents(eventsRating);
-            console.log("Latest Events:", eventsRating);
+            console.log("Average Ratings:", eventsRating);
     
         } catch (error) {
-            console.error("Error fetching deal state events:", error);
-            alert("An error occurred while fetching deal state events. Please try again.");
+            console.error("Error fetching rating events:", error);
+            alert("An error occurred while fetching rating events. Please try again.");
         }
     };
 

@@ -8,6 +8,8 @@ interface HeaderProps {
   onShowSignUp: () => void;
   onGetProducts: () => void;
   onGetDelivering: (completed: boolean) => void;
+  activeView: 'products' | 'deals';
+  setActiveView: (view: 'products' | 'deals') => void;
 }
 
 const Header: FC<HeaderProps> = ({
@@ -16,7 +18,9 @@ const Header: FC<HeaderProps> = ({
   onOpenWallet,
   onShowSignUp,
   onGetProducts,
-  onGetDelivering
+  onGetDelivering,
+  activeView,
+  setActiveView
 }) => {
   return (
     <header className="bg-white shadow-md">
@@ -59,7 +63,7 @@ const Header: FC<HeaderProps> = ({
               </a>
             </div>
 
-            <div className="flex items-center gap-3">
+            {/* <div className="flex items-center gap-3">
               <button
                 onClick={() => onGetDelivering(true)}
                 className="text-gray-700 hover:text-blue-600 transition-colors text-sm font-medium"
@@ -77,6 +81,29 @@ const Header: FC<HeaderProps> = ({
                 className="text-gray-700 hover:text-blue-600 transition-colors text-sm font-medium"
               >
                 Mua Hàng
+              </button>
+            </div> */}
+
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={() => setActiveView('products')}
+                className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
+                  activeView === 'products'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                Sản phẩm
+              </button>
+              <button
+                onClick={() => setActiveView('deals')}
+                className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
+                  activeView === 'deals'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                Đơn hàng của tôi
               </button>
             </div>
 

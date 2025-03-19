@@ -85,10 +85,10 @@ function App() {
       ratingCount: ratingEvent ? ratingEvent.ratingCount : null,
     };
   });
+  const [activeView, setActiveView] = useState<'products' | 'deals'>('products');
 
   return (
     <div>
-
       <Header
         address={address}
         isConnected={isConnected}
@@ -96,6 +96,8 @@ function App() {
         onShowSignUp={handleShowSignUpForm}
         onGetProducts={getEventProducts}
         onGetDelivering={getEventDelivering}
+        activeView={activeView}
+        setActiveView={setActiveView}
       />
       {/* <GetInput signer = {} dealId = {} /> */}
       {submittedData && (
@@ -126,6 +128,8 @@ function App() {
         deals={dealState}
         onConfirmDeal={comfirmDeal}
         onShowRating={handleShowRatingInput}
+        activeView={activeView}
+        onGetDelivering={getEventDelivering}
       />
       <RatingModal
         isOpen={showRatingInput}
