@@ -5,7 +5,12 @@ const ratingSchema = new mongoose.Schema({
   productId: { type: String, required: true },
   rating: { type: Number, required: true },
   comment: { type: String, required: false },
-  images: [{ type: String }], // Array of image URLs
+  images: [{
+    filename: { type: String },
+    path: { type: String },
+    mimetype: { type: String },
+    size: { type: String }
+  }],
   timestamp: { type: Date, default: Date.now }
 });
 
