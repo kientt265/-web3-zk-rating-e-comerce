@@ -8,6 +8,7 @@ contract DealComerce is SellerComerce, UserComerce {
 
     event DealState(uint indexed dealId, address indexed buyer, string productId, uint amount, uint value, bool indexed isCompleted);
     event NewQuantityProduct(string productID, uint price, uint quantity);
+    event DealRatingState(uint indexed dealId, bool indexed isRating);
     struct Deal {
         address buyer;
         address seller;
@@ -16,6 +17,7 @@ contract DealComerce is SellerComerce, UserComerce {
         uint value; 
         bool buyerConfirmed;
         bool isCompleted;
+        bool isRating;
     }
 
     uint public dealId = 0;
@@ -40,7 +42,8 @@ contract DealComerce is SellerComerce, UserComerce {
             amount: _amount,
             value: msg.value,
             buyerConfirmed: false,
-            isCompleted: false
+            isCompleted: false,
+            isRating: false
         });
         quantityPerItem[_productId] -= _amount;
         buyerDeals[msg.sender].push(_dealId);
@@ -63,6 +66,15 @@ contract DealComerce is SellerComerce, UserComerce {
 
         payable(deals[_dealId].seller).transfer(deals[_dealId].value);
         emit DealState(_dealId, msg.sender, deals[_dealId].productId , deals[_dealId].amount, deals[_dealId].value, deals[_dealId].isCompleted);
+    }
+
+    function completeRating(uint _dealId) public {
+        require(deals[_dealId].buyer == msg.sender, "You are not the buyer");
+        require(deals[_dealId].isCompleted == true, "Deal not completed");
+        require(deals[_dealId].isRating == false, "Deal already rated");
+        deals[_dealId].isRating = true;
+        emit DealRatingState(_dealId, true);
+        
     }
 
     function getDealId(address _addressUser) public view returns(uint) {
