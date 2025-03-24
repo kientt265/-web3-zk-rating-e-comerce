@@ -8,7 +8,7 @@ contract DealComerce is SellerComerce, UserComerce {
 
     event DealState(uint indexed dealId, address indexed buyer, string productId, uint amount, uint value, bool indexed isCompleted);
     event NewQuantityProduct(string productID, uint price, uint quantity);
-    event DealRatingState(uint indexed dealId, bool indexed isRating);
+    // event DealRatingState(uint indexed dealId, bool indexed isRating);
     struct Deal {
         address buyer;
         address seller;
@@ -68,14 +68,14 @@ contract DealComerce is SellerComerce, UserComerce {
         emit DealState(_dealId, msg.sender, deals[_dealId].productId , deals[_dealId].amount, deals[_dealId].value, deals[_dealId].isCompleted);
     }
 
-    function completeRating(uint _dealId) public {
-        require(deals[_dealId].buyer == msg.sender, "You are not the buyer");
-        require(deals[_dealId].isCompleted == true, "Deal not completed");
-        require(deals[_dealId].isRating == false, "Deal already rated");
-        deals[_dealId].isRating = true;
-        emit DealRatingState(_dealId, true);
+    // function completeRating(uint _dealId) public {
+    //     require(deals[_dealId].buyer == msg.sender, "You are not the buyer");
+    //     require(deals[_dealId].isCompleted == true, "Deal not completed");
+    //     require(deals[_dealId].isRating == false, "Deal already rated");
+    //     deals[_dealId].isRating = true;
+    //     emit DealRatingState(_dealId, true);
         
-    }
+    // }
 
     function getDealId(address _addressUser) public view returns(uint) {
         return getDealIDByAddress[_addressUser];
