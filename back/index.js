@@ -10,6 +10,7 @@ import dealRouter from './src/routes/dataDeal.route.js';
 import requestRouter from './src/routes/request.route.js';
 import verifyRouter from './src/routes/verifyProof.router.js';
 import ratingRouter from './src/routes/rating.route.js';
+import saveNullifier from './src/routes/saveNullifier.route'
 const debug = createDebug('api:Application');
 const wsDebug = createDebug('api:WebSocket');
 
@@ -115,7 +116,7 @@ const boostrap = async () => {
   app.use('/api', requestRouter);
   app.use('/api', verifyRouter);
   app.use('/api', ratingRouter);
-
+  app.use('/api', saveNullifier);
   app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);
   });
