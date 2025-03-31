@@ -41,7 +41,16 @@ const Header: FC<HeaderProps> = ({
                 className="text-sm text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-1"
               >
                 <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-                ContractSaveMerkleRoot
+                MerkleRoot
+              </a>
+              <a 
+                href="https://sepolia.etherscan.io/address/0xaacd754db17e0d46fde1f424b27c56d530c85870" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sm text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-1"
+              >
+                <span className="w-2 h-2 bg-green-400 rounded-full"></span>
+                Nullifier
               </a>
               <a 
                 href="https://sepolia.etherscan.io/address/0x204369e4c844de8d5299baa86d62fa76174cd670" 
@@ -50,7 +59,7 @@ const Header: FC<HeaderProps> = ({
                 className="text-sm text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-1"
               >
                 <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-                ContractRating
+                Rating
               </a>
               <a 
                 href="https://sepolia.etherscan.io/address/0x48985c6aADB9Fd141c8D9962D78d75Df18d5deE7" 

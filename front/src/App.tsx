@@ -52,13 +52,24 @@ function App() {
     setIsLoading(true);
     if (walletProvider) {
       try {
+        
         const browserProvider = new BrowserProvider(walletProvider);
         const signerProvider = browserProvider.getSigner();
         const contract = new Contract(contractAdr, contractABI, await signerProvider);
 
         const transaction = await contract.completeDeal(dealId);
         await transaction.wait();
-
+        //nullifier = poseidon(dealId, productId, privateKey);
+        // const data = {
+        //  nullifier: nullifier
+        // };
+        // const response = await fetch("http://localhost:3000/api/nullifier", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify(data),
+        // });
         setIsSuccess(true);
       } catch (error) {
         console.error("Error confirming deal:", error);

@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { DealEvent } from '../lib/type';
+import PrivateKeyModal from './PrivateKeyModal';
 
 interface DealStateListProps {
   deals: DealEvent[];
-  onConfirmDeal: (dealId: string) => void;
+  onConfirmDeal: (dealId: string, productId: string,  privateKey?: string) => void;
   onShowRating: (dealId: string, productId: string) => void;
 }
 
@@ -12,6 +13,21 @@ const DealStateList: FC<DealStateListProps> = ({
   onConfirmDeal,
   onShowRating,
 }) => {
+  const [showPrivateKeyModal, setShowPrivateKeyModal] = useState(false);
+  const [selectedDealId, setSelectedDealId] = useState<string>('');
+  const [selectedProductId, setSelectedProductId] = useState<string>(''); // Thêm state mới
+
+  const handleConfirmClick = (dealId: string, productID: string) => {
+    setSelectedDealId(dealId);
+    setSelectedProductId(productID); // Cập nhật state mới
+    setShowPrivateKeyModal(true);
+  };
+
+  const handlePrivateKeySubmit = (privateKey: string) => {
+    onConfirmDeal(selectedDealId, selectedProductId,  privateKey);
+    setShowPrivateKeyModal(false);
+  };
+
   return (
     <div>
       {/* <h2 className="text-xl mb-4">Deal State Events</h2> */}
@@ -27,7 +43,7 @@ const DealStateList: FC<DealStateListProps> = ({
               Completed: {deal.isCompleted ? 'Yes' : 'No'}
               {!deal.isCompleted && (
                 <button
-                  onClick={() => onConfirmDeal(deal.dealId)}
+                  onClick={() => handleConfirmClick(deal.dealId, deal.productID)}
                   className="ml-4 bg-green-500 text-white py-1 px-2 rounded-lg hover:bg-green-400 transition-colors"
                 >
                   Đã Nhận được Hàng
@@ -47,6 +63,13 @@ const DealStateList: FC<DealStateListProps> = ({
       ) : (
         <p>Bạn chưa mua gì</p>
       )}
+      <PrivateKeyModal
+        isOpen={showPrivateKeyModal}
+        onClose={() => setShowPrivateKeyModal(false)}
+        onConfirm={handlePrivateKeySubmit}
+        dealId={selectedDealId}
+        productId={selectedProductId}
+      />
     </div>
   );
 };

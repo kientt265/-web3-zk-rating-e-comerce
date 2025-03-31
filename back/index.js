@@ -10,7 +10,7 @@ import dealRouter from './src/routes/dataDeal.route.js';
 import requestRouter from './src/routes/request.route.js';
 import verifyRouter from './src/routes/verifyProof.router.js';
 import ratingRouter from './src/routes/rating.route.js';
-import saveNullifier from './src/routes/saveNullifier.route'
+import saveNullifier from './src/routes/saveNullifier.route.js'
 const debug = createDebug('api:Application');
 const wsDebug = createDebug('api:WebSocket');
 
