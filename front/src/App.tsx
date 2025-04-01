@@ -48,28 +48,33 @@ function App() {
     handleSubmit
   } = useEventHandlers(walletProvider, appState);
   const { open } = useWeb3Modal();
-  const comfirmDeal = async (dealId: string) => {
+  const comfirmDeal = async (dealId: string, productId: string, privateKey: string, nullifier: string) => {
     setIsLoading(true);
     if (walletProvider) {
       try {
-        
-        const browserProvider = new BrowserProvider(walletProvider);
-        const signerProvider = browserProvider.getSigner();
-        const contract = new Contract(contractAdr, contractABI, await signerProvider);
+        // const browserProvider = new BrowserProvider(walletProvider);
+        // const signerProvider = browserProvider.getSigner();
+        // const contract = new Contract(contractAdr, contractABI, await signerProvider);
 
-        const transaction = await contract.completeDeal(dealId);
-        await transaction.wait();
-        //nullifier = poseidon(dealId, productId, privateKey);
-        // const data = {
-        //  nullifier: nullifier
-        // };
-        // const response = await fetch("http://localhost:3000/api/nullifier", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify(data),
-        // });
+        // const transaction = await contract.completeDeal(dealId);
+        // await transaction.wait();
+
+        // Send nullifier to API
+        const data = {
+          nullifier: nullifier
+        };
+        const response = await fetch("http://localhost:3000/api/nullifier", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to submit nullifier');
+        }
+
         setIsSuccess(true);
       } catch (error) {
         console.error("Error confirming deal:", error);
@@ -137,7 +142,8 @@ function App() {
         isLoading={isLoading}
         onGetProducts={getEventProducts}
         deals={dealState}
-        onConfirmDeal={comfirmDeal}
+        onConfirmDeal={(dealId: string, productId: string, privateKey: string, nullifier: string) => 
+          comfirmDeal(dealId, productId, privateKey, nullifier)}
         onShowRating={handleShowRatingInput}
         activeView={activeView}
         onGetDelivering={getEventDelivering}

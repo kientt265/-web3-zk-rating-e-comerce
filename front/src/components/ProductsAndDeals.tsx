@@ -11,7 +11,7 @@ interface ProductsAndDealsProps {
   isLoading?: boolean;
   onGetProducts: () => void;
   deals: any[];
-  onConfirmDeal: (dealId: string, productId: string, privateKey?: string) => void;
+  onConfirmDeal: (dealId: string, productId: string, privateKey: string, nullifier: string) => void;
   onShowRating: (dealId: string, productId: string) => void;
   activeView: 'products' | 'deals';
   onGetDelivering: (completed: boolean) => void;

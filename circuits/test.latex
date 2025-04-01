@@ -1,0 +1,184 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Medium Length Professional CV
+% LaTeX Template
+% Version 3.0 (December 17, 2022)
+%
+% This template originates from:
+% https://www.LaTeXTemplates.com
+%
+% Author:
+% Vel (vel@latextemplates.com)
+%
+% Original author:
+% Trey Hunner (http://www.treyhunner.com/)
+%
+% License:
+% CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/)
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+	%a4paper, % Uncomment for A4 paper size (default is US letter)
+	11pt, % Default font size, can use 10pt, 11pt or 12pt
+]{resume} % Use the resume class
+
+% Remove or comment out the current font package
+% \usepackage{ebgaramond}
+
+% Choose one of these font combinations:
+% Option 1: Modern and clean
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+
+% Option 2: Professional and elegant
+% \usepackage{libertine}
+% \usepackage[T1]{fontenc}
+
+% Option 3: Contemporary and readable
+% \usepackage{roboto}
+% \usepackage[T1]{fontenc}
+\usepackage{hyperref}
+
+
+\usepackage{xcolor}
+\usepackage{fontawesome5} % Gói icon
+\usepackage{fontawesome5} % Gói icon
+\usepackage{xcolor}
+
+\definecolor{linkcolor}{RGB}{6,69,173} % Màu xanh link
+
+%------------------------------------------------
+
+\name{Tran Trung Kien} % Your name to appear at the top
+
+% You can use the \address command up to 3 times for 3 different addresses or pieces of contact information
+% Any new lines (\\) you use in the \address commands will be converted to symbols, so each address will appear as a single line.
+
+\address{123 Broadway \\ City, State 12345} % Main address
+
+\address{123 Pleasant Lane \\ City, State 12345} % A secondary address (optional)
+
+\address{(011)~$\cdot$~899~$\cdot$~9881 \\ john@LaTeXTemplates.com} % Contact information
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+% contact information
+\begin{center}
+  \textbf{\LARGE\scshape Ethan Yang} \\
+  \vspace{1pt}\small
+  \href{mailto:}{Email}
+  $\ \diamond\ $ 
+  Phone
+  $\ \diamond\ $
+  \href{https://github.com/}{GitHub}
+  $\ \diamond\ $
+  \href{https://www.linkedin.com/}{LinkedIn}
+\end{center}
+{\LARGE\bfseries Duong Nguyen}\\[5pt]
+%----------------------------------------------------------------------------------------
+%	EDUCATION SECTION
+%----------------------------------------------------------------------------------------
+\begin{rSection}{Sumary}
+     I am a final-year Computer Networks student at the University of Information Technology - Vietnam (UIT),
+ currently working as a Web3 development intern with strong foundations in front-end and back-end
+ development (Node.js, Laravel), as well as decentralized application (dApp) development using technologies
+ like Solidity, React, and related blockchain libraries. I have hands-on experience in testing and deploying
+ smart contracts on EVM using Foundry and on Solana using Anchor framework, version control with Git, and
+ deploying private blockchain networks with Hyperledger Besu.
+\end{rSection}
+\begin{rSection}{Education}
+	
+	\textbf{University of Information Technology- VNUHCM} \hfill \textit{June 2021} \\ 
+	Bachelor of Computer Networks \\
+	Overall GPA: 7.5/10
+	
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	WORK EXPERIENCE SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{Technical Skills}
+
+	\begin{tabular}{@{} >{\bfseries}l @{\hspace{6ex}} l @{}}
+		Programming Languages & TypeScript, PHP, Solidity, Rust\\
+		Front-end Frameworks  & ReactJS \\
+		Back-end Frameworks & NodeJS, Laravel \\
+		Blockchain Framework & Web3JS, EtherJS \\
+            Smart Contract Development & Foundry(Hardhat), Anchor(Solana) \\
+            Source Control & Git \\
+            Other Skills & EVM, non-EVM, Security Contract, Zero-Knowledge Proof, ERC20, ERC721, etc.
+	\end{tabular}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	TECHNICAL STRENGTHS SECTION
+%----------------------------------------------------------------------------------------
+\begin{rSection}{English}
+    Proficient in usage and communication
+\end{rSection}
+\begin{rSection}{Projects}
+
+
+
+{\section*{\normalfont{ZKXCB} \hfill \textit{8/2024 - 11/2024}}}
+
+ZKXCB is an application that allows users to anonymously review products on e-commerce platforms. The application leverages zero-knowledge proof technology and blockchain to ensure that transactions are transparent, secure, private, and anonymous.
+
+\textbf{About project:}
+
+\begin{itemize}
+    \item Technologies Used: React.js, Node.js, Zero-Knowledge Proof, Consortium Blockchain, etc.
+    \item Frameworks: Foundry (or Hardhat), Ethers.js (or Web3.js), ZK-SNARK, Hyperledger Besu, etc. 
+\end{itemize}
+
+\emph{Link:} \href{https://github.com/kientt265/-web3-zk-rating-e-comerce}{ZKXCB}
+{\section*{\normalfont{ZKHealth} \hfill \textit{5/2024 - 7/2024}}}
+
+ZKHealth is an application that allows patients to conceal sensitive personal information when receiving medical treatment at hospitals. The application utilizes zero-knowledge proof technology and consortium blockchain to ensure that only those involved in the treatment process can access the patient's information.
+
+\textbf{About project:}
+
+\begin{itemize}
+    \item Technologies Used: React.js, Zero-Knowledge Proof, Blockchain, etc. 
+    \item Frameworks:Technologies Used: React.js, Zero-Knowledge Proof, Blockchain, etc.  
+\end{itemize}
+
+\emph{Link:} \href{https://github.com/kientt265/-web3-zk-hopital}{ZKHealth}
+{\section*{\normalfont{NFT Marketplace} \hfill \textit{2/2024 - 4/2024}}}
+
+An NFT marketplace built on Solana, enabling users to mint, trade, list, and purchase NFTs
+ securely and efficiently
+
+\textbf{About project:}
+
+\begin{itemize}
+    \item Technologies Used: React.js, Node.js, Blockchain, etc. 
+    \item Frameworks: Anchor, Web3.js, etc.  
+\end{itemize}
+
+\emph{Link:} \href{https://github.com/kientt265/nft_marketplace_solana}{NFT Marketplace}
+
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	EXAMPLE SECTION
+%----------------------------------------------------------------------------------------
+
+%\begin{rSection}{Section Name}
+
+	%Section content\ldots
+
+%\end{rSection}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

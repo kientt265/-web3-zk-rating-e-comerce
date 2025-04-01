@@ -4,7 +4,7 @@ import PrivateKeyModal from './PrivateKeyModal';
 
 interface DealStateListProps {
   deals: DealEvent[];
-  onConfirmDeal: (dealId: string, productId: string,  privateKey?: string) => void;
+  onConfirmDeal: (dealId: string, productId: string, privateKey: string, nullifier: string) => void;
   onShowRating: (dealId: string, productId: string) => void;
 }
 
@@ -23,8 +23,8 @@ const DealStateList: FC<DealStateListProps> = ({
     setShowPrivateKeyModal(true);
   };
 
-  const handlePrivateKeySubmit = (privateKey: string) => {
-    onConfirmDeal(selectedDealId, selectedProductId,  privateKey);
+  const handlePrivateKeySubmit = (privateKey: string, nullifier: string) => {
+    onConfirmDeal(selectedDealId, selectedProductId, privateKey, nullifier);
     setShowPrivateKeyModal(false);
   };
 

@@ -3,7 +3,7 @@ import  PoseidonThreePara from '../helpers/PoseidonThreePara.tsx'
 interface PrivateKeyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (privateKey: string) => void;
+  onConfirm: (privateKey: string, nullifier: string) => void;  // Updated
   dealId: string;
   productId: string;
 }
@@ -15,15 +15,15 @@ const PrivateKeyModal: FC<PrivateKeyModalProps> = ({
   dealId,
   productId 
 }) => {
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {  // Made async
     e.preventDefault();
     const privateKey = (e.target as any).privateKey.value;
-    console.log('Private Key:', privateKey);
-    console.log('Deal ID:', dealId);
-    console.log('Product ID:', productId);
-    const x = PoseidonThreePara(privateKey, dealId, productId);
-    console.log('Hash result:', x);
-    onConfirm(privateKey);
+    try {
+      const nullifier = await PoseidonThreePara(privateKey, productId, dealId);
+      onConfirm(privateKey, nullifier);
+    } catch (error) {
+      console.error('Error generating nullifier:', error);
+    }
   };
 
   if (!isOpen) return null;
