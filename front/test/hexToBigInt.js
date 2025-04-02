@@ -8,5 +8,5 @@ export const  hexToBigInt = (hexAddress) => {
     return BigInt(`0x${hexAddress}`);
   };
 
-  let value = hexToBigInt("90c48915b33285273424beb79fc6bfec46d1c5bb8f429e148ed6ed537e905d4a");
+  let value = hexToBigInt("2BEF6298f46817f7391A852dfc6669492Ea72d90");
   console.log(value);

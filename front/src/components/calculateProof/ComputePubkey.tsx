@@ -3,6 +3,7 @@ import React from 'react'
 import { secp256k1 } from "ethereum-cryptography/secp256k1";
 import { hexToBytes, bytesToHex } from "ethereum-cryptography/utils";
 import GetInput from './GetInput';
+
 interface ComputePubkeyProps {
     dealId: string;
     productId: string;
@@ -62,8 +63,6 @@ export const ComputePubkey: React.FC<ComputePubkeyProps> = ({
         }
     }
     
-
-
         //uncompressed bỏ 04, lấy nửa đầu làm x, nửa sau làm y
         function split256To64BitChunks(num: bigint) {
             const mask = BigInt((1n << 64n) - 1n); // Mặt nạ 64-bit: 2^64 - 1
@@ -89,7 +88,7 @@ export const ComputePubkey: React.FC<ComputePubkeyProps> = ({
     
   return (
     <div>
-      <GetInput 
+      {/* <GetInput 
         dealId = {dealId}
         productId= {productId}
         rating={rating}
@@ -102,7 +101,7 @@ export const ComputePubkey: React.FC<ComputePubkeyProps> = ({
         comment={comment}
         images={images}
 
-      />
+      /> */}
     </div>
   )
 }

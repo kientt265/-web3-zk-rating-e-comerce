@@ -5,7 +5,7 @@ import { useWeb3Modal } from '@web3modal/ethers/react'
 import Header from './components/Header';
 import { FundedEvent, DealEvent, RatingEvent } from "./lib/type"
 import { contractABI, contractAdr } from "./contract/contractData"
-import { ComputePubkey } from "./components/ComputePubkey";
+import { ComputePubkey } from "./components/calculateProof/ComputePubkey";
 import { initWeb3Modal, contractAddressRating, contractABIRating } from './components/Web3Config';
 import RatingModal from './components/RatingModal';
 import SignUpForm from './components/SignUpForm';
@@ -13,7 +13,8 @@ import ProductsList from './components/ProductsList';
 import DealStateList from './components/DealStateList';
 import { useEventHandlers } from './hooks/useEventHandlers';
 import { useAppState } from './hooks/useAppState';
-import  ProductsAndDeals  from './components/ProductsAndDeals';
+import  ProductsAndDeals  from './components/ProductsAndDeals'
+import GetInput from './components/calculateProof/GetInput';
 initWeb3Modal();
 function App() {
   const appState = useAppState();
@@ -52,28 +53,28 @@ function App() {
     setIsLoading(true);
     if (walletProvider) {
       try {
-        // const browserProvider = new BrowserProvider(walletProvider);
-        // const signerProvider = browserProvider.getSigner();
-        // const contract = new Contract(contractAdr, contractABI, await signerProvider);
+        const browserProvider = new BrowserProvider(walletProvider);
+        const signerProvider = browserProvider.getSigner();
+        const contract = new Contract(contractAdr, contractABI, await signerProvider);
 
-        // const transaction = await contract.completeDeal(dealId);
-        // await transaction.wait();
+        const transaction = await contract.completeDeal(dealId);
+        await transaction.wait();
 
         // Send nullifier to API
-        const data = {
-          nullifier: nullifier
-        };
-        const response = await fetch("http://localhost:3000/api/nullifier", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
+        // const data = {
+        //   nullifier: nullifier
+        // };
+        // const response = await fetch("http://localhost:3000/api/nullifier", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify(data),
+        // });
 
-        if (!response.ok) {
-          throw new Error('Failed to submit nullifier');
-        }
+        // if (!response.ok) {
+        //   throw new Error('Failed to submit nullifier');
+        // }
 
         setIsSuccess(true);
       } catch (error) {
@@ -119,7 +120,7 @@ function App() {
       {submittedData && (
         <div>
           {/* <GetInput dealId={submittedData.dealId} productId = {submittedData.productId} rating = {submittedData.rating}  /> */
-            <ComputePubkey dealId={submittedData.dealId} productId={submittedData.productId} rating={submittedData.rating} address={submittedData.address} msgHash={submittedData.msgHash} r={submittedData.r} s={submittedData.s} v={submittedData.v} comment={submittedData.comment} images={submittedData.images}/>}
+            <GetInput dealId={submittedData.dealId} productId={submittedData.productId} rating={submittedData.rating} address={submittedData.address} msgHash={submittedData.msgHash} r={submittedData.r} s={submittedData.s} v={submittedData.v} comment={submittedData.comment} images={submittedData.images}/>}
         </div>
 
       )}

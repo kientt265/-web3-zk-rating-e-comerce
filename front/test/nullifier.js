@@ -23,8 +23,8 @@ const PoseidonThreePara = async (privateKey, productId, dealId) => {
     }
 }
 
-const a = "2BEF6298f46817f7391A852dfc6669492Ea72d90";
+const a = "8d736906ec7a1cae1ac025eb320f06effc63cee13fa4c07fc5341b9b21bdc032";
 const b = "1abc";
-const c = "72";
+const c = "74";
 
 PoseidonThreePara(a, b, c);

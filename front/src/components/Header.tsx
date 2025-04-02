@@ -62,7 +62,7 @@ const Header: FC<HeaderProps> = ({
                 Rating
               </a>
               <a 
-                href="https://sepolia.etherscan.io/address/0x48985c6aADB9Fd141c8D9962D78d75Df18d5deE7" 
+                href="https://sepolia.etherscan.io/address/0x5a94ecbd4a4cbcd7e1cab4b4ec86d7d8660915f1" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-sm text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-1"

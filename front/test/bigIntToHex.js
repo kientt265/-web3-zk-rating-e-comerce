@@ -12,6 +12,6 @@ export const bigIntToHex = (bigIntValue) => {
   };
   
   // Test thử
-  let bigIntValue = BigInt("595569833831702603714349001078101360528286604458");
+  let bigIntValue = BigInt("633312402075039977350098731221198159830618857134");
   console.log(bigIntToHex(bigIntValue));
   

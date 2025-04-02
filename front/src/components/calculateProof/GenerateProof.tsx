@@ -14,7 +14,6 @@ type PublicSignal = string[];
 interface GenerateProofProps {
   rootMerkle: string;
   siblingsNode: string[];
-  pubkey: string[][];
   r: string;
   s: string;
   v: string;
@@ -33,7 +32,6 @@ interface GenerateProofProps {
 const GenerateProof: React.FC<GenerateProofProps> = ({
   rootMerkle,
   siblingsNode,
-  pubkey,
   r,
   s,
   v,
@@ -73,7 +71,6 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
       const input = {
         rootMerkle: rootMerkle,
         siblingsMerkle: siblingsNode,
-        pubkey: pubkey,
         r: r,
         s: s,
         msgHash: msgHash,
@@ -163,25 +160,25 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
       );
       console.timeEnd("Verify Zk Proof")
       setVerificationResult(res ? "Verification successful!" : "Verification failed.");
-      const data = {
-        pi_a: pi_a,
-        pi_b: pi_b,
-        pi_c: pi_c,
-        finalPublicSignal: finalPublicSignal,
-        productId: productId,
-        star: rating,
-        dealId: key1,
-        comment: comment,
-        images: images
-      };
-      // console.log("dataaaaaaaaaaaaaaaaaaa", JSON.stringify(data))
-      const response = await fetch("http://localhost:3000/api/verify", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      // const data = {
+      //   pi_a: pi_a,
+      //   pi_b: pi_b,
+      //   pi_c: pi_c,
+      //   finalPublicSignal: finalPublicSignal,
+      //   productId: productId,
+      //   star: rating,
+      //   dealId: key1,
+      //   comment: comment,
+      //   images: images
+      // };
+      // // console.log("dataaaaaaaaaaaaaaaaaaa", JSON.stringify(data))
+      // const response = await fetch("http://localhost:3000/api/verify", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(data),
+      // });
       
     } catch (error) {
       console.error("Error verifying proof:", error);
