@@ -7,9 +7,11 @@ interface RatingModalProps {
   rating: string;
   commentRating: string;
   imagesRating: File[];
+  privateKey: string; // thêm prop mới
   onRatingChange: (value: string) => void;
   onCommentChange: (value: string) => void;
   onImagesChange: (files: File[]) => void;
+  onPrivateKeyChange: (value: string) => void; // thêm handler mới
 }
 
 const RatingModal: FC<RatingModalProps> = ({
@@ -19,9 +21,11 @@ const RatingModal: FC<RatingModalProps> = ({
   rating,
   commentRating,
   imagesRating,
+  privateKey,
   onRatingChange,
   onCommentChange,
-  onImagesChange
+  onImagesChange,
+  onPrivateKeyChange
 }) => {
   if (!isOpen) return null;
 
@@ -31,6 +35,20 @@ const RatingModal: FC<RatingModalProps> = ({
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">Product Rating</h2>
         
         <div className="space-y-6">
+          {/* Thêm trường Private Key ở đây */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Private Key
+            </label>
+            <input
+              type="password"
+              placeholder="Enter your private key"
+              value={privateKey}
+              onChange={(e) => onPrivateKeyChange(e.target.value)}
+              className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Rating Score

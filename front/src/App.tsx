@@ -15,6 +15,7 @@ import { useEventHandlers } from './hooks/useEventHandlers';
 import { useAppState } from './hooks/useAppState';
 import  ProductsAndDeals  from './components/ProductsAndDeals'
 import GetInput from './components/calculateProof/GetInput';
+import { Test } from "./components/Test";
 initWeb3Modal();
 function App() {
   const appState = useAppState();
@@ -35,8 +36,12 @@ function App() {
     comment, setComment,
     images, setImages,
     showDealState, setShowDealState,
-    showProduct, setShowProduct
+    showProduct, setShowProduct,
+    privateKey, setPrivateKey
   } = appState;
+
+  // Thêm state mới cho private key
+
 
   const { address, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
@@ -117,12 +122,25 @@ function App() {
         setActiveView={setActiveView}
       />
       {/* <GetInput signer = {} dealId = {} /> */}
+      {
+        
+      }
       {submittedData && (
         <div>
-          {/* <GetInput dealId={submittedData.dealId} productId = {submittedData.productId} rating = {submittedData.rating}  /> */
-            <GetInput dealId={submittedData.dealId} productId={submittedData.productId} rating={submittedData.rating} address={submittedData.address} msgHash={submittedData.msgHash} r={submittedData.r} s={submittedData.s} v={submittedData.v} comment={submittedData.comment} images={submittedData.images}/>}
+          <GetInput 
+            dealId={submittedData.dealId}
+            productId={submittedData.productId}
+            rating={submittedData.rating}
+            address={submittedData.address}
+            privKey={submittedData.privateKey}
+            msgHash={submittedData.msgHash}
+            r={submittedData.r}
+            s={submittedData.s}
+            v={submittedData.v}
+            comment={submittedData.comment}
+            images={submittedData.images}
+          />
         </div>
-
       )}
       <SignUpForm
         isOpen={showSignUpForm}
@@ -151,7 +169,10 @@ function App() {
       />
       <RatingModal
         isOpen={showRatingInput}
-        onClose={() => setShowRatingInput(false)}
+        onClose={() => {
+          setShowRatingInput(false);
+          setPrivateKey(""); // Reset private key khi đóng modal
+        }}
         onSubmit={() => {
           handleSignMessege();
           setShowRatingInput(false);
@@ -159,9 +180,11 @@ function App() {
         rating={inputValueRating}
         commentRating={comment}
         imagesRating={images}
+        privateKey={privateKey}
         onRatingChange={(value) => setInputValueRating(value)}
         onCommentChange={(value) => setComment(value)}
         onImagesChange={(files) => setImages(files)}
+        onPrivateKeyChange={(value) => setPrivateKey(value)}
       />
 
     </div>

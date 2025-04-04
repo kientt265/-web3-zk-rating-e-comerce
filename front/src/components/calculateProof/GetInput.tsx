@@ -8,6 +8,7 @@ interface GetInputProps {
   productId: string;
   rating: string;
   address: string;
+  privKey: string;
   msgHash: string;
   r: string;
   s: string;
@@ -16,7 +17,7 @@ interface GetInputProps {
   images: File[];
 }
 
-const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, address, msgHash, r, s, v,  comment, images }) => {
+const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, address, privKey, msgHash, r, s, v,  comment, images }) => {
   // const [signer, setSigner] = useState<JsonRpcSigner | null>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -25,6 +26,7 @@ const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, address,
   const [buyerAddressBigInt, setBuyerAddressBigInt] = useState<string | null>(
     null
   );
+ 
   // useEffect(() => {
   //   async function initProvider() {
   //     try {
@@ -144,9 +146,9 @@ const GetInput: React.FC<GetInputProps> = ({ dealId, productId, rating, address,
           r={r}
           s={s}
           v={v.toString()}
-          key1={dealId}
-          value1={dealId}
-          value2={buyerAddressBigInt}
+          privKey={privKey}
+          dealId={dealId}
+          address={buyerAddressBigInt}
           productId={productId}
           rating = {rating}
           comment = {comment}

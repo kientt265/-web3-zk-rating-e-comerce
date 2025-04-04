@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import * as snarkjs from "snarkjs";
 import { Contract, Signer, ethers } from "ethers";
+import { zkProofHelpers } from '../../helpers/ZKProofHelpers';
 
 
 interface Proof {
@@ -17,10 +18,10 @@ interface GenerateProofProps {
   r: string;
   s: string;
   v: string;
+  privKey:string;
   msgHash: string;
-  key1: string;
-  value1: string;
-  value2: string;
+  dealId: string;
+  address: string;
   productId: string;
   rating: string;
   comment: string;
@@ -28,17 +29,35 @@ interface GenerateProofProps {
   // password: string;
   // signer: Signer;
 }
-// no bao loi gi  
+// rootMerkle: DONE
+// siblingsMerkle:  DONE
+// privatekey[4](hexa): chia 4 phần đổi thành bigInt rồi đổi ngược vị trí
+// privatekeyForNullifier(hexa): đổi privkey thànhbigInt
+// dealId(decimal)
+// productId(hexa): đổi thành bigInt
+// r[4](hexa): chia 4 phần đổi thành bigInt rồi đổi ngược vị trí
+// s[4](hexa): chia 4 phần đổi thành bigInt rồi đổi ngược vị trí
+// msghash[4](hexa): đổi thành bigInt
+// nullifier: Được tính bằng cách Hash poseidon (privatekeyForNullifier, dealId, productId): Biết rằng phải đổi 3 biến thành bigInt trước mới hash được
+//*Biết rằng chỉ privKey: không ở dạng 0x còn các biến hexa còn lại thì ở dạng 0x nhé
+//===========================
+//Những biến gửi kèm bằng chứng
+//comment: Lưu backend
+//images: Lưu backend
+//rating: Lưu backend, lưu blockchain
+//productId: Lưu vô sản phẩm có đánh giá này trên blockchain
+//msgHash: Lưu trên blockchain và backend (Để query comment và ảnh)
+//nullifier: kiểm tra trên blockchain
 const GenerateProof: React.FC<GenerateProofProps> = ({
   rootMerkle,
   siblingsNode,
   r,
   s,
   v,
+  privKey,
   msgHash,
-  key1,
-  value1,
-  value2,
+  dealId,
+  address,
   productId,
   rating,
   comment,
@@ -62,34 +81,44 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
   const calculateProof = async () => {
     setResult("Generating proof...");
     setLoading(true);
-    console.log("rootMerkle:@",typeof rootMerkle, rootMerkle);
-    console.log("siblingsNode:@", siblingsNode); // cai node nay no tinh o dau nhi
-    console.log("key1:@", key1);
-    console.log("value1:@", value1);
-    console.log("value2:@", value2);
     try {
+      // Prepare ZK inputs first
+      const zkInputs = await zkProofHelpers.prepareZKInputs({
+        privateKey: privKey,    // without 0x
+        dealId: dealId,          // decimal
+        productId: productId,  // without 0x
+        r: r,                  // with 0x
+        s: s,                  // with 0x
+        msgHash: msgHash       // with 0x
+      });
+
+      console.log("Prepared ZK inputs:", zkInputs);
+
       const input = {
         rootMerkle: rootMerkle,
         siblingsMerkle: siblingsNode,
-        r: r,
-        s: s,
-        msgHash: msgHash,
-        key: key1,
-        value1: value1,
-        value2: value2,
+        privatekey: zkInputs.privateKeyParts,
+        privatekeyForNullifier: zkInputs.privateKeyForNullifier,
+        dealId: zkInputs.dealId,
+        productId: zkInputs.productIdBigInt,
+        r: zkInputs.rParts,
+        s: zkInputs.sParts,
+        msghash: zkInputs.masgHashParts,
+        nullifier: zkInputs.nullifier,
       };
-      console.time("Create ZK Proof")
+      console.log("input@", input);
+      console.time("Create ZK Proof");
       const { proof, publicSignals } = await snarkjs.groth16.fullProve(
         input, 
-        "./prove/zkecomerce.wasm",
-        "./prove/zkecomerce.zkey"
+        "./prove/ZKEComerce.wasm",
+        "./prove/zkxcb_1.zkey"
       );
-      console.timeEnd("Create ZK Proof")
+      console.timeEnd("Create ZK Proof");
 
       setProof(proof);
       setPublicSignals(publicSignals);
-      console.log("proof@", proof)
-      console.log("publicSignals@", publicSignals)
+      console.log("proof@", proof);
+      console.log("publicSignals@", publicSignals);
       generateCallFromProof(proof, publicSignals);
       setResult("Proof generated successfully.");
     } catch (error) {
@@ -159,6 +188,13 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
         finalPublicSignal
       );
       console.timeEnd("Verify Zk Proof")
+      //Những biến gửi kèm bằng chứng
+//comment: Lưu backend
+//images: Lưu backend
+//rating: Lưu backend, lưu blockchain
+//productId: Lưu vô sản phẩm có đánh giá này trên blockchain
+//msgHash: Lưu trên blockchain và backend (Để query comment và ảnh)
+//nullifier: kiểm tra trên blockchain
       setVerificationResult(res ? "Verification successful!" : "Verification failed.");
       // const data = {
       //   pi_a: pi_a,
@@ -167,9 +203,9 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
       //   finalPublicSignal: finalPublicSignal,
       //   productId: productId,
       //   star: rating,
-      //   dealId: key1,
       //   comment: comment,
-      //   images: images
+      //   images: images,
+      //   nullifier: nullifier,
       // };
       // // console.log("dataaaaaaaaaaaaaaaaaaa", JSON.stringify(data))
       // const response = await fetch("http://localhost:3000/api/verify", {

@@ -7,7 +7,7 @@ export function useEventHandlers(walletProvider: any, appState: any) {
         setIsLoading, setIsSuccess, setProducts, setDealState,
         setSelectedProduct, setShowRatingInput, dealId, productId,
         inputValueRating, setSubmittedData, setSignatureData,
-        setRatingEvents, dealState, selectedProduct, comment, images
+        setRatingEvents, dealState, selectedProduct, comment, images, privateKey
     } = appState;
 
     const handleSignMessege = async () => {
@@ -257,7 +257,8 @@ export function useEventHandlers(walletProvider: any, appState: any) {
             s,
             v,
             comment: comment,
-            images: images
+            images: images,
+            privateKey: privateKey
         };
         setSubmittedData(data);
         setShowRatingInput(false);

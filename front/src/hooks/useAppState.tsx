@@ -34,8 +34,9 @@ export function useAppState() {
         v: number;
         comment: string;
         images: File[];
+        privateKey: string; // Thêm privateKey vào submittedData
     } | null>(null);
-
+    const [privateKey, setPrivateKey] = useState("");
     return {
         isLoading, setIsLoading,
         isSuccess, setIsSuccess,
@@ -53,6 +54,7 @@ export function useAppState() {
         comment, setComment,
         images, setImages,
         showDealState, setShowDealState,
-        showProduct, setShowProduct
+        showProduct, setShowProduct,
+        privateKey, setPrivateKey
     };
 }
