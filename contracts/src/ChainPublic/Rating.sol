@@ -6,48 +6,65 @@ interface IVerifier {
         uint256[2] memory _pA,
         uint256[2][2] memory _pB,
         uint256[2] memory _pC,
-        uint256[25] memory _pubSignals
+        uint256[42] memory _pubSignals
     ) external view returns (bool);
+}
+
+interface INullifier {
+    function addNullifier(string memory _nullifier) external;
+    function getStatusNullifier(string memory _nullifier) external view returns(bool);
+    function updateStatusNullifier(string memory _nullifier) external;
 }
 contract Rating {
 
-    event NewRating(string  _productId, uint8 _rating, uint256 _ratingCount);
+    event NewRating(string  _productId, uint8 _rating, uint256 _ratingCount, uint256 _totalRating);
 
     address public verifyContract;
-
+    address public nullifierContract;
+    address public owner;
     mapping(string => uint256) private totalRating; 
     mapping(string => uint256) private ratingCount; 
-    mapping(string => uint8) public currentRating; 
-    mapping(uint  => string) public saveNullifier;
-    mapping(string => bool) public nullifierUsed;
     mapping(string => string) public hashRating;
+    mapping(address => bool) public validators;
 
 
+    constructor() {
+        owner = msg.sender;
+    }
+    function registerValidator(address _validator) public {
+        require(msg.sender == owner, "Only owner can sign");
+        validators[_validator] = true;
+    }
+
+    function deleteValidator(address _validator) public {
+        require(msg.sender == owner, "Only owner can sign");
+        validators[_validator] = false;
+    }
 
     function setVerifyContract(address _verifyContract) public {
+        require(msg.sender == owner, "Only owner can sign");
         verifyContract = _verifyContract;
     }
-    function ratingProduct(uint8 _star, string memory _productId, string memory _nullifier,  uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[25] calldata _pubSignals, string memory hashM) public {
+    function setNullifierContract(address _nullifierContract) public {
+        require(msg.sender == owner, "Only owner can sign");
+        nullifierContract = _nullifierContract;
+    }
+    function ratingProduct(uint8 _star, string memory _productId, string memory _nullifier,  uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[42] calldata _pubSignals, string memory hashM) public {
+        require(validators[msg.sender]==true, "You must to true validator");
+        bool statusNullifier = INullifier(nullifierContract).getStatusNullifier(_nullifier);
+        require(statusNullifier == false, "Nullifier be used");
         bool proofValid = IVerifier(verifyContract).verifyProof(_pA, _pB, _pC, _pubSignals);
         require(proofValid, "Invalid proof");
-        require(!nullifierUsed[_nullifier], "Nullifier already used");
         require(_star >= 1 && _star <= 5, "Rating must be between 1 and 5 stars"); 
+        INullifier(nullifierContract).updateStatusNullifier(_nullifier);
         hashRating[_productId] = hashM;
-        nullifierUsed[_nullifier] = true;
         totalRating[_productId] += _star; 
         ratingCount[_productId] += 1;
-        currentRating[_productId] = _star;
-        emit NewRating(_productId, _star, ratingCount[_productId]);
+
+        emit NewRating(_productId, _star, ratingCount[_productId], totalRating[_productId]);
     }
 
-    function addNullifier(string memory _nullifier, uint _dealId) public {
-        saveNullifier[_dealId] = _nullifier;
-        nullifierUsed[_nullifier] = false;
-    }
 
-    function getNullifierByDealId(uint _dealId) public view returns(string memory) {
-        return saveNullifier[_dealId];
-    }
 
     function getRatingCount(string memory _productId) public view returns (uint256) {
         return ratingCount[_productId];
