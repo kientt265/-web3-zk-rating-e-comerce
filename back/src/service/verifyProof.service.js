@@ -1,6 +1,36 @@
 
 import { ethers } from 'ethers';
 import Rating from '../database/schema/ratingModel.js';
+
+// Cấu hình địa chỉ các validator
+const VALIDATORS = [
+    {
+        address: process.env.CONTRACT_ADDRESS_RATING,
+        abi: process.env.CONTRACT_ABI_RATING
+    },
+    {
+        address: process.env.CONTRACT_ADDRESS_RATING_2,
+        abi: process.env.CONTRACT_ABI_RATING
+    },
+    {
+        address: process.env.CONTRACT_ADDRESS_RATING_3,
+        abi: process.env.CONTRACT_ABI_RATING
+    },
+    {
+        address: process.env.CONTRACT_ADDRESS_RATING_4,
+        abi: process.env.CONTRACT_ABI_RATING
+    }
+];
+
+let currentValidatorIndex = 0;
+
+// Hàm chọn validator theo round-robin
+const getNextValidator = () => {
+    const validator = VALIDATORS[currentValidatorIndex];
+    currentValidatorIndex = (currentValidatorIndex + 1) % VALIDATORS.length;
+    return validator;
+};
+
 export const verifyProofService = async (proof) => {
     const { pi_a, pi_b, pi_c, finalPublicSignal, productId, star, dealId, comment, images } = proof;
     const starNumber = Number(star);
@@ -17,7 +47,10 @@ export const verifyProofService = async (proof) => {
     };
     const ratingHash = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(ratingInfo)));
     console.log('Received productId:', productId);
-    const contractRating = new ethers.Contract(process.env.CONTRACT_ADDRESS_RATING, process.env.CONTRACT_ABI_RATING, signer)
+
+    // Lấy validator tiếp theo
+    const validator = getNextValidator();
+    const contractRating = new ethers.Contract(validator.address, validator.abi, signer);
     const nullifier = await contractRating.getNullifierByDealId(dealId)
     console.time("Rating Time")
     const ratingProduct = await contractRating.ratingProduct(starNumber, productId, nullifier, pi_a, pi_b, pi_c, finalPublicSignal, ratingHash)
