@@ -72,4 +72,4 @@ template ZKEComerce(n, k, nLevels) {
 
 }
 
-component main {public [rootMerkle, siblingsMerkle, privatekey, dealId, productId, r, s, msghash, nullifier]} = ZKEComerce(64, 4, 20);
+component main {public [rootMerkle, productId, msghash, nullifier]} = ZKEComerce(64, 4, 20);

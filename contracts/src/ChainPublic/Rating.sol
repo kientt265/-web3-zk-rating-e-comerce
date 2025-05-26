@@ -11,9 +11,9 @@ interface IVerifier {
 }
 
 interface INullifier {
-    function addNullifier(string memory _nullifier) external;
-    function getStatusNullifier(string memory _nullifier) external view returns(bool);
-    function updateStatusNullifier(string memory _nullifier) external;
+    function addNullifier(uint256 _nullifier) external;
+    function getStatusNullifier(uint256  _nullifier) external view returns(bool);
+    function updateStatusNullifier(uint256  _nullifier) external;
 }
 contract Rating {
 
@@ -49,8 +49,9 @@ contract Rating {
         require(msg.sender == owner, "Only owner can sign");
         nullifierContract = _nullifierContract;
     }
-    function ratingProduct(uint8 _star, string memory _productId, string memory _nullifier,  uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[42] calldata _pubSignals, string memory hashM) public {
+    function ratingProduct(uint8 _star, string memory _productId,  uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[42] calldata _pubSignals, string memory hashM) public {
         require(validators[msg.sender]==true, "You must to true validator");
+        uint256 _nullifier = _pubSignals[41];
         bool statusNullifier = INullifier(nullifierContract).getStatusNullifier(_nullifier);
         require(statusNullifier == false, "Nullifier be used");
         bool proofValid = IVerifier(verifyContract).verifyProof(_pA, _pB, _pC, _pubSignals);

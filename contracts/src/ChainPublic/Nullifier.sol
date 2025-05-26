@@ -2,18 +2,18 @@
 pragma solidity ^0.8.13;
 
 contract Nullifier {
-    mapping(string => bool) shopee;
+    mapping(uint256 => bool) shopee;
 
 
-    function addNullifier(string memory _nullifier) public {
+    function addNullifier(uint256 _nullifier) public {
         shopee[_nullifier] = false;
     }
 
-    function getStatusNullifier(string memory _nullifier) public view returns(bool) {
+    function getStatusNullifier(uint256 _nullifier) public view returns(bool) {
         return shopee[_nullifier];
     }
 
-    function updateStatusNullifier(string memory _nullifier) public {
+    function updateStatusNullifier(uint256 _nullifier) public {
         shopee[_nullifier] = true;
     }
 }
