@@ -3,12 +3,8 @@ import Data from '../database/schema/ratingModel.js'
 
 
 export const getRatingService = async (productId) => {
-  // const data = await Data.findOne({ dealID: dealId }); // Find one get vet 1 record, voi param la dealId
-
-  const data = await Data.findOne({ productId: productId }); 
-  const {dealId, comment, images, ...rest } = data; // Cu phap destruct cua JS, chia ra 2 phan blockNumber va proofMerkle, con lai la rest
-
-  return {  dealId, comment, images}; // Tra ve blockNumber va proofMerkle duoi dang Oject
-
-
+  // Lấy tất cả đánh giá của productId
+  const data = await Data.find({ productId: productId }); 
+  // Trả về mảng các object chỉ chứa rating, comment, images
+  return data.map(({ rating, comment, images }) => ({ rating, comment, images }));
 }

@@ -1,16 +1,10 @@
 import mongoose from 'mongoose';
 
 const ratingSchema = new mongoose.Schema({
-  dealId: { type: String, required: true },
   productId: { type: String, required: true },
   rating: { type: Number, required: true },
   comment: { type: String, required: false },
-  images: [{
-    filename: { type: String },
-    path: { type: String },
-    mimetype: { type: String },
-    size: { type: String }
-  }],
+  images: {type: String, required: false}, // Assuming images are stored as a string (e.g., URL or base64)
   timestamp: { type: Date, default: Date.now }
 });
 

@@ -52,10 +52,10 @@ export const processBlockData = async (logsBlockData) => {
     console.log("Merkle root:", typeof merkleRoot, merkleRoot);
     console.log("Merkle Proof:", merkleTree.proof);
 
-    const nullifier = merkleTree.nullifier;
+    // const nullifier = merkleTree.nullifier;
 
-    const transactionRating = await contractRating.addNullifier(nullifier, dealIds)
-    await transactionRating.wait()
+    // const transactionRating = await contractRating.addNullifier(nullifier, dealIds)
+    // await transactionRating.wait()
 
     const processedData = {
       blockNumber: blockNumber,

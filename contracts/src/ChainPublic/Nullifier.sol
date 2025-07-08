@@ -5,10 +5,6 @@ contract Nullifier {
     mapping(uint256 => bool) shopee;
 
 
-    function addNullifier(uint256 _nullifier) public {
-        shopee[_nullifier] = false;
-    }
-
     function getStatusNullifier(uint256 _nullifier) public view returns(bool) {
         return shopee[_nullifier];
     }

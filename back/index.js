@@ -47,7 +47,7 @@ const boostrap = async () => {
         {
           fromBlock: "latest",
           toBlock: "latest",
-          address: "0xbE80Fa520AD9EEB165565d42b66b549170D3aEf6",
+          address: "0x766BB60Cf2D1698a4342Ae3B71582a34C5d0a54b",
           topics: [
             null,
             null,
