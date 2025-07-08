@@ -1,17 +1,12 @@
 import React, { FC, useState, useEffect } from 'react';
 import { FundedEvent } from '../lib/type';
- interface ReviewImage {
-  _id: string;
-  filename: string;
-  path: string;
-  mimetype: string;
-  size: string;
-}
- interface ProductReview {
-  dealId: string;
+
+interface ProductReview {
+  rating: number;
   comment: string;
-  images: ReviewImage[];
+  images: string; // string (URL hoặc base64)
 }
+
 interface DetailProductProps {
   product: FundedEvent & {
     rating: string | null;
@@ -22,7 +17,6 @@ interface DetailProductProps {
 
 export const DetailProduct: FC<DetailProductProps> = ({ product, onClose }) => {
   const [reviews, setReviews] = useState<ProductReview[]>([]);
-  const [showAllReviews, setShowAllReviews] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -35,6 +29,7 @@ export const DetailProduct: FC<DetailProductProps> = ({ product, onClose }) => {
         setReviews(Array.isArray(data) ? data : [data]);
       } catch (error) {
         console.error('Error fetching reviews:', error);
+        setReviews([]);
       } finally {
         setIsLoading(false);
       }
@@ -43,15 +38,13 @@ export const DetailProduct: FC<DetailProductProps> = ({ product, onClose }) => {
     fetchReviews();
   }, [product.productID]);
 
-  const displayedReviews = showAllReviews ? reviews : reviews.slice(0, 3);
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        {/* Thông tin sản phẩm */}
         <div className="flex justify-between items-start mb-6">
           <div className="flex gap-8">
-            <img 
-            //   src={product.imageUrl || ''} 
+            <img
               alt={`Product ${product.productID}`}
               className="w-72 h-72 object-cover rounded-xl"
             />
@@ -61,13 +54,13 @@ export const DetailProduct: FC<DetailProductProps> = ({ product, onClose }) => {
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold">Description</h3>
                 <p className="text-gray-600">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </p>
               </div>
             </div>
           </div>
-          <button 
+          <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
           >
@@ -77,6 +70,7 @@ export const DetailProduct: FC<DetailProductProps> = ({ product, onClose }) => {
           </button>
         </div>
 
+        {/* Danh sách đánh giá */}
         <div className="mt-8">
           <h3 className="text-2xl font-bold mb-6">Reviews</h3>
           {isLoading ? (
@@ -85,33 +79,43 @@ export const DetailProduct: FC<DetailProductProps> = ({ product, onClose }) => {
             </div>
           ) : reviews.length > 0 ? (
             <div className="space-y-6">
-              {displayedReviews.map((review, index) => (
-                <div key={review.dealId} className="border-b border-gray-200 pb-6">
-                  <p className="text-gray-600 mb-4">{review.comment}</p>
-                  <div className="flex gap-2 flex-wrap">
-                    {review.images.map((img) => (
-                      <img 
-                        key={img._id}
-                        src={`http://localhost:3000${img.path}`}
-                        alt={img.filename}
+              {reviews.map((review, idx) => (
+                <div key={idx} className="border-b border-gray-200 pb-6 flex items-start gap-4">
+                  {/* Icon user bên trái */}
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/149/149071.png" // Đường dẫn icon user từ Flaticon
+                    alt="user icon"
+                    className="w-10 h-10 object-cover rounded-full mt-1"
+                  />
+                  <div className="flex-1">
+                    {/* Hiển thị rating bằng icon ngôi sao */}
+                    <div className="flex items-center mb-2">
+                      {Array.from({ length: 5 }).map((_, starIdx) => (
+                        <svg
+                          key={starIdx}
+                          className={`w-6 h-6 ${starIdx < review.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.921-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.197-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z" />
+                        </svg>
+                      ))}
+                      <span className="ml-2 text-gray-600 font-medium">{review.rating}/5</span>
+                    </div>
+                    <p className="text-gray-600 mb-4">{review.comment}</p>
+                    {review.images && (
+                      <img
+                        src={review.images.startsWith('http') ? review.images : `http://localhost:3000${review.images}`}
+                        alt="review-img"
                         className="w-24 h-24 object-cover rounded-lg"
                       />
-                    ))}
+                    )}
                   </div>
                 </div>
               ))}
             </div>
           ) : (
             <p className="text-center text-gray-500">No reviews available.</p>
-          )}
-          
-          {reviews.length > 3 && (
-            <button
-              onClick={() => setShowAllReviews(!showAllReviews)}
-              className="mt-6 px-6 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 font-semibold transition duration-200"
-            >
-              {showAllReviews ? 'Show Less' : 'Show More'}
-            </button>
           )}
         </div>
       </div>

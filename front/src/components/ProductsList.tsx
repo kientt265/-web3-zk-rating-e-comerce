@@ -1,7 +1,20 @@
 import { FC, useEffect, useState } from 'react';
 import { FundedEvent } from '../lib/type';
 import productImage from '../assets/data/quan02.jpg';
+import productImagetest from '../assets/data/ao02.jpg';
+import productImage2 from '../assets/data/bowling.png';
+import productImage3 from '../assets/data/sale.png';
+import productImage4 from '../assets/data/shirt.png';
 import { DetailProduct } from './DetailProduct';
+
+// Tạo mảng chứa 5 ảnh
+const productImages = [
+  productImage,
+  productImagetest,
+  productImage2,
+  productImage3,
+  productImage4,
+];
 
 interface ProductsListProps {
   combinedData: (FundedEvent & {
@@ -31,9 +44,25 @@ const ProductsList: FC<ProductsListProps> = ({
     }
   }, [onGetProducts, combinedData]);
 
+  // Map productID với 1 ảnh random, giữ cố định khi render lại
+  const [productImagesMap, setProductImagesMap] = useState<{ [productID: string]: string }>({});
+
+  useEffect(() => {
+    const newMap: { [productID: string]: string } = { ...productImagesMap };
+    combinedData.forEach((item) => {
+      if (!newMap[item.productID]) {
+        const randomImg = productImages[Math.floor(Math.random() * productImages.length)];
+        newMap[item.productID] = randomImg;
+      }
+    });
+    setProductImagesMap(newMap);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [combinedData]);
+
   const [selectedDetailProduct, setSelectedDetailProduct] = useState<(FundedEvent & {
     rating: string | null;
     ratingCount: string | null;
+    imageUrl?: string;
   }) | null>(null);
 
   return (
@@ -51,7 +80,7 @@ const ProductsList: FC<ProductsListProps> = ({
                 >
                   <div className="relative">
                     <img 
-                      src={productImage} 
+                      src={productImagesMap[item.productID] || productImage} 
                       alt={`Product ${item.productID}`}
                       className="w-full h-56 object-cover rounded-t-xl"
                     />
@@ -85,7 +114,10 @@ const ProductsList: FC<ProductsListProps> = ({
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            setSelectedDetailProduct(item);
+                            setSelectedDetailProduct({
+                              ...item,
+                              imageUrl: productImagesMap[item.productID] || productImage
+                            });
                           }}
                           className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 font-semibold transition duration-200"
                         >

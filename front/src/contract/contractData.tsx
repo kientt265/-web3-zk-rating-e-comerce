@@ -1,5 +1,6 @@
 // export const contractAdr = "0xc221a771be70F2D8F6c31b927D6F9C6eFe5A1344"
-export const contractAdr = "0xbE80Fa520AD9EEB165565d42b66b549170D3aEf6"
+// export const contractAdr = "0xbE80Fa520AD9EEB165565d42b66b549170D3aEf6"
+export const contractAdr = "0x766BB60Cf2D1698a4342Ae3B71582a34C5d0a54b"
 export const contractABI = [
     'function createDeal(string memory _productId, uint _amount) payable',
     'function completeDeal(uint _dealId)',

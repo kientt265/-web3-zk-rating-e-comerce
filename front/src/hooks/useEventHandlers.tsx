@@ -75,63 +75,91 @@ export function useEventHandlers(walletProvider: any, appState: any) {
 
     const getEventProducts = async () => {
         if (walletProvider) {
-          try {
-            const browserProvider = new BrowserProvider(walletProvider);
-            const signerProvider = browserProvider.getSigner();
-            
-            const contract = new Contract(contractAdr, contractABI, await signerProvider);
-            const newProductEventFilter = contract.filters.NewProduct();
-            const newProductEvents = await contract.queryFilter(
-              newProductEventFilter,
-              10
-            );
-            const newQuantityProductFilter = contract.filters.NewQuantityProduct();
-            const newQuantityProductEvents = await contract.queryFilter(
-              newQuantityProductFilter, 10
-            );
-            
+            try {
+                const browserProvider = new BrowserProvider(walletProvider);
+                const signerProvider = browserProvider.getSigner();
+                
+                // Log connection info
+                const network = await browserProvider.getNetwork();
+                console.log("🔗 Connected to network:", network.name);
+                console.log("🔗 Chain ID:", network.chainId);
+                console.log("📍 Contract address:", contractAdr);
 
-            const events: FundedEvent[] = [];
+                const contract = new Contract(contractAdr, contractABI, await signerProvider);
+                
+                // Log NewProduct events
+                const newProductEventFilter = contract.filters.NewProduct();
+                const newProductEvents = await contract.queryFilter(
+                    newProductEventFilter,
+                    10
+                );
+                console.log("📦 Number of NewProduct events:", newProductEvents.length);
+                console.log("📦 NewProduct events details:", newProductEvents.map(event => ({
+                    productID: (event as any).args[0],
+                    quantity: (event as any).args[1].toString(),
+                    price: formatEther((event as any).args[2]),
+                    blockNumber: event.blockNumber
+                })));
 
-            for (let i = 0; i < newProductEvents.length; i++) {
-              const currentEvent = newProductEvents[i];
+                // Log NewQuantityProduct events  
+                const newQuantityProductFilter = contract.filters.NewQuantityProduct();
+                const newQuantityProductEvents = await contract.queryFilter(
+                    newQuantityProductFilter, 
+                    10
+                );
+                console.log("🔄 Number of NewQuantityProduct events:", newQuantityProductEvents.length);
+                console.log("🔄 NewQuantityProduct events details:", newQuantityProductEvents.map(event => ({
+                    productID: (event as any).args[0],
+                    newQuantity: (event as any).args[2].toString(),
+                    blockNumber: event.blockNumber
+                })));
 
-              const eventObj = {
-                productID: (currentEvent as any).args[0],
-                quantityPerItem: (currentEvent as any).args[1].toString(),
-                pricePerProduct: formatEther((currentEvent as any).args[2]),
-                blockNumber: currentEvent.blockNumber,
-              };
-               
-              events.push(eventObj);
-              
+                const events: FundedEvent[] = [];
+
+                for (let i = 0; i < newProductEvents.length; i++) {
+                  const currentEvent = newProductEvents[i];
+
+                  const eventObj = {
+                    productID: (currentEvent as any).args[0],
+                    quantityPerItem: (currentEvent as any).args[1].toString(),
+                    pricePerProduct: formatEther((currentEvent as any).args[2]),
+                    blockNumber: currentEvent.blockNumber,
+                  };
+                   
+                  events.push(eventObj);
+                  
+                }
+
+                for (let i = 0; i < newQuantityProductEvents.length; i++) {
+                  const currentEvent = newQuantityProductEvents[i];
+                  const productID123 = (currentEvent as any).args[0];
+                  const updatedQuantity = (currentEvent as any).args[2].toString();
+                  // const priceOldProduct = formatEther((currentEvent as any).args[2]); 
+                  const existingProduct = events.find(event => event.productID === productID123);
+                  if (existingProduct) {
+                    // Ghi đè updatedQuantity vào phần tử có productID trùng khớp
+                    existingProduct.quantityPerItem = updatedQuantity;
+                  }          
+                }
+
+                const ratingEvents = await getEventRating();
+                console.log("Rating Events:", ratingEvents);
+
+                  
+                if (events.length !== 0) {
+                    console.log("✅ Final processed products:", events);
+                    setProducts(events);
+                    return events.sort((a, b) => b.blockNumber - a.blockNumber);
+                } else {
+                    console.log("⚠️ No products found after processing");
+                }
+
+            } catch (error) {
+                console.error("❌ Error fetching product events:", error);
+                return null;
             }
-
-            for (let i = 0; i < newQuantityProductEvents.length; i++) {
-              const currentEvent = newQuantityProductEvents[i];
-              const productID123 = (currentEvent as any).args[0];
-              const updatedQuantity = (currentEvent as any).args[2].toString();
-              // const priceOldProduct = formatEther((currentEvent as any).args[2]); 
-              const existingProduct = events.find(event => event.productID === productID123);
-              if (existingProduct) {
-                // Ghi đè updatedQuantity vào phần tử có productID trùng khớp
-                existingProduct.quantityPerItem = updatedQuantity;
-              }          
-            }
-
-            const ratingEvents = await getEventRating();
-            console.log("Rating Events:", ratingEvents);
-
-              
-            if (events.length !== 0) {
-                setProducts(events); // Update state with fetched products
-                return events.sort((a, b) => b.blockNumber - a.blockNumber);
-            }
-
-          } catch (error) {
-            console.error("Error fetching product events:", error);
-            return null;  // Trả về null nếu có lỗi
-          }
+        } else {
+            console.log("❌ No wallet provider available");
         }
       };
 

@@ -196,25 +196,25 @@ const GenerateProof: React.FC<GenerateProofProps> = ({
 //msgHash: Lưu trên blockchain và backend (Để query comment và ảnh)
 //nullifier: kiểm tra trên blockchain
       setVerificationResult(res ? "Verification successful!" : "Verification failed.");
-      // const data = {
-      //   pi_a: pi_a,
-      //   pi_b: pi_b,
-      //   pi_c: pi_c,
-      //   finalPublicSignal: finalPublicSignal,
-      //   productId: productId,
-      //   star: rating,
-      //   comment: comment,
-      //   images: images,
-      //   nullifier: nullifier,
-      // };
-      // // console.log("dataaaaaaaaaaaaaaaaaaa", JSON.stringify(data))
-      // const response = await fetch("http://localhost:3000/api/verify", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(data),
-      // });
+      const data = {
+        pi_a: pi_a,
+        pi_b: pi_b,
+        pi_c: pi_c,
+        finalPublicSignal: finalPublicSignal,
+        productId: productId,
+        star: rating,
+        comment: comment,
+        images: images,
+        // nullifier: nullifier,
+      };
+      // console.log("dataaaaaaaaaaaaaaaaaaa", JSON.stringify(data))
+      const response = await fetch("http://localhost:3000/api/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
       
     } catch (error) {
       console.error("Error verifying proof:", error);

@@ -17,6 +17,7 @@ public/prove/test.json
 public/prove/zkecomerce_0001.zkey
 public/prove/zkxcb_1.zkey
 public/prove/ZKEComerce.wasm
+public/prove/ZKEComerce_old.wasm
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

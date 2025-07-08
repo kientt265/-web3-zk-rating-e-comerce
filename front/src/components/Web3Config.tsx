@@ -1,6 +1,6 @@
 import { createWeb3Modal, defaultConfig } from "@web3modal/ethers/react";
 
-const contractAddressRating = import.meta.env.VITE_CONTRACT_ADDRESS_RATING || "0x204369E4c844DE8D5299Baa86D62fa76174CD670";
+const contractAddressRating = import.meta.env.VITE_CONTRACT_ADDRESS_RATING || "0x5Aa3addfE30144F11Ec5408fcF56baC906a97964";
 const contractABIRating = JSON.parse(import.meta.env.VITE_CONTRACT_ABI_RATING || "[]");
 
 const projectId = import.meta.env.VITE_PROJECT_ID;
